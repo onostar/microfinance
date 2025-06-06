@@ -6157,3 +6157,146 @@ function updateLedger(){
      }, 1000)
      return false;    
 }
+
+//calculate age from date of birth
+function getAge(dob){
+     let age = document.getElementById("age");
+     let new_age = Math.floor((new Date() - new Date(dob).getTime()) / 3.15576e+10)
+     age.value = new_age+" Year(s)";
+}
+
+// Register new patient
+function NewRegistration(){
+     // let last_name = document.getElementById("last_name").value;
+     let full_name = document.getElementById("full_name").value;
+     let phone_number = document.getElementById("phone_number").value;
+     let dob = document.getElementById("dob").value;
+     // let suffix = document.getElementById("suffix").value;
+     // let title = document.getElementById("title").value;
+     let gender = document.getElementById("gender").value;
+     let marital_status = document.getElementById("marital_status").value;
+     let religion = document.getElementById("religion").value;
+     let occupation = document.getElementById("occupation").value;
+     let income = document.getElementById("income").value;
+     let address = document.getElementById("address").value;
+     let state_region = document.getElementById("state_region").value;
+     let lga = document.getElementById("lga").value;
+     let landmark = document.getElementById("landmark").value;
+     let email = document.getElementById("email").value;
+     let business = document.getElementById("business").value;
+     let business_address = document.getElementById("business_address").value;
+     let nok = document.getElementById("nok").value;
+     let nok_relation = document.getElementById("nok_relation").value;
+     let nok_address = document.getElementById("nok_address").value;
+     let nok_phone = document.getElementById("nok_phone").value;
+     let bank = document.getElementById("bank").value;
+     let account_number = document.getElementById("account_number").value;
+     let account_name = document.getElementById("account_name").value;
+     let todayDate = new Date();
+     let today = todayDate.toLocaleDateString();
+     if(full_name.length == 0 || full_name.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter full name!");
+          $("#full_name").focus();
+          return;
+     }else if(gender.length == 0 || gender.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select Gender!");
+          $("#gender").focus();
+          return;
+     }else if(email.length == 0 || email.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input patient's email address");
+          $("#email").focus();
+          return;
+     }else if(phone_number.length == 0 || phone_number.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter patient phone number");
+          $("#phone_number").focus();
+          return;
+     }else if(phone_number.length != 11){
+          alert("Phone number is not correct");
+          $("#phone_number").focus();
+          return;
+    
+     }else if(dob.length == 0 || dob.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter date of birth");
+          $("#dob").focus();
+          return;
+     }else if(address.length == 0 || address.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input customer address");
+          $("#address").focus();
+          return;
+     }else if(state_region.length == 0 || state_region.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select state or region");
+          $("#state_region").focus();
+          return;
+     }else if(lga.length == 0 || lga.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input Local Government Area");
+          $("#lga").focus();
+          return;
+     }else if(occupation.length == 0 || occupation.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select occupation");
+          $("#occupation").focus();
+          return;
+     }else if(marital_status.length == 0 || marital_status.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select marital status");
+          $("#marital_status").focus();
+          return;
+     }else if(nok_address.length == 0 || nok_address.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input patient's Next of Kin address");
+          $("#nok_address").focus();
+          return;
+     }else if(nok.length == 0 || nok.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input patient's Next of Kin");
+          $("#nok").focus();
+          return;
+     }else if(nok_phone.length == 0 || nok_phone.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input patient's Next of Kin phone number");
+          $("#nok_phone").focus();
+          return;
+     }else if(nok_relation.length == 0 || nok_relation.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input Next of Kin relationship");
+          $("#nok_relation").focus();
+          return;
+     }else if(income.length == 0 || income.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input estimated monthly income");
+          $("#income").focus();
+          return;
+     }else if(business.length == 0 || business.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input Business/company name");
+          $("#business").focus();
+          return;
+     }else if(business_address.length == 0 || business_address.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input Business/company address");
+          $("#business_address").focus();
+          return;
+     }else if(bank.length == 0 || bank.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select your bank name");
+          $("#bank").focus();
+          return;
+     }else if(account_number.length == 0 || account_number.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input account number");
+          $("#account_number").focus();
+          return;
+     }else if(account_name.length == 0 || account_name.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input account name");
+          $("#account_name").focus();
+          return;
+     }else if(new Date(today).getTime() <= new Date(dob).getTime()){
+          alert("You can not enter a futuristic date !");
+          $("#dob").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/new_registration.php",
+               data : {full_name:full_name,phone_number:phone_number, email:email, address:address, dob:dob, gender:gender, marital_status:marital_status, religion:religion, occupation:occupation, nok:nok, nok_address:nok_address,nok_phone:nok_phone, nok_relation:nok_relation, income:income, business:business, business_address:business_address, bank:bank, account_number:account_number, account_name:account_name, state_region:state_region, lga:lga, landmark:landmark},
+               beforeSend : function(){
+                    $("#new_reg").html("<p>Processing...</p>");
+               },
+               success : function(response){
+                    $("#new_reg").html(response);
+               }
+          })
+          
+          return false;   
+     }
+      
+}
