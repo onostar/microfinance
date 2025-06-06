@@ -6,8 +6,8 @@
 
 ?>
     <div class="info"></div>
-<div class="displays allResults" id="staff_list" style="width:80%!important;margin:50px!important">
-    <h2>Customer list</h2>
+<div class="displays allResults" id="staff_list" style="width:90%!important;margin:50px auto!important">
+    <h2>List of Users</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchStaff" placeholder="Enter keyword" onkeyup="searchData(this.value)">
@@ -18,7 +18,8 @@
                 <td>S/N</td>
                 <td>Full Name</td>
                 <td>Username</td>
-                <td>Store</td>
+                <td>Role</td>
+                <td>Branch</td>
                 <td>Date reg</td>
             </tr>
         </thead>
@@ -34,6 +35,7 @@
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
                 <td><?php echo $detail->full_name?></td>
                 <td style="color:var(--otherColor)"><?php echo $detail->username?></td>
+                <td style="color:var(--otherColor)"><?php echo $detail->user_role?></td>
                 <td style="color:var(--primaryColor)">
                     <?php 
                         //get store

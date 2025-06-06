@@ -14,10 +14,8 @@
                 <select name="user_role" id="user_role" required style="padding:10px;border-radius:10px">
                     <option value="" selected>Select role</option>
                     <option value="Admin">Admin</option>
-                    <option value="cashier">Cashier</option>
-                    <option value="sales rep">Sales Rep</option>
                     <option value="Accountant">Accountant</option>
-                    <option value="Inventory Officer">Inventory Officer</option>
+                    <option value="Loan Officer">Loan Officer</option>
                 </select>
                 <select name="store_id" id="store_id" style="padding:10px; border-radius:10px">
                     <option value=""selected required>select store</option>

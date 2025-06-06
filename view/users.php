@@ -50,10 +50,10 @@ date_default_timezone_set("Africa/Lagos");
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="keywords" content="Invoicing management, Accounting, Asset manager, trial balance, income statement, cash flow, balance sheet, accounting software">
-    <meta name="description" content="An online/offline Invoicing and Accounting Management system for manageing invoices, asset management, vendors, customer payments, as well complete accounting information">
+     <meta name="keywords" content="microfinance software, loan management system, microfinance web app, client onboarding platform, wallet management, microloan software, digital lending solution, accounting-based loan system, microfinance dashboard, financial tracking tool, Laravel microfinance system, online loan disbursement software Dorthpro microfinance">
+    <meta name="description" content="A powerful microfinance web application designed for seamless loan management, client onboarding, wallet tracking, and real-time financial reporting. Built with an accounting model for transparency and growth.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoicing & Accounting Management</title>
+    <title>Microfinance & Loan Management</title>
     <link rel="icon" type="image/png" size="32x32" href="../images/icon.png">
     <link rel="stylesheet" href="../fontawesome-free-6.0.0-web/css/all.css">
     <link rel="stylesheet" href="../fontawesome-free-6.0.0-web/css/all.min.css">

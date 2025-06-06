@@ -9,7 +9,7 @@ date_default_timezone_set("Africa/Lagos");
                 if (self::$conn === null) {  // create only one connection per request
                     $username = "onostarmedia";
                     $password = "yMcmb@her0123!";
-                    $dsn = "mysql:host=localhost;dbname=jevi;charset=utf8mb4";
+                    $dsn = "mysql:host=localhost;dbname=microfinance;charset=utf8mb4";
     
                     $options = [
                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

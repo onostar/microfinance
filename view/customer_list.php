@@ -6,7 +6,7 @@
 
 ?>
     <div class="info"></div>
-<div class="displays allResults" id="staff_list" style="width:80%!important;margin:50px!important">
+<div class="displays allResults" id="staff_list" style="width:90%!important;margin:50px auto!important">
     <h2>Customer list</h2>
     <hr>
     <div class="search">

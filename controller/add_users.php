@@ -1,6 +1,6 @@
 <?php
 
-    $fullname = ucwords(htmlspecialchars(stripslashes($_POST['full_name'])));
+    $fullname = strtoupper(htmlspecialchars(stripslashes($_POST['full_name'])));
     $username = ucwords(htmlspecialchars(stripslashes($_POST['username'])));
     $role = ucwords(htmlspecialchars(stripslashes($_POST['user_role'])));
     $store = htmlspecialchars(stripslashes($_POST['store_id']));
