@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 06, 2025 at 12:10 PM
+-- Generation Time: Jun 07, 2025 at 09:44 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -272,7 +272,7 @@ CREATE TABLE `companies` (
 --
 
 INSERT INTO `companies` (`company_id`, `company`, `logo`, `date_created`) VALUES
-(1, 'Demo Microfinance', 'icon.png', '2025-06-06 14:46:39');
+(1, 'Demo Microfinance Ltd', 'icon.png', '2025-06-06 14:46:39');
 
 -- --------------------------------------------------------
 
@@ -300,14 +300,36 @@ CREATE TABLE `cost_of_sales` (
 CREATE TABLE `customers` (
   `customer_id` int(11) NOT NULL,
   `customer` varchar(50) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `ledger_id` int(11) NOT NULL,
   `acn` int(50) NOT NULL,
   `customer_type` varchar(20) NOT NULL,
   `phone_numbers` varchar(20) NOT NULL,
   `customer_address` varchar(100) NOT NULL,
   `customer_email` varchar(50) NOT NULL,
+  `state_region` varchar(50) NOT NULL,
+  `lga` varchar(255) NOT NULL,
+  `landmark` varchar(255) NOT NULL,
+  `gender` varchar(20) NOT NULL,
+  `dob` date DEFAULT NULL,
+  `religion` varchar(50) NOT NULL,
+  `marital_status` varchar(50) NOT NULL,
+  `occupation` varchar(50) NOT NULL,
+  `business` varchar(255) NOT NULL,
+  `business_address` varchar(255) NOT NULL,
+  `income` float NOT NULL,
+  `nok` varchar(255) NOT NULL,
+  `nok_address` varchar(255) NOT NULL,
+  `nok_phone` varchar(50) NOT NULL,
+  `nok_relation` varchar(50) NOT NULL,
+  `bank` varchar(50) NOT NULL,
+  `account_number` int(11) NOT NULL,
+  `account_name` varchar(50) NOT NULL,
+  `photo` varchar(1024) NOT NULL,
+  `reg_status` int(11) NOT NULL,
   `wallet_balance` int(11) NOT NULL,
   `amount_due` int(11) NOT NULL,
+  `created_by` int(11) NOT NULL,
   `reg_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -628,6 +650,26 @@ CREATE TABLE `item_transfers` (
   `posted_by` int(11) NOT NULL,
   `post_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kyc`
+--
+
+CREATE TABLE `kyc` (
+  `kyc_id` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `id_type` varchar(50) NOT NULL,
+  `id_number` varchar(50) NOT NULL,
+  `id_card` varchar(1024) NOT NULL,
+  `bvn` int(11) NOT NULL,
+  `verification` int(11) NOT NULL,
+  `verified_by` int(11) NOT NULL,
+  `verified_date` datetime DEFAULT NULL,
+  `kyc_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1119,7 +1161,7 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (58, 5, 'Accept Items Report', 'accept_report', 1),
 (59, 3, 'All Store Balance', 'all_store_balance', 1),
 (60, 2, 'Wholesale', 'wholesale', 1),
-(62, 1, 'Add Customer', 'add_customer', 0),
+(62, 1, 'Add New Client', 'add_customer', 0),
 (63, 5, 'Customer List', 'customer_list', 0),
 (64, 6, 'Retail Sales', 'retail_sales', 1),
 (65, 6, 'Wholesale Report', 'wholesale_report', 1),
@@ -1271,7 +1313,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `full_name`, `username`, `user_role`, `user_password`, `status`, `store`, `reg_date`) VALUES
 (1, 'Administrator', 'Sysadmin', 'Admin', '$2y$10$dcUrnR/.PvfK7XeYcP60hOyW2qnPSSvEq/Wxee6lv5DETW8pbGXYu', 0, 1, '2022-09-27 13:47:21'),
-(2, 'Admin', 'Admin', 'Admin', '$2y$10$Zg86mlW4zi3KoTPoKw1fpefZbkEH7MhhrAqQz.njT0gEtX0uvXUra', 0, 1, '2024-09-13 10:48:06');
+(2, 'Admin', 'Admin', 'Admin', '$2y$10$Zg86mlW4zi3KoTPoKw1fpefZbkEH7MhhrAqQz.njT0gEtX0uvXUra', 0, 1, '2024-09-13 10:48:06'),
+(4, 'KELLY IKPEFUA', 'Onostar', 'Loan Officer', '123', 0, 1, '2025-06-06 11:45:41');
 
 -- --------------------------------------------------------
 
@@ -1480,6 +1523,12 @@ ALTER TABLE `items`
 --
 ALTER TABLE `item_transfers`
   ADD PRIMARY KEY (`transfer_id`);
+
+--
+-- Indexes for table `kyc`
+--
+ALTER TABLE `kyc`
+  ADD PRIMARY KEY (`kyc_id`);
 
 --
 -- Indexes for table `ledgers`
@@ -1804,6 +1853,12 @@ ALTER TABLE `item_transfers`
   MODIFY `transfer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
+-- AUTO_INCREMENT for table `kyc`
+--
+ALTER TABLE `kyc`
+  MODIFY `kyc_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `ledgers`
 --
 ALTER TABLE `ledgers`
@@ -1939,7 +1994,7 @@ ALTER TABLE `transfers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `vendors`

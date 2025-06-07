@@ -6300,3 +6300,98 @@ function NewRegistration(){
      }
       
 }
+
+//update foto
+function updatePhoto(id){
+     window.open("../view/update_photo.php?patient="+id);
+     /* setTimeout(function(){
+          $("#new_reg").load("new_registration.php #new_reg");
+     }, 1000); */
+     return false;
+ 
+ }
+// Configure a few settings and attach camera 250x187
+Webcam.set({
+     width: 350,
+     height: 287,
+     image_format: 'jpeg',
+     jpeg_quality: 90
+    });	 
+    Webcam.attach( '#my_camera' );
+   
+   function take_snapshot() {
+    // play sound effect
+    //shutter.play();
+    // take snapshot and get image data
+    Webcam.snap( function(data_uri) {
+    // display results in page
+    document.getElementById('results').innerHTML = 
+     '<img class="after_capture_frame" src="'+data_uri+'"/>';
+    $("#captured_image_data").val(data_uri);
+    });	 
+   }
+
+   function saveSnap(){
+   var base64data = $("#captured_image_data").val();
+   let patient = document.getElementById("patient").value;
+    $.ajax({
+             type: "POST",
+             dataType: "json",
+             url: "../controller/capture_image_upload.php",
+             data: {image: base64data, patient:patient},
+             success: function(data) { 
+                  alert(data);
+             }
+        });
+   }
+//update kyc
+function updateKYC(){
+     let customer = document.getElementById("customer_id").value;
+     let id_type = document.getElementById("id_type").value;
+     let id_number = document.getElementById("id_number").value;
+     let id_card = document.getElementById("id_card").value;
+     let bvn = document.getElementById("bvn").value;
+     if(id_type.length == 0 || id_type.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select identification type!");
+          $("#id_type").focus();
+          return;
+     }else if(id_number.length == 0 || id_number.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input identity number");
+          $("#id_number").focus();
+          return;
+     }else if(id_card.length == 0 || id_card.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please upload id card photo");
+          $("#id_card").focus();
+          return;
+     }else if(bvn.length == 0 || bvn.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input BVN");
+          $("#bvn").focus();
+          return;
+     
+     }else{
+          var fd = new FormData();
+          var files = $('#id_card')[0].files[0];
+          fd.append('id_card', files);
+          fd.append('customer', customer);
+          fd.append('id_type', id_type);
+          fd.append('id_number', id_number);
+          fd.append('bvn', bvn);
+          
+          $.ajax({
+               url: '../controller/add_kyc.php',
+               type: 'post',
+               data: fd,
+               contentType: false,
+               processData: false,
+               success: function(response){
+                    if(response != 0){
+                    $(".info").html(response); 
+                   
+                    }else{
+                         alert('file not uploaded');
+                         return
+                    }
+               },
+          });
+     }
+}
