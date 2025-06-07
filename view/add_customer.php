@@ -168,7 +168,7 @@
                 </div>
                 <div class="data" style="width:23%">
                     <label for="income">Monthly Income Estimate<span class="important">*</span></label>
-                    <input type="number" name="income" id="income" required>
+                    <input type="text" name="income" id="income" required>
                 </div>
                 <div class="data" style="width:23%">
                     <label for="business">Business/Company Name<span class="important">*</span></label>

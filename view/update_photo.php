@@ -10,7 +10,6 @@
     <meta name="description" content="A powerful microfinance web application designed for seamless loan management, client onboarding, wallet tracking, and real-time financial reporting. Built with an accounting model for transparency and growth.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microfinance & Loan Management System</title>
-    <link rel="icon" type="image/png" size="32x32" href="../images/icon.png">
     <link rel="stylesheet" href="../bootstrap-4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="../fontawesome-free-6.0.0-web/css/all.css">
     <link rel="stylesheet" href="../fontawesome-free-6.0.0-web/css/all.min.css">

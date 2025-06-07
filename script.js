@@ -6286,7 +6286,7 @@ function NewRegistration(){
      }else{
           $.ajax({
                type : "POST",
-               url : "../controller/new_registration.php",
+               url : "../controller/add_customer.php",
                data : {full_name:full_name,phone_number:phone_number, email:email, address:address, dob:dob, gender:gender, marital_status:marital_status, religion:religion, occupation:occupation, nok:nok, nok_address:nok_address,nok_phone:nok_phone, nok_relation:nok_relation, income:income, business:business, business_address:business_address, bank:bank, account_number:account_number, account_name:account_name, state_region:state_region, lga:lga, landmark:landmark},
                beforeSend : function(){
                     $("#new_reg").html("<p>Processing...</p>");
@@ -6346,7 +6346,7 @@ Webcam.set({
    }
 //update kyc
 function updateKYC(){
-     let customer = document.getElementById("customer_id").value;
+     let customer_id = document.getElementById("customer_id").value;
      let id_type = document.getElementById("id_type").value;
      let id_number = document.getElementById("id_number").value;
      let id_card = document.getElementById("id_card").value;
@@ -6367,12 +6367,16 @@ function updateKYC(){
           alert("Please input BVN");
           $("#bvn").focus();
           return;
+     }else if(bvn.length != 11){
+          alert("BVN must be 11 digits");
+          $("#bvn").focus();
+          return;
      
      }else{
           var fd = new FormData();
           var files = $('#id_card')[0].files[0];
           fd.append('id_card', files);
-          fd.append('customer', customer);
+          fd.append('customer_id', customer_id);
           fd.append('id_type', id_type);
           fd.append('id_number', id_number);
           fd.append('bvn', bvn);
@@ -6386,7 +6390,7 @@ function updateKYC(){
                success: function(response){
                     if(response != 0){
                     $(".info").html(response); 
-                   
+                    document.qyerySelector(".info").scrollIntoView({behavior: "smooth"});
                     }else{
                          alert('file not uploaded');
                          return
@@ -6394,4 +6398,8 @@ function updateKYC(){
                },
           });
      }
+     $("#id_type").val('');
+     $("#id_number").val('');
+     $("#id_card").val('');
+     $("#bvn").val('');
 }

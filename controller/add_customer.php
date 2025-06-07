@@ -4,7 +4,7 @@
     session_start();
     $user = $_SESSION['user_id'];
     $store = $_SESSION['store_id'];
-    $customer = strtoupper(htmlspecialchars(stripslashes($_POST['fulll_name'])));
+    $customer = strtoupper(htmlspecialchars(stripslashes($_POST['full_name'])));
     // $other_names = strtoupper(htmlspecialchars(stripslashes($_POST['other_names'])));
     $phone = htmlspecialchars(stripslashes($_POST['phone_number']));
     $address = ucwords(htmlspecialchars(stripslashes($_POST['address'])));
@@ -31,7 +31,7 @@
     $todays_date = date("dmyh");
    
     $data = array(
-        'customer' => $full_name,
+        'customer' => $customer,
         'phone_numbers' => $phone,
         'customer_email' => $email,
         'customer_address' => $address,
@@ -48,7 +48,7 @@
         'nok_phone' => $nok_phone,
         'nok_relation' => $relation,
         'business' => $business,
-        'business_address' => $business_address,
+        'business_address' => $biz_address,
         'income' => $income,
         'bank' => $bank,
         'account_number' => $account_number,
@@ -73,8 +73,8 @@
    //check if patient exists
    
    $check = new selects();
-   $results = $check->fetch_count_cond('customers', 'full_name', $customer);
-   $results2 = $check->fetch_count_cond('customers', 'phone_number', $phone);
+   $results = $check->fetch_count_cond('customers', 'customer', $customer);
+   $results2 = $check->fetch_count_cond('customers', 'phone_numbers', $phone);
    if($results > 0 || $results2 > 0){
        echo "<p class='exist' style='background:red;color:#fff;'><span>$customer</span> already exists!</p>";
    }else{
@@ -82,7 +82,6 @@
        $add_data = new add_data('customers', $data);
        $add_data->create_data();
        if($add_data){
-            //generate customer number
             //get customer id first
             $get_id = new selects();
             $ids = $get_id->fetch_lastInserted('customers', 'customer_id');
@@ -99,6 +98,20 @@
             );
             $add_user = new add_data('users', $user_data);
             $add_user->create_data();
+            if($add_user){
+                //get user id
+                $user_ids = $get_id->fetch_lastInserted('users', 'user_id');
+                $user_id = $user_ids->user_id;
+                //now update customer with user id
+                $update = new Update_table();
+                $update->update('customers', 'user_id', 'customer_id', $user_id, $customer_id);
+            }
+             //create account number
+             //first get today's date
+            //  $acn = "10104".$todays_date.$customer_id;
+             //now update account number
+             $update_acn = new Update_table();
+             $update_acn->update('customers', 'acn', 'customer_id', $acn, $customer_id);
             //add to account ledger
              //check if customer is in ledger
              $get_ledger = new selects();
@@ -111,8 +124,8 @@
                  //update customer ledger no
                  //first get ledger id from ledger table
                  $get_last = new selects();
-                 $ids = $get_last->fetch_lastInserted('ledgers', 'ledger_id');
-                 $ledger_id = $ids->ledger_id;
+                 $legd = $get_last->fetch_lastInserted('ledgers', 'ledger_id');
+                 $ledger_id = $legd->ledger_id;
                   //update account number
                 $acn = "10104".$ledger_id;
                 $update_acn = new Update_table();
@@ -125,16 +138,32 @@
        }
        echo "<div class='success'><p><span>$customer </span> registered successfully!</p></div>";
 ?>
+<style>
+    .add_user_form .data{
+        width:48%;
+    }
+    @media screen and (max-width: 800px) {
+        .add_user_form .data{
+            width:100%;
+        }
+        .add_user_form .inputs{
+            flex-direction: column;
+        }
+    }
+</style>
     <!-- display update photoform -->
      <div class="info"></div>
-    <div class="add_user_form" style="width:50%; margin:10px auto; box-shadow:none;background:transparent">
-        <h3 style="background:var(--tertiaryColor)">KYC / Identity Verification</h3>
+    <div class="add_user_form" style="width:60%; margin:10px auto; box-shadow:none;background:transparent">
+        <h3 style="background:var(--tertiaryColor)!important">KYC / Identity Verification</h3>
         <div class="inputs">
-             <div class="data" style="width:30%">
+             <div class="data">
+                <figure>
+                    <img src="../photos/user.png" alt="user photo" id="photo" style="width:100%; height:250px; object-fit:cover; border-radius:10px; box-shadow:1px 1px 1px #222">
+                </figure>
                 <button type="button" style="border-radius:10px; padding:8px; border:1px solid #fff; box-shadow:1px 1px 1px #222;background:silver;color:#222" id="upload_photo" name="upload_photo" onclick="updatePhoto('<?php echo $customer_id?>')">Update Photo<i class="fas fa-photo"></i></button>
             </div>
         </div>
-        <div class="inputs">
+        <div class="inputs" style="margin-top:10px; gap:.5rem; display:flex; flex-wrap:wrap; justify-content:space-between">
             <input type="hidden" name="customer_id" id="customer_id" value="<?php echo $customer_id?>">
             <div class="data">
                 <label for="identity_type">Government Issued ID Type</label>
@@ -158,7 +187,7 @@
                 <label for="bvn">BVN</label>
                 <input type="text" name="bvn" id="bvn" required>
             </div>
-            <div class="data" style="width:30%">
+            <div class="data">
                 <button type="button" style="border-radius:10px; padding:8px; border:1px solid #fff; box-shadow:1px 1px 1px #222;background:green;color:#fff" onclick="updateKYC()">Update KYC<i class="fas fa-photo"></i></button>
             </div>
         </div>
