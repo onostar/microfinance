@@ -45,7 +45,10 @@ Best regards,<br>$company</p>";
         $notif_data = array(
             'client' => $customer,
             'subject' => 'KYC Verification Unsuccessful',
-            'message' => $message,
+            'message' => 'Dear '.$client.' , Thank you for submitting your KYC (Know Your Customer) documents.. 
+            🎉After a thorough review, we regret to inform you that your KYC verification was unsuccessful due to [brief reason – e.g., incomplete/inaccurate documentation, mismatch of information, expired ID, etc.].<br><br>To proceed, please update and resubmit the required documents through your dashboard or contact our support team for assistance. If you have any questions or need clarification, feel free to reach out to us at ['.$phone.']..
+
+            Best regards,'.$company,
             'post_date' => $date,
         );
         $add_data = new add_data('notifications', $notif_data);

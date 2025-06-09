@@ -1518,7 +1518,7 @@ table tr:nth-child(even){
     display:flex;
     justify-content: space-between;
     align-items: center;
-    margin:10px auto!important;
+    margin:5px auto!important;
 }
 .quick_links{
     /* display:none; */
@@ -1527,7 +1527,7 @@ table tr:nth-child(even){
     flex-wrap:wrap; 
     margin:5px;
     gap:.5rem;
-    margin:10px 0;
+    margin:5px 0;
 }
 .quick_links .links{
     min-width:50px;
@@ -3496,6 +3496,15 @@ x
 .greetigs span{
     color:var(--secondaryColor);
     font-weight: bold;
+}
+#notifs{
+    position:relative;
+
+}
+#notifs p{
+    position:absolute;
+    top:2px;
+    right:12px;
 }
 @media screen and (max-width: 800px){
     #topHeader{

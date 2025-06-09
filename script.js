@@ -392,7 +392,26 @@ function searchData(data){
           return !~text.indexOf(val);
      }).hide();
 }
-
+ //search any table on key press
+function searchItems(item_name, url){
+     let item = item_name;
+     if(item.length >= 3){
+          if(item){
+               $.ajax({
+                    type : "POST",
+                    url :"../controller/"+url,
+                    data : {item:item},
+                    success : function(response){
+                         $("#result").html(response);
+                    }
+               })
+               return false;
+          }else{
+               $("#result").html("<p>Please enter atleast 3 letters</p>");
+          }
+     }
+     
+}
 // disale user
 function disableUser(user_id){
      let disable = confirm("Do you want to disable this user?", "");

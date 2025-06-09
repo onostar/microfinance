@@ -39,7 +39,15 @@ Best regards,<br>$company</p>";
         $notif_data = array(
             'client' => $customer,
             'subject' => 'KYC Verification Approved',
-            'message' => $message,
+            'message' => 'Dear '.$client.', 
+
+            We’re happy to inform you that your KYC verification has been successfully completed. 🎉
+            
+            Your account is now fully verified, and you can enjoy uninterrupted access to all features and services.
+
+            Thank you for completing the verification process. If you have any questions or need assistance, feel free to reach out to our support team.
+            
+            Best regards,'.$company,
             'post_date' => $date,
         );
         $add_data = new add_data('notifications', $notif_data);

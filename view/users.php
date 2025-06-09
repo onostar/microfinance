@@ -52,6 +52,14 @@ date_default_timezone_set("Africa/Lagos");
                 return "Good evening! <span style='font-weight:bold'>$staff_name</span>";
             }
         }
+        //get customer if
+        $cus = $fetch_comp->fetch_details_cond('customers', 'user_id', $user_id);
+        if(is_array($cus)){
+            foreach($cus as $cli){
+                $customer_id = $cli->customer_id;
+            }
+            $_SESSION['client_id'] = $customer_id;
+        }
     
         
 ?>
@@ -178,12 +186,12 @@ date_default_timezone_set("Africa/Lagos");
                             </p>
                         </div>
                         <?php }else{?>
-                        <div class="links page_navs" onclick="showPage('notifications.php')" title="Notifications">
+                        <div class="links page_navs" id="notifs" onclick="showPage('notifications.php')" title="Notifications">
                             <i class="fas fa-bell" style="color:var(--tertiaryColor)"></i>
                             <p style="color:red">
                                 <?php
                                     $get_nots = new selects();
-                                    $nots = $get_nots->fetch_count_2cond('notifications', 'not_status', 0, 'client', $user_id);
+                                    $nots = $get_nots->fetch_count_2cond('notifications', 'not_status', 0, 'client', $customer_id);
                                     echo $nots;
                                 ?>
                             </p>

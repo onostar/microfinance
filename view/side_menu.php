@@ -12,7 +12,6 @@
                 $get_Admin_menus = new selects();
                 $admin_menus = $get_Admin_menus->fetch_single_grouped('sub_menus', 'menu');
                 if(gettype($admin_menus) == "array"){
-
                     //get menu name
                     foreach($admin_menus as $admin_men){
                     $get_admin_name = new selects();
@@ -47,6 +46,29 @@
                 <a href="javascript:void(0);"><i class="fas fa-rocket"></i> </a>
             </li>
         </ul>
+        <?php
+            }elseif($role == "Client"){
+        ?>
+        <ul>
+            <?php 
+                //get menus
+                $get_menus = new selects();
+                $menus = $get_menus->fetch_details_condOrder('sub_menus', 'menu', 12, 'sub_menu');
+                if(gettype($menus) == "array"){
+
+                    //get menu name
+                    foreach($menus as $men){
+            ?>
+            
+                <li>
+                    <a href="javascript:void(0);" title="<?php echo $men->sub_menu?>" class="page_navs" onclick="showPage('<?php echo $men->url?>.php')"><i class="fas fa-arrow-alt-circle-right"></i> <?php echo $men->sub_menu?></a>
+                </li>
+            <?php
+                    }
+                }
+            ?>
+        </ul>
+        
         <?php
             }else{
         ?>

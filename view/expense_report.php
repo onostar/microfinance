@@ -19,7 +19,7 @@
                 <input type="date" name="to_date" id="to_date"><br>
             </div>
             <button type="submit" name="search_date" id="search_date" onclick="search('search_expense.php')" style="width:15%">Search <i class="fas fa-search"></i></button>
-</section>
+        </section>
     </div>
 <div class="displays allResults new_data" id="revenue_report">
     <h2>Expense report for today</h2>
