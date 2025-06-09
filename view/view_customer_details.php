@@ -174,18 +174,21 @@
                      ?>
                     <div class="data" style="width:auto!important">
                         <label style="width:auto" for="other_names">ID Type:</label>
-                        <input type="text"  value="<?php echo $row->id_type?>" readonly>
+                        <input type="text"  value="<?php echo $kyc->id_type?>" readonly>
                     
                     </div>
                     <div class="data" style="width:auto!important">
                         <label style="width:auto" for="other_names">ID Number:</label>
-                        <input type="text"  value="<?php echo $row->id_number?>" readonly>
+                        <input type="text"  value="<?php echo $kyc->id_number?>" readonly>
                     
                     </div>
                     <div class="data" style="width:auto!important">
                         <label style="width:auto" for="other_names">BVN:</label>
-                        <input type="text"  value="<?php echo $row->bvn?>" readonly>
+                        <input type="text"  value="<?php echo $kyc->bvn?>" readonly>
                     
+                    </div>
+                    <div class="data">
+                        <a style="border-radius:5px; background:silver;color:#222;padding:10px; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="../id_cards/<?php echo $kyc->id_card?>" target="_blank"><i class="fas fa-id-card"></i> View Identity Card</a>
                     </div>
                     <?php
                                 }
