@@ -161,6 +161,7 @@
                         <option value="Clergy">Clergy</option>
                         <option value="Banker">Banker</option>
                         <option value="Trader">Trader</option>
+                        <option value="Teacher/Lecturer">Teacher/Lecturer</option>
                         <option value="Business Person">Business Person</option>
                         <option value="Others">Others</option>
                         <option value="Unemployed">Unemployed</option>

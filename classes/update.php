@@ -41,6 +41,28 @@ date_default_timezone_set("Africa/Lagos");
                 echo "<div class='info'><p class='exist'>Update failed! <i class='fas fa-ban'></i></p></div>";
             } */
         }
+        //update any table with a condition
+       public function updateAny($table, $data, $con, $val) {
+            // Build SET part of the query
+            $setPart = implode(", ", array_map(function($key) {
+                return "$key = :$key";
+            }, array_keys($data)));
+
+            // Prepare the query
+            $sql = "UPDATE $table SET $setPart WHERE $con = :where_$con";
+            $update = $this->connectdb()->prepare($sql);
+
+            // Bind SET values
+            foreach($data as $column => $value) {
+                $update->bindValue(":$column", $value);
+            }
+
+            // Bind WHERE condition
+            $update->bindValue(":where_$con", $val);
+
+            // Execute
+            return $update->execute();
+        }
         //update tripple
         public function update_tripple($table, $column1, $value1, $column2, $value2, $column3, $value3, $condition, $condition_value){
             $update = $this->connectdb()->prepare("UPDATE $table SET $column1 = :$column1, $column2 = :$column2, $column3 = :$column3 WHERE $condition = :$condition");

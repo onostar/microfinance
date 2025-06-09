@@ -5,18 +5,22 @@
     $user = $_SESSION['user_id'];
     $kyc = $_GET['kyc'];
     $company = $_SESSION['company'];
-    require "../PHPMailer/PHPMailerAutoload.php";
-    require "../PHPMailer/class.phpmailer.php";
-    require "../PHPMailer/class.smtp.php";
+    $store = $_SESSION['store_id'];;
+
 
     // instantiate class
     include "../classes/dbh.php";
     include "../classes/select.php";
     include "../classes/update.php";
     include "../classes/inserts.php";
-
-    //get customer
+    include "../classes/delete.php";
+    //get store details
     $get_details = new selects();
+    $strs = $get_details->fetch_details_cond('stores', 'store_id', $store);
+    foreach($strs as $str){
+        $phone = $str->phone_number;
+    }
+    //get customer
     $rows = $get_details->fetch_details_cond('kyc', 'kyc_id', $kyc);
     foreach($rows as $row){
         $customer = $row->customer;
@@ -28,17 +32,19 @@
         $customer_email = $result->customer_email;
     }
     //approve kyc
-    $update = new Update_table();
-    $update->update_tripple('kyc', 'verification', 1, 'verified_by', $user, 'verified_date', $date, 'kyc_id', $kyc);
-    //update reg status in customer table
-    $update->update('customers', 'reg_status', 'customer_id', 1, $customer);
-    $message = "<p>Dear $client, <br> We’re happy to inform you that your KYC verification has been successfully completed. 🎉<br><br> Your account is now fully verified, and you can enjoy uninterrupted access to all features and services.<br><br>Thank you for completing the verification process. If you have any questions or need assistance, feel free to reach out to our support team.<br><br>
+    /* $update = new Update_table();
+    $update->update_tripple('kyc', 'verification', -1, 'verified_by', $user, 'verified_date', $date, 'kyc_id', $kyc); */
+    //delete kyc from customer table
+    $delete = new deletes();
+    $delete->delete_item('kyc', 'kyc_id', $kyc);
+    
+    $message = "<p>Dear $client, <br><br> Thank you for submitting your KYC (Know Your Customer) documents.. 🎉<br><br> After a thorough review, we regret to inform you that your KYC verification was unsuccessful due to [brief reason – e.g., incomplete/inaccurate documentation, mismatch of information, expired ID, etc.].<br><br>To proceed, please update and resubmit the required documents through your dashboard or contact our support team for assistance. If you have any questions or need clarification, feel free to reach out to us at [$phone]..<br><br>
 Best regards,<br>$company</p>";
-    if($update){
+    if($delete){
         //insert into notifications
         $notif_data = array(
             'client' => $customer,
-            'subject' => 'KYC Verification Approved',
+            'subject' => 'KYC Verification Unsuccessful',
             'message' => $message,
             'post_date' => $date,
         );
@@ -89,7 +95,7 @@ Best regards,<br>$company</p>";
         $from = 'admin@dorthpro.com';
         $from_name = "$company";
         $name = "$company";
-        $subj = 'KYC Verification Approved';
+        $subj = 'KYC Verification Unsuccessful';
         $msg = "<div>$message</div>";
         
         $error=smtpmailer($to, $from, $name ,$subj, $msg);

@@ -78,59 +78,55 @@
    if($results > 0 || $results2 > 0){
        echo "<p class='exist' style='background:red;color:#fff;'><span>$customer</span> already exists!</p>";
    }else{
-       //create customer
-       $add_data = new add_data('customers', $data);
-       $add_data->create_data();
-       if($add_data){
-            //get customer id first
-            $get_id = new selects();
-            $ids = $get_id->fetch_lastInserted('customers', 'customer_id');
-            $customer_id = $ids->customer_id;
-            //add to users  table
-            $user_data = array(
-                'full_name' => $customer,
-                'username' => $phone, //use phone number as username
-                'user_password' => 123, //default password
-                'user_role' => 'Client', //default role
-                'store' => $store,
-                'status' => 0, //0 for  active
-                'reg_date' => $date,
-            );
-            $add_user = new add_data('users', $user_data);
-            $add_user->create_data();
-            if($add_user){
-                //get user id
-                $user_ids = $get_id->fetch_lastInserted('users', 'user_id');
-                $user_id = $user_ids->user_id;
-                //now update customer with user id
-                $update = new Update_table();
-                $update->update('customers', 'user_id', 'customer_id', $user_id, $customer_id);
-            }
-            //add to account ledger
-             //check if customer is in ledger
-             $get_ledger = new selects();
-             $ledg = $get_ledger->fetch_count_cond('ledgers', 'ledger', $customer);
-             if($ledg > 0){
-                 echo "<p class='exist'  style='background:red;color:#fff;><span>$customer</span> already exists in ledger</p>";
-             }else{
-                 $add_ledger = new add_data('ledgers', $ledger_data);
-                 $add_ledger->create_data();
-                 //update customer ledger no
-                 //first get ledger id from ledger table
-                 $get_last = new selects();
-                 $legd = $get_last->fetch_lastInserted('ledgers', 'ledger_id');
-                 $ledger_id = $legd->ledger_id;
-                  //update account number
-                $acn = "10104".$ledger_id;
-                $update_acn = new Update_table();
-                $update_acn->update('ledgers', 'acn', 'ledger_id', $acn, $ledger_id);
-                 //now update
-                 $update = new Update_table();
-                 $update->update_double('customers', 'ledger_id', $ledger_id, 'acn', $acn, 'customer_id', $customer_id);
-             }
-                
-       }
-       echo "<div class='success'><p><span>$customer </span> registered successfully!</p></div>";
+        //check if customer is in ledger
+        $get_ledger = new selects();
+        $ledg = $get_ledger->fetch_count_cond('ledgers', 'ledger', $customer);
+        if($ledg > 0){
+            echo "<p class='exist'  style='background:red;color:#fff;><span>$customer</span> already exists in ledger</p>";
+        }else{
+            //create customer
+            $add_data = new add_data('customers', $data);
+            $add_data->create_data();
+            if($add_data){
+                //get customer id first
+                $get_id = new selects();
+                $ids = $get_id->fetch_lastInserted('customers', 'customer_id');
+                $customer_id = $ids->customer_id;
+                //add to users  table
+                $user_data = array(
+                    'full_name' => $customer,
+                    'username' => $phone, //use phone number as username
+                    'user_password' => 123, //default password
+                    'user_role' => 'Client', //default role
+                    'store' => $store,
+                    'status' => 0, //0 for  active
+                    'reg_date' => $date,
+                );
+                $add_user = new add_data('users', $user_data);
+                $add_user->create_data();
+                if($add_user){
+                    //get user id
+                    $user_ids = $get_id->fetch_lastInserted('users', 'user_id');
+                    $user_id = $user_ids->user_id;
+                    //now update customer with user id
+                    $update = new Update_table();
+                    $update->update('customers', 'user_id', 'customer_id', $user_id, $customer_id);
+                    //add account ledger
+                    $add_ledger = new add_data('ledgers', $ledger_data);
+                    $add_ledger->create_data();
+                    //update customer ledger no
+                    //first get ledger id from ledger table
+                    $get_last = new selects();
+                    $legd = $get_last->fetch_lastInserted('ledgers', 'ledger_id');
+                    $ledger_id = $legd->ledger_id;
+                    //update account number
+                    $acn = "10104".$ledger_id;
+                    $update_acn = new Update_table();
+                    $update_acn->update('ledgers', 'acn', 'ledger_id', $acn, $ledger_id);
+                    //now update
+                    $update = new Update_table();
+                    $update->update_double('customers', 'ledger_id', $ledger_id, 'acn', $acn, 'customer_id', $customer_id);
+                    echo "<div class='success'><p><span>$customer </span> registered successfully!</p></div>";
 ?>
 <style>
     .add_user_form .data{
@@ -149,11 +145,13 @@
      <div class="info"></div>
     <div class="add_user_form" style="width:60%; margin:10px auto; box-shadow:none;background:transparent">
         <h3 style="background:var(--tertiaryColor)!important">KYC / Identity Verification</h3>
-        <div class="inputs">
+        <div class="inputs" style="margin-top:10px; gap:1rem; display:flex; flex-wrap:wrap;">
              <div class="data">
                 <figure>
-                    <img src="../photos/user.png" alt="user photo" id="photo" style="width:100%; height:250px; object-fit:cover; border-radius:10px; box-shadow:1px 1px 1px #222">
+                    <img src="../photos/user.png" alt="user photo" id="photo" style="width:100%; height:150px; object-fit:cover; border-radius:10px; box-shadow:1px 1px 1px #222">
                 </figure>
+             </div>
+             <div class="data">
                 <button type="button" style="border-radius:10px; padding:8px; border:1px solid #fff; box-shadow:1px 1px 1px #222;background:silver;color:#222" id="upload_photo" name="upload_photo" onclick="updatePhoto('<?php echo $customer_id?>')">Update Photo<i class="fas fa-photo"></i></button>
             </div>
         </div>
@@ -188,4 +186,7 @@
     </form>
     </div>
 <?php
+                }
+            }
+        }
    }
