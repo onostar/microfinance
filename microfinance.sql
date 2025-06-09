@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 07, 2025 at 09:44 AM
+-- Generation Time: Jun 09, 2025 at 12:55 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -317,7 +317,7 @@ CREATE TABLE `customers` (
   `occupation` varchar(50) NOT NULL,
   `business` varchar(255) NOT NULL,
   `business_address` varchar(255) NOT NULL,
-  `income` float NOT NULL,
+  `income` varchar(50) NOT NULL,
   `nok` varchar(255) NOT NULL,
   `nok_address` varchar(255) NOT NULL,
   `nok_phone` varchar(50) NOT NULL,
@@ -332,6 +332,13 @@ CREATE TABLE `customers` (
   `created_by` int(11) NOT NULL,
   `reg_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`customer_id`, `customer`, `user_id`, `ledger_id`, `acn`, `customer_type`, `phone_numbers`, `customer_address`, `customer_email`, `state_region`, `lga`, `landmark`, `gender`, `dob`, `religion`, `marital_status`, `occupation`, `business`, `business_address`, `income`, `nok`, `nok_address`, `nok_phone`, `nok_relation`, `bank`, `account_number`, `account_name`, `photo`, `reg_status`, `wallet_balance`, `amount_due`, `created_by`, `reg_date`) VALUES
+(36, 'IKPEFUA KELLY', 6, 0, 2147483647, '', '07068897068', '1b Ogidan Street Off Atican Beahview Estate Okun-ajah Community', 'onostarkels@gmail.com', 'LAGOS', 'ETI-OSA', 'Abraham Adesanya Estate', 'Male', '1989-05-15', 'Christian', 'Married', 'Business Person', 'onostar media', 'okun-ajah, lagos', '500,000', 'PAUL IKPEFUA', 'Abraka, Delta State', '0', 'BROTHER', 'Access Bank', 30596252, 'IKPEFUA KELLY', '6844bcab57978.png', 1, 0, 0, 1, '2025-06-07 23:25:01');
 
 -- --------------------------------------------------------
 
@@ -671,6 +678,13 @@ CREATE TABLE `kyc` (
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `kyc`
+--
+
+INSERT INTO `kyc` (`kyc_id`, `customer`, `id_type`, `id_number`, `id_card`, `bvn`, `verification`, `verified_by`, `verified_date`, `kyc_date`, `posted_by`) VALUES
+(2, 36, 'NIN', '89786tuyg', 'nin.jpg', 2147483647, 1, 1, '2025-06-09 11:53:48', '2025-06-07 23:27:22', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -728,7 +742,8 @@ INSERT INTO `ledgers` (`ledger_id`, `account_group`, `sub_group`, `class`, `ledg
 (110, 4, 6, 12, 'COMPUTER CONSUMABLES', 407014110),
 (111, 4, 6, 13, 'PETTY PROJECT EXPENSES', 406013111),
 (112, 4, 6, 13, 'TRANSFER TO MDS ACCOUNT', 406013112),
-(119, 1, 1, 1, 'ACCESS BANK', 10101119);
+(119, 1, 1, 1, 'ACCESS BANK', 10101119),
+(121, 1, 1, 4, 'IKPEFUA KELLY', 10104121);
 
 -- --------------------------------------------------------
 
@@ -775,7 +790,8 @@ INSERT INTO `menus` (`menu_id`, `menu`) VALUES
 (6, 'Financial reports'),
 (8, 'Invoicing'),
 (9, 'Asset Management'),
-(10, 'Chart Of Account');
+(10, 'Chart Of Account'),
+(11, 'Client Module');
 
 -- --------------------------------------------------------
 
@@ -794,6 +810,28 @@ CREATE TABLE `multiple_payments` (
   `posted_by` int(11) NOT NULL,
   `post_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `notification_id` int(11) NOT NULL,
+  `client` int(11) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `not_status` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`notification_id`, `client`, `subject`, `message`, `not_status`, `post_date`) VALUES
+(1, 36, 'KYC Verification status', 'Dear [Client Name], We’re happy to inform you that your KYC verification has been successfully completed. 🎉<br> Your account is now fully verified, and you can enjoy uninterrupted access to all features and services.<br>Thank you for completing the verification process. If you have any questions or need assistance, feel free to reach out to our support team.<br><br>\r\nBest regards,<br>Demo Microfinance Ltd;\r\n\r\n', 0, '2025-06-09 11:53:48');
 
 -- --------------------------------------------------------
 
@@ -1161,7 +1199,7 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (58, 5, 'Accept Items Report', 'accept_report', 1),
 (59, 3, 'All Store Balance', 'all_store_balance', 1),
 (60, 2, 'Wholesale', 'wholesale', 1),
-(62, 1, 'Add New Client', 'add_customer', 0),
+(62, 11, 'Add New Client', 'add_customer', 0),
 (63, 5, 'Customer List', 'customer_list', 0),
 (64, 6, 'Retail Sales', 'retail_sales', 1),
 (65, 6, 'Wholesale Report', 'wholesale_report', 1),
@@ -1244,7 +1282,8 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (148, 6, 'Inventory Postings', 'inventory_posting', 0),
 (149, 6, 'Yearly Income Statement', 'yearly_income_statement', 0),
 (150, 6, 'Other Transactions', 'other_transactions', 0),
-(151, 10, 'Update Ledger', 'update_ledger', 0);
+(151, 10, 'Update Ledger', 'update_ledger', 0),
+(152, 11, 'Verify Kyc', 'verify_kyc', 0);
 
 -- --------------------------------------------------------
 
@@ -1314,7 +1353,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`user_id`, `full_name`, `username`, `user_role`, `user_password`, `status`, `store`, `reg_date`) VALUES
 (1, 'Administrator', 'Sysadmin', 'Admin', '$2y$10$dcUrnR/.PvfK7XeYcP60hOyW2qnPSSvEq/Wxee6lv5DETW8pbGXYu', 0, 1, '2022-09-27 13:47:21'),
 (2, 'Admin', 'Admin', 'Admin', '$2y$10$Zg86mlW4zi3KoTPoKw1fpefZbkEH7MhhrAqQz.njT0gEtX0uvXUra', 0, 1, '2024-09-13 10:48:06'),
-(4, 'KELLY IKPEFUA', 'Onostar', 'Loan Officer', '123', 0, 1, '2025-06-06 11:45:41');
+(6, 'IKPEFUA KELLY', '07068897068', 'Client', '123', 0, 1, '2025-06-07 23:25:01');
 
 -- --------------------------------------------------------
 
@@ -1555,6 +1594,12 @@ ALTER TABLE `multiple_payments`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`notification_id`);
+
+--
 -- Indexes for table `opening_balance`
 --
 ALTER TABLE `opening_balance`
@@ -1760,7 +1805,7 @@ ALTER TABLE `cost_of_sales`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `customer_trail`
@@ -1856,13 +1901,13 @@ ALTER TABLE `item_transfers`
 -- AUTO_INCREMENT for table `kyc`
 --
 ALTER TABLE `kyc`
-  MODIFY `kyc_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `kyc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `ledgers`
 --
 ALTER TABLE `ledgers`
-  MODIFY `ledger_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `ledger_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- AUTO_INCREMENT for table `loans`
@@ -1874,13 +1919,19 @@ ALTER TABLE `loans`
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `multiple_payments`
 --
 ALTER TABLE `multiple_payments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `opening_balance`
@@ -1976,7 +2027,7 @@ ALTER TABLE `stores`
 -- AUTO_INCREMENT for table `sub_menus`
 --
 ALTER TABLE `sub_menus`
-  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
+  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
 
 --
 -- AUTO_INCREMENT for table `transactions`
@@ -1994,7 +2045,7 @@ ALTER TABLE `transfers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `vendors`

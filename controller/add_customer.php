@@ -106,12 +106,6 @@
                 $update = new Update_table();
                 $update->update('customers', 'user_id', 'customer_id', $user_id, $customer_id);
             }
-             //create account number
-             //first get today's date
-            //  $acn = "10104".$todays_date.$customer_id;
-             //now update account number
-             $update_acn = new Update_table();
-             $update_acn->update('customers', 'acn', 'customer_id', $acn, $customer_id);
             //add to account ledger
              //check if customer is in ledger
              $get_ledger = new selects();

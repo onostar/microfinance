@@ -43,6 +43,9 @@
                 </ul>
             </li>
                 <?php } }?>
+            <li>
+                <a href="javascript:void(0);"><i class="fas fa-rocket"></i> </a>
+            </li>
         </ul>
         <?php
             }else{
@@ -87,6 +90,9 @@
                 </ul>
             </li>
                 <?php } }?>
+            <li>
+                <a href="javascript:void(0);"><i class="fas fa-rocket"></i> </a>
+            </li>
         </ul>
         <?php }?>
     </nav>

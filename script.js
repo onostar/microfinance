@@ -6403,3 +6403,25 @@ function updateKYC(){
      $("#id_card").val('');
      $("#bvn").val('');
 }
+
+//approve kyc
+function approveKYC(kyc){
+     let confirm_kyc = confirm("DO you want to approve this KYC verification", "");
+     if(confirm_kyc){
+          $.ajax({
+               type : "GET",
+               url : "../controller/approve_kyc.php?kyc="+kyc,
+               beforeSend : function(){
+                    $("#kyc_details").html("<p>Processing...</p>");
+               },
+               success : function(response){
+                    $("#kyc_details").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#kyc_details").load("verify_kyc.php #kyc_details");
+          }, 2000)
+     }else{
+          return;
+     }
+}

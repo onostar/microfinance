@@ -25,7 +25,55 @@
                 $rows = "<p class='no_result'>No records found</p>";
             }
         }
+         //fetch details from any table order
+        public function fetch_details_order($table, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table ORDER BY $order");
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
 
+            }else{
+                $rows = "<p class='no_result'>No records found</p>";
+            }
+        }
+        //fetch details from any table
+        public function fetch_details_page($table, $limit, $offset){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table LIMIT $offset, $limit");
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+
+            }else{
+                $rows = "<p class='no_result'>No records found</p>";
+            }
+        }
+        //fetch details from any table order
+        public function fetch_details_pageOrder($table, $limit, $offset, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table ORDER BY $order LIMIT $offset, $limit");
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+
+            }else{
+                $rows = "<p class='no_result'>No records found</p>";
+            }
+        }
+        //fetch details from any table with condition
+        public function fetch_details_pageCondOrder($table, $column, $value, $limit, $offset, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column ORDER BY $order DESC LIMIT $offset, $limit");
+            $get_user->bindValue("$column", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+
+            }else{
+                $rows = "<p class='no_result'>No records found</p>";
+            }
+        }
         //check for columns
         public function fetch_column($table, $column){
             $get_user = $this->connectdb()->prepare("SHOW COLUMNS FROM $table LIKE '$column'");

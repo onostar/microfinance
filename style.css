@@ -3299,6 +3299,172 @@ x
     width:100%;
     height:100%;
  }
+ #patient_details{
+    width: 95%;
+    margin: auto;
+ }
+ #patient_details h3{
+    font-size:1rem;
+    color:#fff;
+    padding:8px;
+    text-align: center;
+    text-transform: uppercase;
+    color:rgb(212, 212, 11)
+ }
+ #patient_details .nomenclature{
+    padding:10px;
+    display:flex;
+    align-items: flex-start;
+    gap:.5rem;
+    width:100%;
+    flex-wrap:wrap;
+    background:#fff!important;
+    box-shadow: 2px 2px 2px #a7a7a7;
+
+ }
+ .nomenclature .profile_foto{
+    box-shadow: 1px 1px 1px #222;
+    width:18%;
+    height:150px;
+    border-radius: 10px;
+    border:2px solid #fff;
+ }
+ .nomenclature .profile_foto img{
+    width:100%;
+    height:100%;
+    border-radius: 10px;
+ }
+ .nomenclature .inputs{
+    width:74%;
+    display:flex;
+    flex-wrap: wrap;
+    gap:.8rem;
+ }
+ .nomenclature .inputs .data{
+    width:47%;
+    border-bottom: 1px solid #c4c4c4;
+    /* padding:10px 0; */
+    margin:5px 0;
+    display:flex;
+    align-items: center;
+    gap:.5rem;
+ }
+ .nomenclature .inputs .data label{
+    text-transform: uppercase;
+    color:red;
+    width:30%;
+    font-weight: bold;
+ }
+ .nomenclature .inputs .data input{
+    /* width:100%; */
+    border:none;
+    background:transparent;
+    padding:10px;
+ }
+ #patient_details .add_btn{
+    margin:10px 0!important;
+    
+ }
+ #last_consult, #allergy{
+    background:#fff;
+    padding:10px;
+    margin:10px 0;
+    box-shadow: 2px 2px 2px #a7a7a7;
+
+ }
+ #last_consult h3, #allergy h3{
+    color:red;
+    background:transparent;
+    text-transform: uppercase;
+    text-align: left;
+    font-size: .9rem;
+ }
+ #main_consult, #prescription, #consult_status, #doctors_notes, #all_diagnosis, #referral{
+    background:#fff;
+    padding:10px;
+    margin:20px 0;
+    box-shadow: 2px 2px 2px #a7a7a7;
+ }
+ #main_consult h3, #prescription h3{
+    color:#fff;
+    background:var(--moreColor);
+    text-transform: uppercase;
+    font-size: .9rem;
+
+ }
+ #prescription h3{
+    text-align:left;
+    background:var(--otherColor);
+ }
+ #main_consult .inputs, #prescription .inputs, #consult_status .inputs, #doctors_notes .inputs, #all_diagnosis .inputs, #referral .inputs{
+    display:flex;
+    width:100%;
+    margin: 0 auto;
+    gap:.8rem;
+    align-items: flex-start;
+    padding:10px;
+    flex-wrap: wrap;
+ }
+ #main_consult .inputs .data, #prescription .inputs .data, #consult_status .inputs .data, #doctors_notes .inputs .data, #all_diagnosis .inputs .data, #referral .inputs .data{
+    width:24%!important;
+
+ }
+ #main_consult .inputs .data label, #prescription .inputs .data label, #doctors_notes .inputs .data label, #all_diagnosis .inputs .data label, #referral .inputs .data label{
+    display:block;
+    color:#fff;
+    background:var(--tertiaryColor);
+    padding:5px;
+    text-align: center;
+    width:100%;
+ }
+ #referral .inputs .data label{
+    background:#222;
+ }
+ #main_consult .inputs .data textarea, #main_consult .inputs .data input, #prescription .inputs .data textarea, #doctors_notes .inputs .data textarea,#doctors_notes .inputs .data input, #all_diagnosis .inputs .data textarea, #all_diagnosis .inputs .data input, #referral .inputs .data textarea, #referral .inputs .data select{
+    width:100%;
+    padding:5px;
+ }
+ #main_consult .inputs .data select, #prescription .inputs .data input, #consult_status .inputs .data select, #consult_status .inputs .data input, #referral .inputs .data input{
+    width:100%;
+    background:transparent;
+    padding:5px;
+ }
+ #prescription .inputs .data label{
+    text-align: left;
+ }
+ #prescription .inputs .data button{
+    border-radius: 15px;
+    background:green;
+    padding:5px;
+ }
+ #consult_status .inputs .data label{
+    text-transform: uppercase;
+    display:block;
+ }
+ #consult_status .inputs .data select, #consult_status .inputs .data input{
+    border-radius: 10px;
+    padding:5px;
+ }
+ #consult_status{
+    width:auto;
+ }
+ #consult_status .inputs{
+    align-items: flex-end;
+ }
+ #follow_up, #fl_date, #admit{
+    display:none;
+ }
+ .consultations h2{
+    font-size:1rem;
+    color:var(--otherColor);
+    /* font-family: "Pacifico"; */
+ }
+ .each_consult{
+    width:100%;
+    box-shadow: 2px 2px 2px #a7a7a7;
+    margin:5px 0;
+
+ }
 @media screen and (max-width: 800px){
     #topHeader{
         justify-content: space-between;
