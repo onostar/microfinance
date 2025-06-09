@@ -42,7 +42,16 @@ date_default_timezone_set("Africa/Lagos");
         $_SESSION['store'] = $store;
         $_SESSION['address'] = $store_address;
         $_SESSION['phone'] = $phone;
-        
+        function greeting($staff_name){
+            $hour = date('H'); // Get the current hour in 24-hour format (00 to 23)
+            if ($hour >= 0 && $hour < 12) {
+                return "Good morning! <span style='font-weight:bold'>$staff_name</span>";
+            } elseif ($hour >= 12 && $hour < 18) {
+                return "Good afternoon! <span style='font-weight:bold'>$staff_name</span>";
+            } else {
+                return "Good evening! <span style='font-weight:bold'>$staff_name</span>";
+            }
+        }
     
         
 ?>
@@ -50,7 +59,7 @@ date_default_timezone_set("Africa/Lagos");
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-     <meta name="keywords" content="microfinance software, loan management system, microfinance web app, client onboarding platform, wallet management, microloan software, digital lending solution, accounting-based loan system, microfinance dashboard, financial tracking tool, Laravel microfinance system, online loan disbursement software Dorthpro microfinance">
+    <meta name="keywords" content="microfinance software, loan management system, microfinance web app, client onboarding platform, wallet management, microloan software, digital lending solution, accounting-based loan system, microfinance dashboard, financial tracking tool, Laravel microfinance system, online loan disbursement software Dorthpro microfinance">
     <meta name="description" content="A powerful microfinance web application designed for seamless loan management, client onboarding, wallet tracking, and real-time financial reporting. Built with an accounting model for transparency and growth.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microfinance & Loan Management System</title>
@@ -122,7 +131,7 @@ date_default_timezone_set("Africa/Lagos");
                 <!-- quick links -->
                 <div id="quickLinks">
                     <div class="quick_links">
-                        
+                        <?php if($role == "Admin" || $role == "Accountant"){?>
                         <div class="links page_navs" onclick="showPage('invoicing.php')" title="Create a new invoice">
                             <i class="fas fa-pen-alt"></i>
                             <!-- <p>Direct sales</p> -->
@@ -168,9 +177,28 @@ date_default_timezone_set("Africa/Lagos");
                                 ?>
                             </p>
                         </div>
+                        <?php }else{?>
+                        <div class="links page_navs" onclick="showPage('notifications.php')" title="Notifications">
+                            <i class="fas fa-bell" style="color:var(--tertiaryColor)"></i>
+                            <p style="color:red">
+                                <?php
+                                    $get_nots = new selects();
+                                    $nots = $get_nots->fetch_count_2cond('notifications', 'not_status', 0, 'client', $user_id);
+                                    echo $nots;
+                                ?>
+                            </p>
+                        </div>
+                        <div class="greetings">
+                            <p>
+                                <?php
+                                    echo greeting($fullname);
+                                ?>
+                            </p>
+                        </div>
+                        <?php }?>
                     </div>
                     <?php
-                        if($role == "Admin" || $role == "Inventory Officer" || $role == "Accountant"){
+                        if($role == "Admin" || $role == "Accountant"){
                     ?>
                     <div class="change_dashboard" style="display:none">
                         <!-- check other stores dashboard -->

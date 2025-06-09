@@ -3484,6 +3484,19 @@ x
     margin:5px 0;
 
  }
+ .greetings{
+    margin:5px 10px;
+
+}
+.greetings p{
+    color:var(--otherColor);
+    /* font-weight: bold; */
+
+}
+.greetigs span{
+    color:var(--secondaryColor);
+    font-weight: bold;
+}
 @media screen and (max-width: 800px){
     #topHeader{
         justify-content: space-between;

@@ -11,15 +11,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="keywords" content="Invoicing management, Accounting, Asset manager, trial balance, income statement, cash flow, balance sheet, accounting software">
-    <meta name="description" content="An online/offline Invoicing and Accounting Management system for managing invoices, asset management, vendors, customer payments, as well complete accounting information">
+    <meta name="keywords" content="microfinance software, loan management system, microfinance web app, client onboarding platform, wallet management, microloan software, digital lending solution, accounting-based loan system, microfinance dashboard, financial tracking tool, Laravel microfinance system, online loan disbursement software Dorthpro microfinance">
+    <meta name="description" content="A powerful microfinance web application designed for seamless loan management, client onboarding, wallet tracking, and real-time financial reporting. Built with an accounting model for transparency and growth.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoicing & Accounting | Change password</title>
-    <link rel="icon" type="image/png" size="32x32" href="../images/logo.png">
+    <title>Microfinance & Loan Management System | Change Password</title>
+    <link rel="icon" type="image/png" size="32x32" href="../images/icon.png">
     <link rel="stylesheet" href="../fontawesome-free-6.0.0-web/css/all.css">
     <link rel="stylesheet" href="../fontawesome-free-6.0.0-web/css/all.min.css">
+    <link rel="stylesheet" href="../fontawesome-free-5.15.1-web/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../select2.min.css">
 
 </head>
 <body>
@@ -42,14 +43,13 @@
                         <img src="../images/logo.png" alt="logo">
                     </a>
                 </h1> -->
-                <!-- <h3 class="mobile_company"><?php echo $row->company?></h3>
-                <h2>Change your password</h2>
-                <p></p> -->
                 <div class="company_logo">
                     <img src="<?php echo '../images/'.$row->logo?>" alt="<?php echo $row->company?>">
                 </div>
                 <!-- <h2>Welcome User!</h2> -->
                 <p style="#222"><?php echo $row->company?></p>
+                <h2 style="font-size:.9rem; margin-bottom:5px">Change your password</h2>
+                <p></p>
                 <?php
                     if(isset($_SESSION['success'])){
                         echo "<p class='success succeed'>" . $_SESSION['success']. "</p>
@@ -81,20 +81,20 @@
                         $username = $_SESSION['user'];
                 ?>
                 <form action="../controller/reset_password.php" method="POST">
-                    <div class="data">
+                    <div class="data" style="margin:5px 0!Important">
                         <label for="username">Username</label>
                         <input type="text" name="username" id="username" required value="<?php echo $username?>" readonly>
                         <!-- <input type="hidden" name="current_password" value="123"> -->
                         
                     </div>
-                    <div class="data">
+                    <div class="data" style="margin:5px 0!Important">
                         <label for="new_password">Enter new Password</label>
                         <input type="password" name="new_password" id="password" class="password" placeholder="*******" required>
                         <div class="show_password">
                             <a href="javascript:void(0)" onclick="togglePassword()"><span class="icon"><i class="fas fa-eye"></i></span> <span class="icon_txt">Show password</span></a>
                         </div>
                     </div>
-                    <div class="data">
+                    <div class="data" style="margin:5px 0!Important">
                         <label for="password">Confirm Password</label>
                         <input type="password" name="retype_password" id="retype_password" class="password" placeholder="*******" required>
                         <div class="show_password">
