@@ -21,8 +21,8 @@
 <body>
     <main>
       <?php
-        if(isset($_GET['patient'])){
-          $patient = $_GET['patient'];
+        if(isset($_GET['customer'])){
+          $patient = $_GET['customer'];
         $get_foto = new selects();
         $rows = $get_foto->fetch_details_cond('customers', 'customer_id', $patient);
         foreach($rows as $row){
