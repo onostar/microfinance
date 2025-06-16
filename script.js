@@ -3735,7 +3735,7 @@ function getCustomerEdit(input){
      
 }
 // update customer details
-function updateCustomer(){
+function updateCustomer(url){
      let customer = document.getElementById("customer").value;
      let full_name = document.getElementById("full_name").value;
      let phone_number = document.getElementById("phone_number").value;
@@ -3866,7 +3866,7 @@ function updateCustomer(){
           })
      }
      setTimeout(function(){
-          $("#edit_customer").load("edit_customer.php?customer="+customer+ "#edit_customer");
+          $("#edit_customer").load(url + "?customer="+customer+ "#edit_customer");
      }, 1000);
 
      return false;    

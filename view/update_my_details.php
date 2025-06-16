@@ -7,11 +7,10 @@
     if(isset($_SESSION['user_id'])){
         $user_id = $_SESSION['user_id'];
         // echo $user_id;
-        if(isset($_GET['customer'])){
-            $customer = $_GET['customer'];
-            //get customer name
+        // if(isset($_GET['customer'])){
+            //get customer details
             $get_customer = new selects();
-            $rows = $get_customer->fetch_details_cond('customers', 'customer_id', $customer);
+            $rows = $get_customer->fetch_details_cond('customers', 'user_id', $user_id);
             foreach($rows as $row){
 
 ?>
@@ -222,15 +221,15 @@
                     <input type="tel" name="nok_phone" id="nok_phone" required value="<?php echo $row->nok_phone?>">
                 </div>
                 <div class="data" style="width:50%">
-                    <button type="submit" id="update_customer" name="update_customer" onclick="updateCustomer('edit_customer.php')">Update details <i class="fas fa-save"></i></button>
-                    <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('edit_customer_info.php')"><i class="fas fa-angle-double-left"></i> Return</a>
+                    <button type="submit" id="update_customer" name="update_customer" onclick="updateCustomer('update_my_details.php')">Update details <i class="fas fa-save"></i></button>
+                    <!-- <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('edit_customer_info.php')"><i class="fas fa-angle-double-left"></i> Return</a> -->
                 </div>
             </div>
         </section>    
     </div>
 
 <?php
-            }
+            // }
         }
     }else{
         header("Location: ../index.php");
