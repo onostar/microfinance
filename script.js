@@ -6568,3 +6568,73 @@ function declineKYC(kyc){
           return;
      }
 }
+
+// add package
+function addPackage(){
+     let product = document.getElementById("product").value;
+     let minimum = document.getElementById("minimum").value;
+     let maximum = document.getElementById("maximum").value;
+     let interest = document.getElementById("interest").value;
+     let repayment = document.getElementById("repayment").value;
+     let processing = document.getElementById("processing").value;
+     let penalty = document.getElementById("penalty").value;
+     let collateral = document.getElementById("collateral").value;
+     let description = document.getElementById("description").value;
+     let duration = document.getElementById("duration").value;
+     if(product.length == 0 || product.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input product name!");
+          $("#product").focus();
+          return;
+     }else if(minimum.length == 0 || minimum.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input minimum amount");
+          $("#minimum").focus();
+          return;
+     }else if(maximum.length == 0 || maximum.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input maximum amount");
+          $("#maximum").focus();
+          return;
+     }else if(interest.length == 0 || interest.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input interest");
+          $("#description").focus();
+          return;
+     }else if(duration.length == 0 || duration.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select duration");
+          $("#duration").focus();
+          return;
+     }else if(repayment.length == 0 || repayment.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select payment frequency");
+          $("#repayment").focus();
+          return;
+     }else if(processing.length == 0 || processing.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input processing fee");
+          $("#processing").focus();
+          return;
+     }else if(penalty.length == 0 || penalty.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input late payment penalty fee");
+          $("#penalty").focus();
+          return;
+     }else if(collateral.length == 0 || collateral.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select collateral type");
+          $("#collateral").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_loan_product.php",
+               data : {product:product, minimum:minimum, maximum:maximum, interest:interest, duration:duration, repayment:repayment, processing:processing, penalty:penalty, collateral:collateral, description:description},
+               success : function(response){
+               $("#package").html(response);
+               }
+          })
+     }
+     // $("#room_category").val('');
+     /* $("#business").val('');
+     $("#address").val('');
+     $("#business_type").val('');
+     $("#description").val('');
+     $("#business").focus(); */
+     setTimeout(function(){
+          $("#package").load("add_loan_products.php #package");
+     }, 2000)
+     return false;    
+}
