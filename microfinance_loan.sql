@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2025 at 12:55 PM
+-- Generation Time: Jun 17, 2025 at 06:19 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -338,7 +338,8 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`customer_id`, `customer`, `user_id`, `ledger_id`, `acn`, `customer_type`, `phone_numbers`, `customer_address`, `customer_email`, `state_region`, `lga`, `landmark`, `gender`, `dob`, `religion`, `marital_status`, `occupation`, `business`, `business_address`, `income`, `nok`, `nok_address`, `nok_phone`, `nok_relation`, `bank`, `account_number`, `account_name`, `photo`, `reg_status`, `wallet_balance`, `amount_due`, `created_by`, `reg_date`) VALUES
-(36, 'IKPEFUA KELLY', 6, 0, 2147483647, '', '07068897068', '1b Ogidan Street Off Atican Beahview Estate Okun-ajah Community', 'onostarkels@gmail.com', 'LAGOS', 'ETI-OSA', 'Abraham Adesanya Estate', 'Male', '1989-05-15', 'Christian', 'Married', 'Business Person', 'onostar media', 'okun-ajah, lagos', '500,000', 'PAUL IKPEFUA', 'Abraka, Delta State', '0', 'BROTHER', 'Access Bank', 30596252, 'IKPEFUA KELLY', '6844bcab57978.png', 1, 0, 0, 1, '2025-06-07 23:25:01');
+(38, 'IKPEFUA KELLY', 8, 122, 10104122, '', '07068897068', '1b Ogidan Street Off Atican Beachview Estate, Okun-ajah Community', 'onostarkels@gmail.com', 'LAGOS', 'ETI-OSA', 'Abraham Adesanya Estate', 'Male', '1989-05-15', 'Christian', 'Married', 'Business Person', 'onostar media', 'Ogidan, Lagos state', '1,000,000', 'PAUL IKPEFUA', 'Abraka, Delta State', '091565677', 'BROTHER', 'Access Bank', 30596252, 'IKPEFUA KELLY ONOLUNOSE', '684fd6924b626.png', 1, 0, 0, 1, '2025-06-09 14:21:04'),
+(40, 'IKPEFUA VICTORY', 10, 124, 10104124, '', '09012345678', 'Iyan-ipaja', 'victory@mail.com', 'LAGOS', 'IYAN', 'I', 'Female', '2001-05-25', 'Christian', 'Single', 'Banker', 'torys hair', 'jkhkh', '200000', 'PAUL', 'Khjkh', 'hghg', 'JKH', 'Jaiz Bank', 8786, '786786', 'user.png', 1, 0, 0, 1, '2025-06-09 15:19:33');
 
 -- --------------------------------------------------------
 
@@ -683,7 +684,8 @@ CREATE TABLE `kyc` (
 --
 
 INSERT INTO `kyc` (`kyc_id`, `customer`, `id_type`, `id_number`, `id_card`, `bvn`, `verification`, `verified_by`, `verified_date`, `kyc_date`, `posted_by`) VALUES
-(2, 36, 'NIN', '89786tuyg', 'nin.jpg', 2147483647, 1, 1, '2025-06-09 11:53:48', '2025-06-07 23:27:22', 1);
+(3, 38, 'NIN', '89900987766', 'nin.jpg', 2147483647, 1, 1, '2025-06-09 14:42:29', '2025-06-09 14:37:59', 1),
+(5, 40, 'VOTER&#039;S CARD', '87686876ug', '26680_40.jpg', 2147483647, 1, 1, '2025-06-09 15:20:20', '2025-06-09 15:19:56', 1);
 
 -- --------------------------------------------------------
 
@@ -743,7 +745,8 @@ INSERT INTO `ledgers` (`ledger_id`, `account_group`, `sub_group`, `class`, `ledg
 (111, 4, 6, 13, 'PETTY PROJECT EXPENSES', 406013111),
 (112, 4, 6, 13, 'TRANSFER TO MDS ACCOUNT', 406013112),
 (119, 1, 1, 1, 'ACCESS BANK', 10101119),
-(121, 1, 1, 4, 'IKPEFUA KELLY', 10104121);
+(122, 1, 1, 4, 'IKPEFUA KELLY', 10104122),
+(124, 1, 1, 4, 'IKPEFUA VICTORY', 10104124);
 
 -- --------------------------------------------------------
 
@@ -765,6 +768,36 @@ CREATE TABLE `loans` (
   `post_date` datetime DEFAULT NULL,
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `loan_products`
+--
+
+CREATE TABLE `loan_products` (
+  `product_id` int(11) NOT NULL,
+  `product` varchar(1024) NOT NULL,
+  `description` text NOT NULL,
+  `interest` decimal(10,0) NOT NULL,
+  `repayment` varchar(50) NOT NULL,
+  `minimum` decimal(10,0) NOT NULL,
+  `maximum` decimal(10,0) NOT NULL,
+  `duration` int(11) NOT NULL,
+  `processing` decimal(10,0) NOT NULL,
+  `penalty` decimal(10,0) NOT NULL,
+  `collateral` varchar(50) NOT NULL,
+  `product_status` int(11) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `loan_products`
+--
+
+INSERT INTO `loan_products` (`product_id`, `product`, `description`, `interest`, `repayment`, `minimum`, `maximum`, `duration`, `processing`, `penalty`, `collateral`, `product_status`, `posted_by`, `post_date`) VALUES
+(1, 'SME LOAN', 'For Small Businesess', 3, 'Weekly', 50000, 300000, 90, 1, 2, 'Yes', 1, 1, '2025-06-17 14:10:52');
 
 -- --------------------------------------------------------
 
@@ -791,7 +824,9 @@ INSERT INTO `menus` (`menu_id`, `menu`) VALUES
 (8, 'Invoicing'),
 (9, 'Asset Management'),
 (10, 'Chart Of Account'),
-(11, 'Client Module');
+(11, 'Client Module'),
+(12, 'Customer'),
+(13, 'Loan Management');
 
 -- --------------------------------------------------------
 
@@ -831,7 +866,8 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`notification_id`, `client`, `subject`, `message`, `not_status`, `post_date`) VALUES
-(1, 36, 'KYC Verification status', 'Dear [Client Name], We’re happy to inform you that your KYC verification has been successfully completed. 🎉<br> Your account is now fully verified, and you can enjoy uninterrupted access to all features and services.<br>Thank you for completing the verification process. If you have any questions or need assistance, feel free to reach out to our support team.<br><br>\r\nBest regards,<br>Demo Microfinance Ltd;\r\n\r\n', 0, '2025-06-09 11:53:48');
+(3, 38, 'KYC Verification Approved', '<p>Dear IKPEFUA KELLY, <br> We’re happy to inform you that your KYC verification has been successfully completed. 🎉<br><br> Your account is now fully verified, and you can enjoy uninterrupted access to all features and services.<br><br>Thank you for completing the verification process. If you have any questions or need assistance, feel free to reach out to our support team.<br><br>\r\nBest regards,<br>Demo Microfinance Ltd</p>;\r\n\r\n', 1, '2025-06-09 14:42:29'),
+(4, 40, 'KYC Verification Approved', '<p>Dear IKPEFUA VICTORY, <br> We’re happy to inform you that your KYC verification has been successfully completed. 🎉<br><br> Your account is now fully verified, and you can enjoy uninterrupted access to all features and services.<br><br>Thank you for completing the verification process. If you have any questions or need assistance, feel free to reach out to our support team.<br><br>\r\nBest regards,<br>Demo Microfinance Ltd</p>;\r\n\r\n', 0, '2025-06-09 15:20:20');
 
 -- --------------------------------------------------------
 
@@ -1200,7 +1236,7 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (59, 3, 'All Store Balance', 'all_store_balance', 1),
 (60, 2, 'Wholesale', 'wholesale', 1),
 (62, 11, 'Add New Client', 'add_customer', 0),
-(63, 5, 'Customer List', 'customer_list', 0),
+(63, 11, 'Customer List', 'customer_list', 0),
 (64, 6, 'Retail Sales', 'retail_sales', 1),
 (65, 6, 'Wholesale Report', 'wholesale_report', 1),
 (66, 6, 'Customer Statement', 'customer_statement', 0),
@@ -1216,7 +1252,7 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (76, 1, 'Update Store Details', 'update_store', 0),
 (77, 1, 'Add User Rights', 'add_rights', 1),
 (78, 1, 'Delete Rights', 'delete_right', 1),
-(79, 1, 'Edit Customer Info', 'edit_customer_info', 0),
+(79, 11, 'Edit Customer Info', 'edit_customer_info', 0),
 (80, 4, 'Customer Payments', 'fund_wallet', 0),
 (81, 4, 'Reverse Deposit', 'reverse_deposit', 1),
 (82, 1, 'Adjust Expiration', 'adjust_expiration', 1),
@@ -1246,7 +1282,7 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (111, 5, 'Transfer Qty Bwt Reports', 'transfer_qty_btw_reports', 1),
 (113, 5, 'Ice Cream Productions', 'ice_cream_production', 1),
 (114, 6, 'Outstanding Debts Posting', 'outstanding_debts', 1),
-(115, 1, 'Merge Customer Files', 'merge_files', 0),
+(115, 11, 'Merge Customer Files', 'merge_files', 0),
 (116, 8, 'New Invoice', 'invoicing', 0),
 (117, 8, 'View Invoices', 'invoice_reports', 0),
 (118, 8, 'Pending Invoice', 'pending_invoice', 0),
@@ -1283,7 +1319,12 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (149, 6, 'Yearly Income Statement', 'yearly_income_statement', 0),
 (150, 6, 'Other Transactions', 'other_transactions', 0),
 (151, 10, 'Update Ledger', 'update_ledger', 0),
-(152, 11, 'Verify Kyc', 'verify_kyc', 0);
+(152, 11, 'Verify Kyc', 'verify_kyc', 0),
+(153, 12, 'Update Details', 'update_my_details', 0),
+(154, 12, 'Upload Kyc', 'upload_kyc', 0),
+(155, 12, 'Update Photo', 'update_my_photo', 0),
+(156, 12, 'Notifications', 'notifications', 0),
+(157, 13, 'Loan Products', 'loan_products', 0);
 
 -- --------------------------------------------------------
 
@@ -1353,7 +1394,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`user_id`, `full_name`, `username`, `user_role`, `user_password`, `status`, `store`, `reg_date`) VALUES
 (1, 'Administrator', 'Sysadmin', 'Admin', '$2y$10$dcUrnR/.PvfK7XeYcP60hOyW2qnPSSvEq/Wxee6lv5DETW8pbGXYu', 0, 1, '2022-09-27 13:47:21'),
 (2, 'Admin', 'Admin', 'Admin', '$2y$10$Zg86mlW4zi3KoTPoKw1fpefZbkEH7MhhrAqQz.njT0gEtX0uvXUra', 0, 1, '2024-09-13 10:48:06'),
-(6, 'IKPEFUA KELLY', '07068897068', 'Client', '123', 0, 1, '2025-06-07 23:25:01');
+(8, 'IKPEFUA KELLY', '07068897068', 'Client', '$2y$10$XmlBV8k.A7XRVkuG.Ipq6Ojr1sq8uTbBUmYceMFPXcTfpLgiosMkK', 0, 1, '2025-06-09 14:21:04'),
+(10, 'IKPEFUA VICTORY', '09012345678', 'Client', '123', 0, 1, '2025-06-09 15:19:33');
 
 -- --------------------------------------------------------
 
@@ -1582,6 +1624,12 @@ ALTER TABLE `loans`
   ADD PRIMARY KEY (`loan_id`);
 
 --
+-- Indexes for table `loan_products`
+--
+ALTER TABLE `loan_products`
+  ADD PRIMARY KEY (`product_id`);
+
+--
 -- Indexes for table `menus`
 --
 ALTER TABLE `menus`
@@ -1805,7 +1853,7 @@ ALTER TABLE `cost_of_sales`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `customer_trail`
@@ -1901,13 +1949,13 @@ ALTER TABLE `item_transfers`
 -- AUTO_INCREMENT for table `kyc`
 --
 ALTER TABLE `kyc`
-  MODIFY `kyc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `kyc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `ledgers`
 --
 ALTER TABLE `ledgers`
-  MODIFY `ledger_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `ledger_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- AUTO_INCREMENT for table `loans`
@@ -1916,10 +1964,16 @@ ALTER TABLE `loans`
   MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `loan_products`
+--
+ALTER TABLE `loan_products`
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `multiple_payments`
@@ -1931,7 +1985,7 @@ ALTER TABLE `multiple_payments`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `opening_balance`
@@ -2027,7 +2081,7 @@ ALTER TABLE `stores`
 -- AUTO_INCREMENT for table `sub_menus`
 --
 ALTER TABLE `sub_menus`
-  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
+  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
 
 --
 -- AUTO_INCREMENT for table `transactions`
@@ -2045,7 +2099,7 @@ ALTER TABLE `transfers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `vendors`
