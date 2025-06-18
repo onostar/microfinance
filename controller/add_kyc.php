@@ -86,7 +86,7 @@
                         //update kyc data
                         $add_kyc = new add_data('kyc', $data);
                         if($add_kyc){
-                            echo "<p><span>KYC updated Successfully</p>";
+                            echo "<p><span>KYC added Successfully<br>Kindly await approval</p>";
                         }else{
                             echo "<p class='exist'>Failed to update KYC</p>";
                         }
@@ -136,7 +136,7 @@
                     $add_item = new add_data('kyc', $data);
                     $add_item->create_data();
                     if($add_item){
-                        echo "<p><span>KYC added Successfully</p>";
+                        echo "<p><span>KYC added Successfully<br>Kindly await approval</p>";
                     }else{
                         echo "<p class='exist'>Failed to add KYC</p>";
                     }

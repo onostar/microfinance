@@ -33,7 +33,7 @@
                     <td>Duration</td>
                     <td>Interest (%)</td>
                     <td>Repayment</td>
-                    <td>Processing Fee (%)</td>
+                    <td>Trx. Fee (%)</td>
                     <td>Penalty Fee (%)</td>
                     <td>Collat.</td>
                     <td>Status</td>
@@ -111,7 +111,9 @@
                             }
                         ?>
                     </td>
-                    <td>
+                    <td style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap">
+                        <a style="background:var(--tertiaryColor)!important; color:#fff!important; padding:3px 6px; margin:2px;border-radius:50%; border:1px solid #fff; box-shadow:1px 1px 1px #222" href="javascript:void(0)" onclick="getForm('<?php echo $row->product_id?>', 'get_package.php');"><i class="fas fa-pen"></i></a>
+                        <a style="background:brown!important; color:#fff!important; padding:3px 6px; border-radius:50%; border:1px solid #fff; box-shadow:1px 1px 1px #222" href="javascript:void(0)" onclick="deletePackage('<?php echo $row->product_id?>');"><i class="fas fa-trash"></i></a>
                         <?php
                             if($row->product_status == 1){
                         ?>
@@ -120,8 +122,7 @@
                         <a style="padding:0; border-radius:5px;  margin: 0 3px; color:green;font-size:1rem;" href="javascript:void(0)" onclick="toggleNotif('<?php echo $row->product_id?>')" title="Disable Product"><i class="fas fa-toggle-on"></i></a>
                         <?php }?>
                         
-                        <a style="background:var(--tertiaryColor)!important; color:#fff!important; padding:5px 8px; border-radius:50%; border:1px solid #fff; box-shadow:1px 1px 1px #222" href="javascript:void(0)" onclick="getForm('<?php echo $row->product_id?>', 'get_package.php');"><i class="fas fa-pen"></i></a>
-                        <a style="background:brown!important; color:#fff!important; padding:5px 8px; border-radius:50%; border:1px solid #fff; box-shadow:1px 1px 1px #222" href="javascript:void(0)" onclick="deletePackage('<?php echo $row->product_id?>');"><i class="fas fa-trash"></i></a>
+                        
                     </td>
                 </tr>
             <?php $n++; endforeach; }?>

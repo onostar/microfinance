@@ -24,7 +24,7 @@
             }
     ?>
     <div class="add_user_form priceForm">
-        <h3 style="background:var(--primaryColor)">Update <?php echo strtoupper($row->product)?> package details</h3>
+        <h3 style="background:var(--primaryColor)">Update <?php echo strtoupper($row->product)?> details</h3>
         <section style="text-align:left">
             <div class="inputs" style="align-items:flex-end; justify-content:left; gap:.5rem">
                 <!-- <div class="data item_head"> -->
@@ -86,7 +86,7 @@
                     <textarea name="description" id="description"><?php echo $row->description?></textarea>
                 </div>
                 <div class="data">
-                    <button type="submit" id="modify_package" name="modify_package" onclick="modifyPackages()">Modify <i class="fas fa-save"></i></button>
+                    <button type="button" id="modify_package" name="modify_package" onclick="modifyPackages()">Modify <i class="fas fa-save"></i></button>
                     <a href="javascript:void(0)" title="close form" style='background:red; padding:10px; border-radius:5px; color:#fff' onclick="closeForm()">Return <i class='fas fa-angle-double-left'></i></a>
                 </div>
             </div>

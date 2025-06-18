@@ -31,7 +31,7 @@
            echo "<div class='success'><p>Loan Product deactivated successfully! <i class='fas fa-thumbs-up'></i></p></div>";
             // echo "<p style='background:green; text-align:center;color:#fff; padding:10px; font-size:.9rem'>Notification activated successfully!</p>";
         }else{
-            echo "<div class='success'><p>Loan Product deactivated successfully! <i class='fas fa-thumbs-down'></i></p></div>";
+            echo "<div class='success'><p>Loan Product activated successfully! <i class='fas fa-thumbs-down'></i></p></div>";
             // echo "<p style='background:green; text-align:center;color:#fff; padding:10px; font-size:.9rem'>Notification deactivated successfully!</p>";
         }
     }

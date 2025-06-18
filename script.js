@@ -6758,3 +6758,15 @@ function toggleNotif(product){
      return false;
      
 }
+
+//get loan prooducts during application
+function getLoanProduct(loan){
+     $.ajax({
+          type : "GET",
+          url : "../controller/get_loan_product.php?product="+loan,
+          success : function(response){
+               $("#product_info").html(response);
+               document.getElementById("product_info").scrollIntoView();
+          }
+     })
+}

@@ -52,7 +52,7 @@ date_default_timezone_set("Africa/Lagos");
                 return "Good evening! <span style='font-weight:bold'>$staff_name</span>";
             }
         }
-        //get customer if
+        //get customer info
         $cus = $fetch_comp->fetch_details_cond('customers', 'user_id', $user_id);
         if(is_array($cus)){
             foreach($cus as $cli){

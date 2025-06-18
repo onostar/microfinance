@@ -3506,6 +3506,32 @@ x
     top:2px;
     right:12px;
 }
+.not_available{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 80%;
+    margin: 20px auto;
+    box-shadow: 1px 1px 1px #000;
+    background:#fff;
+    padding:20px 10px;
+ }
+ .not_available p{
+    text-align: center;
+    margin:10px 0;
+ }
+ 
+ .not_available a{
+    background:var(--tertiaryColor);
+    color:#fff;
+    padding:10px;
+    border:1px solid #fff;
+    box-shadow: 1px 1px 1px #000;
+    border-radius: 15px;
+    text-align: center;
+
+ }
 @media screen and (max-width: 800px){
     #topHeader{
         justify-content: space-between;
