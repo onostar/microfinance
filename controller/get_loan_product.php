@@ -1,7 +1,8 @@
 <?php
 
-    if (isset($_GET['product'])){
+    if (isset($_GET['product']) && isset($_GET['customer'])) {
         $id = $_GET['product'];
+        $customer = $_GET['customer'];
 
     // instantiate class
     include "../classes/dbh.php";
@@ -63,11 +64,11 @@
                 </div>
                 <div class="data" style="width:32%;">
                     <label for="processing"> Processing Fee</label>
-                    <input type="text" value="<?php echo $row->processing?>%">
+                    <input type="text" value="<?php echo $row->processing?>%" readonly>
                 </div>
                 <div class="data" style="width:32%;">
                     <label for="penalty"> Late Payment Penalty</label>
-                    <input type="text" style="color:red" value="<?php echo $row->penalty?>%">
+                    <input type="text" style="color:red" value="<?php echo $row->penalty?>%" readonly>
                 </div>
                 <div class="data" style="width:32%;">
                     <label for="collateral"> Collateral Required?</label>
@@ -75,8 +76,7 @@
                 </div>
                 
                 <div class="data">
-                    <button type="button" onclick="showPage('continue_application.php?product=<?php echo $id?>')">Apply <i class="fas fa-arrow-right-arrow-left"></i></button>
-                    
+                    <button type="button" onclick="showPage('continue_application.php?product=<?php echo $id?>&customer=<?php echo $customer?>')">Apply <i class="fas fa-arrow-right-arrow-left"></i></button>
                 </div>
             </div>
         </section>   

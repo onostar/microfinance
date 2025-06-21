@@ -51,7 +51,7 @@
                 <div class="data" style="width:32%;">
                     <label for="duration"> Maximum Term (Duration)</label>
                     <select name="duration" id="duration">
-                        <option value="">Select Duration</option>
+                        <option value="" selected disabled>Select Duration</option>
                         <option value="90">3 Months</option>
                         <option value="180">6 Months</option>
                         <option value="365">12 Months</option>

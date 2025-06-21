@@ -1,4 +1,4 @@
-<div id="package">
+<div id="loan_application">
 
 <?php
     session_start();    
@@ -38,7 +38,7 @@
                 <div class="inputs">
                     <div class="data" style="width:100%;">
                         <label for="business"> Loan Product</label>
-                        <select name="product" id="product" onchange="getLoanProduct(this.value)">
+                        <select name="product" id="product" onchange="getLoanProduct(this.value, '<?php echo $customer?>')">
                             <option value="" selected disabled>Select Loan Product</option>
                             <?php
                                 $loans = $get_details->fetch_details_condOrder('loan_products', 'product_status', 0, 'product');
