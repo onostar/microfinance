@@ -6771,32 +6771,50 @@ function getLoanProduct(loan, customer){
      })
 }
 
-//calculate loan interest and fees
 function calculateInterest(){
-     let amount = document.getElementById("amount").value;
-     let interest_rate = document.getElementById("interest_rate").value;
-     let interest = document.getElementById("interest");
-     let processing = document.getElementById("processing").value;
-     let processing_fee = document.getElementById("processing_fee");
-     let total_payable = document.getElementById("total_payable");
-     let total_interest = 0;
-     let total_processing = 0;
-     let total_due = 0;
-     if(parseFloat(amount) < 1){
-          alert("Loan amount must be greater than 0");
-          $("#amount").focus();
-          return;
-     
+    let amount = parseFloat(document.getElementById("amount").value);
+    let interest_rate = parseFloat(document.getElementById("interest_rate").value);
+    let processing = parseFloat(document.getElementById("processing").value);
+    let frequency = document.getElementById("frequency").value;
+    let loan_term = parseFloat(document.getElementById("loan_term").value); // in months
+
+     if(amount < 1) {
+        alert("Loan amount must be greater than 0");
+        $("#amount").focus();
+        return;
      }else{
-          total_interest = (parseFloat(amount) * parseFloat(interest_rate)) / 100;
-          total_processing = (parseFloat(amount) * parseFloat(processing)) / 100;
-          total_due = parseFloat(amount) + parseFloat(total_interest) + parseFloat(total_processing);
-          
-          $("#interest").val(total_interest.toFixed(2).toLocaleString());
-          $("#processing_fee").val(total_processing.toFixed(2).toLocaleString());
-          $("#total_payable").val(total_due.toFixed(2).toLocaleString());
-          
+          // Calculate interest and fees
+          let total_interest = (amount * interest_rate) / 100;
+          let total_processing = (amount * processing) / 100;
+          let total_due = amount + total_interest + total_processing;
+
+          // Determine number of installments
+          let installments = 0;
+          if (frequency === "Weekly") {
+               installments = loan_term * 4; // 4 weeks per month
+          } else if (frequency === "Monthly") {
+               installments = loan_term;
+          } else if (frequency === "Yearly") {
+               installments = loan_term / 12; // convert months to years
+          } else {
+               installments = 1; // fallback
+          }
+
+          let repayment = total_due / installments;
+
+          // Update UI
+          $("#installment").val(repayment.toFixed(2));
+          $("#interest").val(total_interest.toFixed(2));
+          $("#processing_fee").val(total_processing.toFixed(2));
+          $("#total_payable").val(total_due.toFixed(2));
+          //format for display
+          $("#installmental").val("₦"+repayment.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+          $("#interest_amount").val("₦"+total_interest.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+          $("#processing_amount").val("₦"+total_processing.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+          $("#total_fee").val("₦"+total_due.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
      }
+
+    
 }
 
 //submit loan application
@@ -6807,12 +6825,16 @@ function completeApplication(){
      let minimum = document.getElementById("minimum").value;
      let maximum = document.getElementById("maximum").value;
      let interest = document.getElementById("interest").value;
+     let interest_rate = document.getElementById("interest_rate").value;
      let processing_fee = document.getElementById("processing_fee").value;
+     let processing = document.getElementById("processing").value;
      let total_payable = document.getElementById("total_payable").value;
-     let repayment = document.getElementById("repayment").value;
+     let frequency = document.getElementById("frequency").value;
+     let installment = document.getElementById("installment").value;
      let duration = document.getElementById("duration").value;
      let loan_term = document.getElementById("loan_term").value;
      let purpose = document.getElementById("purpose").value;
+     let collateral_type = document.getElementById("collateral_type").value;
      let collateral = document.getElementById("collateral")?.value || "";
      if(customer.length == 0 || customer.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please select customer");
@@ -6831,7 +6853,7 @@ function completeApplication(){
           $("#amount").focus();
           return;
      }else if(parseFloat(amount) < parseFloat(minimum) || parseFloat(amount) > parseFloat(maximum)){
-          alert("Loan amount must be within "+minimum+" and "+maximum);
+          alert("Loan amount must be within "+"₦"+minimum.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })+" and "+"₦"+maximum.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
           $("#amount").focus();
           return;
      }else if(purpose.length == 0 || purpose.replace(/^\s+|\s+$/g, "").length == 0){
@@ -6842,15 +6864,21 @@ function completeApplication(){
           alert("Please select loan term");
           $("#loan_term").focus();
           return;
-     }else if(loan_term > duration){
-          alert("Loan duration cannot be grater than "+duration+" days");
+     }else if(parseInt(loan_term) > parseInt(duration)){
+          alert("Loan duration cannot be grater than "+duration+" Months");
           $("#loan_term").focus();
           return;
+     }else if(collateral_type == "Yes"){
+          if(collateral.length == 0 || collateral.replace(/^\s+|\s+$/g, "").length == 0){
+               alert("Please input collateral details");
+               $("#colateral").focus();
+               return;
+          }
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/submit_loan_application.php",
-               data : {customer:customer, product:product, amount:amount, interest:interest, processing_fee:processing_fee, total_payable:total_payable, repayment:repayment,  loan_term:loan_term, purpose:purpose, collateral:collateral},
+               data : {customer:customer, product:product, amount:amount, interest:interest, interest_rate:interest_rate, processing_fee:processing_fee, processing:processing, total_payable:total_payable, installment:installment,  frequency:frequency,loan_term:loan_term, purpose:purpose, collateral:collateral},
                beforeSend : function(){
                     $("#loan_application").html("<p>Processing...</p>");
                },

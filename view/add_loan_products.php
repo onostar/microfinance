@@ -52,9 +52,9 @@
                     <label for="duration"> Maximum Term (Duration)</label>
                     <select name="duration" id="duration">
                         <option value="" selected disabled>Select Duration</option>
-                        <option value="90">3 Months</option>
-                        <option value="180">6 Months</option>
-                        <option value="365">12 Months</option>
+                        <option value="3">3 Months</option>
+                        <option value="6">6 Months</option>
+                        <option value="12">12 Months</option>
                     </select>
                 </div>
                 <div class="data" style="width:32%;">
@@ -127,18 +127,9 @@
                     <td style="color:green">
                         <?php echo number_format($row->minimum, 2)." - ". number_format($row->maximum, 2)?>
                     </td>
-                    <td>
+                   <td>
                         <?php
-                            if($row->duration == 90){
-                                echo "3 Months";
-                            }else if($row->duration == 180){
-                                echo "6 Months";
-                            }else if($row->duration == 365){
-                                echo "1 Year";
-
-                            }else{
-                                echo "";
-                            }
+                            echo $row->duration." Months";
                         ?>
                     </td>
                     <td style="color:red">

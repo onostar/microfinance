@@ -14,15 +14,15 @@
         foreach($rows as $row):
             //get packagename
            
-            if($row->duration == 90){
+            /* if($row->duration == 3){
                 $duration = "3 Months";
-            }else if($row->duration == 180){
+            }else if($row->duration == 6){
                 $duration = "6 Months";
             }else if($row->duration == 365){
                 $duration = "1 Year";
             }else{
                 $duration = "";
-            }
+            } */
     ?>
     <style>
         @media screen and (max-width: 800px){
@@ -60,7 +60,7 @@
                 </div>
                 <div class="data" style="width:32%;">
                     <label for="duration" style="text-align:left!important;">Maximum Term (Duration)</label>
-                     <input type="text" value="<?php echo $duration?>" readonly>
+                     <input type="text" value="<?php echo $row->duration?> Months" readonly>
                 </div>
                 <div class="data" style="width:32%;">
                     <label for="processing"> Processing Fee</label>

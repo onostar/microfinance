@@ -11,17 +11,7 @@
     $rows = $get_item->fetch_details_cond('loan_products', 'product_id', $id);
      if(gettype($rows) == 'array'){
         foreach($rows as $row):
-            //get packagename
-           
-            if($row->duration == 90){
-                $duration = "3 Months";
-            }else if($row->duration == 180){
-                $duration = "6 Months";
-            }else if($row->duration == 365){
-                $duration = "1 Year";
-            }else{
-                $duration = "";
-            }
+            
     ?>
     <div class="add_user_form priceForm">
         <h3 style="background:var(--primaryColor)">Update <?php echo strtoupper($row->product)?> details</h3>
@@ -58,11 +48,11 @@
                     <label for="duration" style="text-align:left!important;">Maximum Term (Duration)</label>
                     <select name="duration" id="duration">
                         <option value="<?php echo $row->duration?>">
-                            <?php echo $duration?>
+                            <?php echo $row->duration?> Months
                         </option>
-                        <option value="90">3 Months</option>
-                        <option value="180">6 Months</option>
-                        <option value="365">1 Year</option>
+                        <option value="3">3 Months</option>
+                        <option value="6">6 Months</option>
+                        <option value="12">12 Months</option>
                     </select>
                 </div>
                 <div class="data" style="width:32%;">

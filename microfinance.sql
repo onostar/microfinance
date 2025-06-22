@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 17, 2025 at 06:19 PM
+-- Generation Time: Jun 22, 2025 at 12:23 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -684,8 +684,8 @@ CREATE TABLE `kyc` (
 --
 
 INSERT INTO `kyc` (`kyc_id`, `customer`, `id_type`, `id_number`, `id_card`, `bvn`, `verification`, `verified_by`, `verified_date`, `kyc_date`, `posted_by`) VALUES
-(3, 38, 'NIN', '89900987766', 'nin.jpg', 2147483647, 1, 1, '2025-06-09 14:42:29', '2025-06-09 14:37:59', 1),
-(5, 40, 'VOTER&#039;S CARD', '87686876ug', '26680_40.jpg', 2147483647, 1, 1, '2025-06-09 15:20:20', '2025-06-09 15:19:56', 1);
+(5, 40, 'VOTER&#039;S CARD', '87686876ug', '26680_40.jpg', 2147483647, 1, 1, '2025-06-09 15:20:20', '2025-06-09 15:19:56', 1),
+(6, 38, 'NIN', '0990099000', '20820_38.jpg', 2147483647, 1, 1, '2025-06-18 15:41:20', '2025-06-18 15:33:58', 8);
 
 -- --------------------------------------------------------
 
@@ -772,6 +772,35 @@ CREATE TABLE `loans` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `loan_applications`
+--
+
+CREATE TABLE `loan_applications` (
+  `loan_id` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `product` int(11) NOT NULL,
+  `amount` decimal(10,0) NOT NULL,
+  `purpose` varchar(255) NOT NULL,
+  `frequency` varchar(50) NOT NULL,
+  `installment` decimal(10,0) NOT NULL,
+  `interest_rate` float NOT NULL,
+  `interest` decimal(10,0) NOT NULL,
+  `processing_rate` float NOT NULL,
+  `processing_fee` decimal(10,0) NOT NULL,
+  `total_payable` decimal(10,0) NOT NULL,
+  `loan_term` float NOT NULL,
+  `collateral` text NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `application_date` datetime DEFAULT NULL,
+  `loan_status` int(11) NOT NULL,
+  `approved_by` int(11) NOT NULL,
+  `start_date` datetime DEFAULT NULL,
+  `due_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `loan_products`
 --
 
@@ -797,7 +826,9 @@ CREATE TABLE `loan_products` (
 --
 
 INSERT INTO `loan_products` (`product_id`, `product`, `description`, `interest`, `repayment`, `minimum`, `maximum`, `duration`, `processing`, `penalty`, `collateral`, `product_status`, `posted_by`, `post_date`) VALUES
-(1, 'SME LOAN', 'For Small Businesess', 3, 'Weekly', 50000, 300000, 90, 1, 2, 'Yes', 1, 1, '2025-06-17 14:10:52');
+(1, 'SME LOAN', 'For Small Businesess', 3, 'Weekly', 50000, 300000, 3, 1, 2, 'Yes', 0, 1, '2025-06-17 14:10:52'),
+(3, 'SALARY ADVANCE', 'For Employed Individuals Needing Short-term Cash Before Payday', 4, 'Monthly', 100000, 500000, 6, 1, 2, 'No', 0, 1, '2025-06-18 15:56:22'),
+(4, 'COOPERATIVE LOAN', 'Group-based Loans Under A Registered Cooperative', 5, 'Weekly', 500000, 1000000, 12, 2, 3, 'No', 0, 1, '2025-06-18 15:58:26');
 
 -- --------------------------------------------------------
 
@@ -867,7 +898,8 @@ CREATE TABLE `notifications` (
 
 INSERT INTO `notifications` (`notification_id`, `client`, `subject`, `message`, `not_status`, `post_date`) VALUES
 (3, 38, 'KYC Verification Approved', '<p>Dear IKPEFUA KELLY, <br> We’re happy to inform you that your KYC verification has been successfully completed. 🎉<br><br> Your account is now fully verified, and you can enjoy uninterrupted access to all features and services.<br><br>Thank you for completing the verification process. If you have any questions or need assistance, feel free to reach out to our support team.<br><br>\r\nBest regards,<br>Demo Microfinance Ltd</p>;\r\n\r\n', 1, '2025-06-09 14:42:29'),
-(4, 40, 'KYC Verification Approved', '<p>Dear IKPEFUA VICTORY, <br> We’re happy to inform you that your KYC verification has been successfully completed. 🎉<br><br> Your account is now fully verified, and you can enjoy uninterrupted access to all features and services.<br><br>Thank you for completing the verification process. If you have any questions or need assistance, feel free to reach out to our support team.<br><br>\r\nBest regards,<br>Demo Microfinance Ltd</p>;\r\n\r\n', 0, '2025-06-09 15:20:20');
+(4, 40, 'KYC Verification Approved', '<p>Dear IKPEFUA VICTORY, <br> We’re happy to inform you that your KYC verification has been successfully completed. 🎉<br><br> Your account is now fully verified, and you can enjoy uninterrupted access to all features and services.<br><br>Thank you for completing the verification process. If you have any questions or need assistance, feel free to reach out to our support team.<br><br>\r\nBest regards,<br>Demo Microfinance Ltd</p>;\r\n\r\n', 0, '2025-06-09 15:20:20'),
+(5, 38, 'KYC Verification Approved', 'Dear IKPEFUA KELLY, \r\n\r\n            We’re happy to inform you that your KYC verification has been successfully completed. 🎉\r\n            \r\n            Your account is now fully verified, and you can enjoy uninterrupted access to all features and services.\r\n\r\n            Thank you for completing the verification process. If you have any questions or need assistance, feel free to reach out to our support team.\r\n            \r\n            Best regards,Demo Microfinance Ltd', 1, '2025-06-18 15:41:20');
 
 -- --------------------------------------------------------
 
@@ -1324,7 +1356,8 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (154, 12, 'Upload Kyc', 'upload_kyc', 0),
 (155, 12, 'Update Photo', 'update_my_photo', 0),
 (156, 12, 'Notifications', 'notifications', 0),
-(157, 13, 'Loan Products', 'loan_products', 0);
+(157, 13, 'Loan Products', 'loan_products', 0),
+(158, 12, 'Apply For A Loan', 'apply_loan', 0);
 
 -- --------------------------------------------------------
 
@@ -1621,6 +1654,12 @@ ALTER TABLE `ledgers`
 -- Indexes for table `loans`
 --
 ALTER TABLE `loans`
+  ADD PRIMARY KEY (`loan_id`);
+
+--
+-- Indexes for table `loan_applications`
+--
+ALTER TABLE `loan_applications`
   ADD PRIMARY KEY (`loan_id`);
 
 --
@@ -1949,7 +1988,7 @@ ALTER TABLE `item_transfers`
 -- AUTO_INCREMENT for table `kyc`
 --
 ALTER TABLE `kyc`
-  MODIFY `kyc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `kyc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `ledgers`
@@ -1964,10 +2003,16 @@ ALTER TABLE `loans`
   MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `loan_applications`
+--
+ALTER TABLE `loan_applications`
+  MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `loan_products`
 --
 ALTER TABLE `loan_products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `menus`
@@ -1985,7 +2030,7 @@ ALTER TABLE `multiple_payments`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `opening_balance`
@@ -2081,7 +2126,7 @@ ALTER TABLE `stores`
 -- AUTO_INCREMENT for table `sub_menus`
 --
 ALTER TABLE `sub_menus`
-  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
+  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
 
 --
 -- AUTO_INCREMENT for table `transactions`

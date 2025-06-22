@@ -30,7 +30,7 @@
                     <td>S/N</td>
                     <td>Product</td>
                     <td>Amount Range (NGN)</td>
-                    <td>Duration</td>
+                    <td>Loan Term</td>
                     <td>Interest (%)</td>
                     <td>Repayment</td>
                     <td>Trx. Fee (%)</td>
@@ -65,16 +65,7 @@
                     </td>
                     <td>
                         <?php
-                            if($row->duration == 90){
-                                echo "3 Months";
-                            }else if($row->duration == 180){
-                                echo "6 Months";
-                            }else if($row->duration == 365){
-                                echo "1 Year";
-
-                            }else{
-                                echo "";
-                            }
+                            echo $row->duration." Months";
                         ?>
                     </td>
                     <td style="color:red">
