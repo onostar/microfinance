@@ -65,6 +65,6 @@
         $add_loan = new add_data('loan_applications', $data);
         $add_loan->create_data();
         if($add_loan){
-            echo "<div class='success'><p>Loan application submitted successfully. Kindly await approval for disbursement <i class='fas fa-thumbs-up'></i></p></div>";
+            echo "<div class='not_available'><p><strong><i class='fas fa-check-circle' style='color: #28a745;'></i> Loan Application Submitted</strong><br>Your loan application has been submitted successfully. Kindly await approval and disbursement.</p></div>";
         }
     }

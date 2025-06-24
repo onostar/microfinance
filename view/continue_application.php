@@ -98,10 +98,9 @@
                     <?php if($row->collateral == "Yes"){?>
                     <div class="data" style="width:64%;">
                         <label for="collateral"> Input Collateral details</label>
-                        <textarea name="collateral" id="collateral" placeholder="Enter Collateral details (if any)"></textarea>
+                        <textarea name="collateral" id="collateral" placeholder="Enter Collateral details"></textarea>
                     </div>
                     <?php }?>
-                    
                     <div class="data">
                         <button type="button" onclick="completeApplication()">Submit Application <i class="fas fa-arrow-right-arrow-left"></i></button>
                         

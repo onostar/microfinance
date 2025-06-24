@@ -6835,7 +6835,14 @@ function completeApplication(){
      let loan_term = document.getElementById("loan_term").value;
      let purpose = document.getElementById("purpose").value;
      let collateral_type = document.getElementById("collateral_type").value;
-     let collateral = document.getElementById("collateral")?.value ?? "Non";
+     let collateral = document.getElementById("collateral")?.value || ""; // Optional collateral field
+     if(collateral_type == "Yes"){
+          if(collateral.length == 0 || collateral.replace(/^\s+|\s+$/g, "").length == 0){
+               alert("Please input collateral details");
+               $("#collateral").focus();
+               return;
+          }
+     }
      if(customer.length == 0 || customer.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please select customer");
           $("#customer").focus();
@@ -6868,13 +6875,6 @@ function completeApplication(){
           alert("Loan duration cannot be greater than "+duration+" Months");
           $("#loan_term").focus();
           return;
-     }else if(collateral_type == "Yes"){
-          let collateral = document.getElementById("collateral").value;
-          if(collateral.length == 0 || collateral.replace(/^\s+|\s+$/g, "").length == 0){
-               alert("Please input collateral details");
-               $("#collateral").focus();
-               return;
-          }
      }else{
           $.ajax({
                type : "POST",
