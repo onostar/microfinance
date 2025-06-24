@@ -35,7 +35,36 @@
         'application_date' => $date
     );
     include "../classes/dbh.php";
-    include "../classes/insert.php";
+    include "../classes/inserts.php";
     include "../classes/select.php";
-    //checkif customer has an existing loan application
+    //check if customer has an existing loan application
     $get_details = new selects();
+    $existing = $get_details->fetch_details_cond('loan_applications', 'customer', $customer);
+    if(is_array($existing)){
+        foreach($existing as $exist){
+            if($exist->loan_status == 0){
+                echo "<div class='not_available'>
+                <p><strong>Existing Loan Application <i class='fas fa-exclamation-triangle' style='color:#cfb20e'></i></strong><br>You have an existing loan application pending approval. Please wait for it to be processed.</p>
+                </div>";
+                exit();
+            }elseif($exist->loan_status == 1){
+                echo "<div class='not_available'>
+                    <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Existing Loan Detected</strong><br>You currently have an active loan. Please note that you are not eligible to apply for a new loan until your current loan is fully repaid.</p></div>";
+            }else{
+                //submitloan application
+                $add_loan = new add_data('loan_applications', $data);
+                $add_loan->create_data();
+                if($add_loan){
+                   echo "<div class='not_available'>
+                    <p><strong><i class='fas fa-check-circle' style='color: #28a745;'></i> Loan Application Submitted</strong><br>Your loan application has been submitted successfully. Kindly await approval and disbursement.</p></div>";
+                }
+            }
+        }
+    }else{
+        //submitloan application
+        $add_loan = new add_data('loan_applications', $data);
+        $add_loan->create_data();
+        if($add_loan){
+            echo "<div class='success'><p>Loan application submitted successfully. Kindly await approval for disbursement <i class='fas fa-thumbs-up'></i></p></div>";
+        }
+    }
