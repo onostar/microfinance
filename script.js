@@ -6881,7 +6881,7 @@ function completeApplication(){
                url : "../controller/submit_loan_application.php",
                data : {customer:customer, product:product, amount:amount, interest:interest, interest_rate:interest_rate, processing_fee:processing_fee, processing:processing, total_payable:total_payable, installment:installment,  frequency:frequency,loan_term:loan_term, purpose:purpose, collateral:collateral},
                beforeSend : function(){
-                    $("#loan_application").html("<p>Processing...</p>");
+                    $("#loan_application").html("<p style='text-align:center;font-size:1rem;'>Processing...</p>");
                },
                success : function(response){
                     $("#loan_application").html(response);

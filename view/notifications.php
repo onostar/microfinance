@@ -34,7 +34,21 @@ session_start();
     
 
 ?>
-    
+   <style>
+    .not_available{
+        width: 50%;
+    }
+    @media screen and (max-width: 800px){
+        table td{
+            padding: 4px!important;
+            font-size:.8rem!important;
+        }
+        table td a, table td a i{
+            font-size:.7rem!important;
+            padding:4px!important;
+        }
+    }
+</style> 
     <div class="select_date" style="width:100%; margin: 10px 50px;">
         <!-- <form method="POST"> -->
         <section style="width:100%">    

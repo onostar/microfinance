@@ -14,7 +14,7 @@
         
     ?>
     <div class="results">
-        <a href="javascript:void(0)" onclick="showPage('new_invoice.php?customer=<?php echo $row->customer_id?>')"><?php echo $row->customer?></a>
+        <a href="javascript:void(0)" onclick="showPage('new_loan_application.php?customer=<?php echo $row->customer_id?>')"><?php echo $row->customer?></a>
     </div>
     <!-- <option onclick="showPage('prescription_order.php?customer=<?php echo $row->customer_id?>')">
         <?php echo $row->customer?>

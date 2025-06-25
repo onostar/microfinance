@@ -1,4 +1,12 @@
 <div id="edit_customer">
+    <style>
+    @media screen and (max-width: 800px){
+        .profile_foto{
+            width: 50%!important;
+            height: 150px!important;
+        }
+    }
+</style>
 <?php
     session_start();
     $store = $_SESSION['store_id'];

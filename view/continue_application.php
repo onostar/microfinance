@@ -1,6 +1,7 @@
 <div id="loan_application">
 <?php
     session_start();
+    $role = $_SESSION['role'];
     if (isset($_GET['product']) && isset($_GET['customer'])) {
         $id = $_GET['product'];
         $customer = $_GET['customer'];
@@ -31,7 +32,11 @@
     </style>
 
     <div class="displays allResults" style="width:100%;">
+        <?php if($role == "Client"){?>
         <a style="border-radius:15px; background:brown;color:#fff;padding:8px; margin:10px 0!important; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('apply_loan.php')"><i class="fas fa-angle-double-left"></i> Return</a>
+        <?php }else{?>
+        <a style="border-radius:15px; background:brown;color:#fff;padding:8px; margin:10px 0!important; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('new_loan_application.php?customer=<?php echo $customer?>')"><i class="fas fa-angle-double-left"></i> Return</a>
+        <?php }?>
         <div class="add_user_form" style="margin:0!important">
             <h3 style="background:var(--tertiaryColor);text-align:left">Complete Application for <?php echo $row->product?></h3>
             <section style="text-align:left">

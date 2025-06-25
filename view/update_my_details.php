@@ -1,4 +1,18 @@
 <div id="edit_customer">
+<style>
+    @media screen and (max-width: 800px){
+        .add_user_form .inputs .data label{
+            margin:0!important;
+            padding:0!important;
+        }
+        .add_user_form .inputs .data input, .add_user_form .inputs .data select{
+            margin:0!important;
+        }
+        .add_user_form .inputs .data{
+            width: 100%!important;
+        }
+    }
+</style>
 <?php
     session_start();
     $store = $_SESSION['store_id'];
@@ -17,7 +31,7 @@
     <div class="add_user_form" style="width:90%">
         <h3 style="background:var(--menuColor)">Edit <?php echo $row->customer?>'s details</h3>
         <!-- <form method="POST" id="addUserForm"> -->
-        <section class="addUserForm">
+        <section>
             <div class="inputs" style="gap:.5rem;">
                 <div class="data" style="width:24%">
                     <label for="customer">Full Name <span class="important">*</span></label>
