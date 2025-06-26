@@ -123,6 +123,7 @@ function showPage(page){
           xhr = new ActiveXObject("Microsoft.XMLHTTP");
      }
      if(xhr){
+          $(".contents").html("<div class='processing'><div class='loader'></div></div>");
           xhr.onreadystatechange = function(){
                if(xhr.readyState == 4 && xhr.status == 200){
                     document.querySelector(".contents").innerHTML = xhr.responseText;
@@ -3026,6 +3027,9 @@ function printSalesTicket(invoice){
                type: "POST",
                url: "../controller/"+url,
                data: {from_date:from_date, to_date:to_date},
+               beforeSend: function(){
+                   $(".new_data").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success: function(response){
                $(".new_data").html(response);
                }
@@ -3858,7 +3862,7 @@ function updateCustomer(url){
                url : "../controller/update_customer.php",
                data : {customer:customer, full_name:full_name,phone_number:phone_number, email:email, address:address, dob:dob, gender:gender, marital_status:marital_status, religion:religion, occupation:occupation, nok:nok, nok_address:nok_address,nok_phone:nok_phone, nok_relation:nok_relation, income:income, business:business, business_address:business_address, bank:bank, account_number:account_number, account_name:account_name, state_region:state_region, lga:lga, landmark:landmark},
                beforeSend : function(){
-                    $("#edit_customer").html("<p>Processing...</p>");
+                    $("#edit_customer").html("<div class='processing'><div class='loader'></div></div>");
                },
                success : function(response){
                $("#edit_customer").html(response);
@@ -6409,7 +6413,7 @@ function NewRegistration(){
                url : "../controller/add_customer.php",
                data : {full_name:full_name,phone_number:phone_number, email:email, address:address, dob:dob, gender:gender, marital_status:marital_status, religion:religion, occupation:occupation, nok:nok, nok_address:nok_address,nok_phone:nok_phone, nok_relation:nok_relation, income:income, business:business, business_address:business_address, bank:bank, account_number:account_number, account_name:account_name, state_region:state_region, lga:lga, landmark:landmark},
                beforeSend : function(){
-                    $("#new_reg").html("<p>Processing...</p>");
+                    $("#new_reg").html("<div class='processing'><div class='loader'></div></div>");
                },
                success : function(response){
                     $("#new_reg").html(response);
@@ -6746,7 +6750,7 @@ function toggleNotif(product){
           type : "GET",
           url : "../controller/toggle_product_status.php?product="+product,
           beforeSend : function(){
-               $("#package").html("<p>Processing...</p>");
+               $("#package").html("<div class='processing'><div class='loader'></div></div>");
           },
           success : function(response){
                $("#package").html(response);
@@ -6881,7 +6885,7 @@ function completeApplication(){
                url : "../controller/submit_loan_application.php",
                data : {customer:customer, product:product, amount:amount, interest:interest, interest_rate:interest_rate, processing_fee:processing_fee, processing:processing, total_payable:total_payable, installment:installment,  frequency:frequency,loan_term:loan_term, purpose:purpose, collateral:collateral},
                beforeSend : function(){
-                    $("#loan_application").html("<p style='text-align:center;font-size:1rem;'>Processing...</p>");
+                    $("#loan_application").html("<div class='processing'><div class='loader'></div></div>");
                },
                success : function(response){
                     $("#loan_application").html(response);

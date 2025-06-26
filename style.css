@@ -26,7 +26,7 @@ body{
 a{
     text-decoration: none;
 }
-.loader{
+/* .loader{
     width:100vw;
     height:100vh;
     background:var(--primaryColor);
@@ -34,7 +34,7 @@ a{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
+} */
 .loader h1{
     color:#fff;
     margin:20px auto;
@@ -64,20 +64,20 @@ a{
         transform: scale(1.2) rotateZ(360deg);
     }
 }
-.processing{
+/* .processing{
     display:none;
     width:100%;
-}
+} */
 .processing .loader {
     border: 18px solid #cecaca;
-    border-top-color:green;
+    border-top-color: var(--tertiaryColor);
     border-radius: 50%;
     /* background: transparent; */
     width: 80px;
     height: 80px;
     margin:10px auto;
     animation: spin 2s linear infinite;
-}
+  }
   
   @keyframes spin {
     0% { transform: rotate(0deg); }
