@@ -22,12 +22,13 @@
                     $gender = $cu->gender;
                     $address = $cu->customer_address.", ".$cu->lga.", ".$cu->state_region;
                     $photo = $cu->photo;
+                    $income = $cu->income;
                 }
 
 ?>
 <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('pending_applications.php')"><i class="fas fa-angle-double-left"></i> Return</a>
     <div id="patient_details">
-        <h3 style="background:var(--tertiaryColor)">Loan Application Details</h3>
+        <h3 style="background:var(--tertiaryColor); color:#fff;">Loan Application Details</h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section class="nomenclature">
             <div class="profile_foto">
@@ -44,84 +45,35 @@
                     <input type="text" value="<?php echo $acn?>" readonly>
                    
                 </div>
-                <div class="data">
+                <div class="data" style="width:30%">
                     <label for="phone_number">Phone number:</label>
                     <input type="text" required value="<?php echo $phone?>" readonly>
                 </div>
                 
-                <div class="data">
+                <div class="data" style="width:25%">
                     <label for="gender">Gender:</label>
                     <input type="text" value="<?php echo $gender?>">
+                </div>
+                 <div class="data" style="width:40%">
+                    <label style="background:transparent; color:green; text-align:left; width:auto" for="other_names">Monthly Income (NGN):</label>
+                    <input type="text"  value="<?php echo $income?>" readonly>
+                
                 </div>
                 <div class="data" style="width:60%">
                     <label for="Address">Address:</label>
                     <textarea style="width:100%!important; padding:2px;border:none;" readonly><?php echo $address?></textarea>
                 </div>
                 <div class="data" style="width:auto!important">
-                    <a style="border-radius:15px; background:var(--menuColor);color:#fff;padding:10px; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="javascript:void(0)" onclick="showPage('view_customer_details.php?customer=<?php echo $row->customer?>')"><i class="fas fa-user-tag"></i> View More Details</a>
+                    <a style="border-radius:15px; background:var(--menuColor);color:#fff;padding:10px; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="javascript:void(0)" onclick="showPage('view_loan_customer_details.php?customer=<?php echo $row->customer?>&loan=<?php echo $loan?>')"><i class="fas fa-user-tag"></i> View More Details</a>
 
                 </div>
             </div>
             
         </section>    
-        <!-- <section id="prescriptions">
-            <h3 style="background:var(--menuColor); color:#fff; text-align:left">Employment details</h3>
-            <div class="nomenclature" style="box-shadow:none">
-                <div class="inputs" style="width:100%; align-items:flex-end">
-                    <div class="data" style="width:auto!important">
-                        <label style="background:transparent; color:green; text-align:left; width:auto" for="customer">Occupation:</label>
-                        <input type="text" name="last_name" id="last_name" value="<?php echo $row->occupation?>" readonly>
-                    </div>
-                    <div class="data" style="width:auto!important">
-                        <label style="background:transparent; color:green; text-align:left; width:auto" for="other_names">Estimated Monthly Income (NGN):</label>
-                        <input type="text"  value="<?php echo $row->income?>" readonly>
-                    
-                    </div>
-                    <div class="data"style="width:auto!important">
-                        <label style="background:transparent; color:green; text-align:left; width:auto" for="other_names">Business/Company Name:</label>
-                        <input type="text"  value="<?php echo $row->business?>" readonly>
-                    
-                    </div>
-                    <div class="data" style="width:auto!important">
-                        <label style="background:transparent; color:green; text-align:left;width:auto" for="other_names">Business/Company Address:</label>
-                        <input type="text"  value="<?php echo $row->business_address?>" readonly>
-                    
-                    </div>
-                </div>
-                
-            </div>
-        </section>
-        <section id="main_consult">
-            <h3 style="background:var(--otherColor); text-align:left">Next of Kin Information</h3>
-            <div class="nomenclature" style="box-shadow:none">
-                <div class="inputs" style="width:100%; align-items:flex-end">
-                    <div class="data" style="width:auto!important">
-                        <label style="background:transparent; color:green; text-align:left; width:auto" for="customer">Full Name:</label>
-                        <input type="text" name="last_name" id="last_name" value="<?php echo $row->nok?>" readonly>
-                    </div>
-                    <div class="data" style="width:auto!important">
-                        <label style="background:transparent; color:green; text-align:left; width:auto" for="other_names">Relationship:</label>
-                        <input type="text"  value="<?php echo $row->nok_relation?>" readonly>
-                    
-                    </div>
-                    <div class="data"style="width:auto!important">
-                        <label style="background:transparent; color:green; text-align:left; width:auto" for="other_names">Phone Number:</label>
-                        <input type="text"  value="<?php echo $row->nok_phone?>" readonly>
-                    
-                    </div>
-                    <div class="data" style="width:auto!important">
-                        <label style="background:transparent; color:green; text-align:left;width:auto" for="other_names">Residential Address:</label>
-                        <input type="text"  value="<?php echo $row->nok_address?>" readonly>
-                    
-                    </div>
-                    
-                </div>
-                
-            </div>
-        </section> -->
+        
         <!-- loan details -->
         <section id="prescriptions">
-            <div class="add_user_form" style="margin:0!important" style="width:100%!important">
+            <div class="add_user_form" style="margin:0!important;width:100%!important">
                 <h3 style="background:var(--menuColor);color:#fff;text-align:left">Loan Details</h3>
                 <section style="text-align:left">
                     <div class="inputs" style="align-items:flex-end; justify-content:left; gap:.5rem">
@@ -139,7 +91,7 @@
                        </div>
                         <div class="data" style="width:32%;">
                             <label for="amount" style="text-align:left!important;">Amount Requested (₦)</label>
-                            <input type="text" value="<?php echo '₦'.number_format($row->amount, 2)?>" readonly>
+                            <input type="text" value="<?php echo '₦'.number_format($row->amount, 2)?>" readonly style="color:green">
                         </div>
                         <div class="data" style="width:32%;">
                             <label for="purpose" style="text-align:left!important;">Loan Purpose</label>
@@ -156,19 +108,19 @@
                         </div>
                         <div class="data" style="width:32%;">
                             <label for="interest" style="text-align:left!important;">Interest: (<?php echo $row->interest_rate?>%)</label>
-                            <input type="text" value="<?php echo '₦'.number_format($row->interest)?>" readonly>
+                            <input type="text" value="<?php echo '₦'.number_format($row->interest, 2)?>" readonly style="color:var(--secondaryColor)">
                         </div>
                         <div class="data" style="width:32%;">
                             <label for="processing"> Processing Fee: (<?php echo $row->processing_rate?>%)</label>
-                            <input type="text" value="<?php echo '₦'.number_format($row->processing_fee)?>" readonly>
+                            <input type="text" value="<?php echo '₦'.number_format($row->processing_fee, 2)?>" readonly style="color:var(--primaryColor)">
                         </div>
                         <div class="data" style="width:32%;">
                             <label for="">Total Repayable Amount:</label>
-                            <input type="text" value="<?php echo '₦'.number_format($row->total_payable)?>" readonly>
+                            <input type="text" value="<?php echo '₦'.number_format($row->total_payable, 2)?>" readonly style="color:var(--tertiaryColor)">
                         </div>
                         <div class="data" style="width:32%;">
                             <label for=""><?php echo $row->frequency?> Installment:</label>
-                            <input type="text" value="<?php echo '₦'.number_format($row->installment)?>" readonly>
+                            <input type="text" value="<?php echo '₦'.number_format($row->installment, 2)?>" readonly style="color:var(--otherColor)">
                         </div>
                         
                         <?php if($row->collateral == "Yes"){?>
@@ -182,7 +134,7 @@
             </div>
         </section>
         <section id="last_consult">
-            <h3 style="background:var(--menuColor); text-align:left; color:#fff;">KYC Info</h3>
+            <h3 style="background:var(--otherColor); text-align:left; color:#fff;">KYC Info</h3>
             <div class="nomenclature" style="box-shadow:none">
                 
                 <div class="inputs" style="width:100%; align-items:flex-end">
@@ -227,6 +179,12 @@
                  
             </div>
         </section>
+        <div class="nomenclature">
+            <a style="border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="approveLoan('<?php echo $loan?>')" title="Approve loan application">Approve <i class="fas fa-check-circle"></i></a>
+            <a style="border-radius:15px; background:var(--primaryColor);color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="requestMoreInfo()" title="Request moreinformation">Request More Info <i class="fas fa-question-circle"></i></a>
+            <a style="border-radius:15px; background:brown;color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="declineLoan()" title="Reject Loan application">Reject <i class="fas fa-close"></i></a>
+                        
+        </div>
     </div>
 
 <?php
