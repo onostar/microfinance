@@ -26,7 +26,7 @@
         <?php
             if($detail->not_status == 0){
         ?>
-        <td><a style="font-size:.8rem;color:#222;" href="javascript:void(0)" onclick="showPage('view_notification.php?notification=<?php echo $detail->notification_id?>')" title="view patient details"><i class="fas fa-envelope"></i> <?php echo $detail->subject?></a></td>
+        <td><a style="font-size:.8rem; font-weight:bold; color:#222;" href="javascript:void(0)" onclick="showPage('view_notification.php?notification=<?php echo $detail->notification_id?>')" title="view patient details"><i class="fas fa-envelope"></i> <?php echo $detail->subject?></a></td>
         <?php }else{?>
         <td><a style="font-size:.8rem;color:#222;" href="javascript:void(0)" onclick="showPage('view_notification.php?notification=<?php echo $detail->notification_id?>')" title="view patient details"><i class="fas fa-envelope-open"></i> <?php echo $detail->subject?></a></td>
         <?php }?>

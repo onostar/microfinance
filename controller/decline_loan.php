@@ -117,6 +117,9 @@
         $msg = "<div>$message</div>";
         
         $error=smtpmailer($to, $from, $name ,$subj, $msg);
-        echo "<div class='not_available'>
-        <p><i class='fas fa-check-circle' style='color: #28a745;'></i> Loan Application Declined Successfully</p></div>";
+        ?>
+        <div class='not_available'>
+        <p><i class='fas fa-check-circle' style='color: red;'></i> Loan Application Declined Successfully</p><br>
+        <a href="javascript:void(0)" style="padding:5px;background:var(--tertiaryColor);color:#fff;box-shadow:1px 1px 1px #222; text-align:center;" onclick="showPage('../view/pending_applications.php')"> Continue <i class="fas fa-paper-plane"></i></a></div>
+    <?php
     }

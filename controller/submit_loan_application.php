@@ -89,6 +89,9 @@
                 exit();
             }elseif($exist->loan_status == 1){
                 echo "<div class='not_available'>
+                    <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Existing Loan Application Approved</strong><br>You currently have an existing loan application awaiting disbursement. Please note that you are not eligible to apply for a new loan until your current loan is fully disbursed and repaid.</p></div>";
+            }elseif($exist->loan_status == 2){
+                echo "<div class='not_available'>
                     <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Existing Loan Detected</strong><br>You currently have an active loan. Please note that you are not eligible to apply for a new loan until your current loan is fully repaid.</p></div>";
             }else{
                 //submitloan application

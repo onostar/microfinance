@@ -154,13 +154,12 @@ date_default_timezone_set("Africa/Lagos");
                                 ?>
                             </p>
                         </div>
-                        <div class="links page_navs" onclick="showPage('expired_items.php')" title="Expired items">
-                            <i class="fas fa-calendar-times" style="color:red"></i>
-                            <p style="color:red">
+                        <div class="links page_navs" onclick="showPage('pending_disursement.php')" title="Loans awaiting disbursement">
+                            <i class="fas fa-hand-holding-dollar" style="color:brown"></i>
+                            <p style="color:brown">
                                 <?php
-                                    $get_expired = new selects();
-                                    $expired = $get_expired->fetch_expired('inventory', 'expiration_date', 'quantity', 'store', $store_id);
-                                    echo $expired;
+                                    $disburse = $fetch_comp->fetch_count_cond('loan_applications', 'loan_status', 1);
+                                    echo $disburse;
                                 ?>
                             </p>
                         </div>

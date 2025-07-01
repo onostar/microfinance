@@ -27,37 +27,37 @@
             </div>
 <?php
             }else{
-
-?>
-
-    <div class="displays allResults" style="width:100%;">
-        <div class="add_user_form" style="width:50%; margin:20px 0">
-            <h3 style="background:var(--primaryColor)">Loan Application</h3>
-            <!-- <form method="POST" id="addUserForm"> -->
-            <section>
-                <div class="inputs">
-                    <div class="data" style="width:100%;">
-                        <label for="business"> Loan Product</label>
-                        <select name="product" id="product" onchange="getLoanProduct(this.value, '<?php echo $customer?>')">
-                            <option value="" selected disabled>Select Loan Product</option>
-                            <?php
-                                $loans = $get_details->fetch_details_condOrder('loan_products', 'product_status', 0, 'product');
-                                if(is_array($loans)){
-                                    foreach($loans as $loan){
-                            ?>
-                            <option value="<?php echo $loan->product_id?>"><?php echo $loan->product?></option>
-                            <?php } }?>
-                        </select>
-                    </div>
-                </div>
-                
-            </section>    
-        </div>
-        <div id="product_info">
-            
-        </div>
-    </div>
-    <?php 
+                //check for current loan applications
+                $existing = $get_details->fetch_details_cond('loan_applications', 'customer', $customer);
+                if(is_array($existing)){
+                    foreach($existing as $exist){
+                        //get loan product details
+                        $product_details = $get_details->fetch_details_cond('loan_products', 'product_id', $exist->product);
+                        if(is_array($product_details)){
+                            foreach($product_details as $detail){
+                                $product_name = $detail->product;
+                            }
+                        }
+                        if($exist->loan_status == 0){
+                            //get loan product details
+                            $product_details = $get_details->fetch_details_cond('loan_products', 'product_id', $exist->product);
+                            echo "<div class='not_available'>
+                            <p><strong>Existing Loan Application <i class='fas fa-exclamation-triangle' style='color:#cfb20e'></i></strong><br>You have an existing $product_name loan application pending approval. Please wait for it to be processed.</p>
+                            </div>";
+                            exit();
+                        }elseif($exist->loan_status == 1){
+                            echo "<div class='not_available'>
+                            <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Loan Application Pending Disbursement</strong><br>You currently have an active $product_name loan awaiting disbursement. Please note that you are not eligible to apply for a new loan until your current loan application is fully disbursed and repaid.</p></div>";
+                        }elseif($exist->loan_status == 2){
+                            echo "<div class='not_available'>
+                            <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Existing Live Loan Detected</strong><br>You currently have an active $product_name loan. Please note that you are not eligible to apply for a new loan until your current loan is fully repaid.</p></div>";
+                        }else{
+                            include "application_form.php";
+                        }
+                    }
+                }else{
+                    include "application_form.php";
+                }
             }
         }else{
     ?>

@@ -6917,3 +6917,22 @@ function declineLoan(loan){
           return;
      }
 }
+
+//approve loan application
+function approveLoan(loan){
+     let approve = confirm("Do you want to approve this loan application", "");
+     if(approve){
+          $.ajax({
+               type : "GET",
+               url : "../controller/approve_loan.php?loan="+loan,
+               beforeSend : function(){
+                    $("#loan_applications").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#loan_applications").html(response);
+               }
+          })
+     }else{
+          return;
+     }
+}

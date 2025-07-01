@@ -3,7 +3,7 @@
     session_start();
     $date = date("Y-m-d H:i:s");
     $user = $_SESSION['user_id'];
-    $kyc = $_GET['kyc'];
+    $loan = $_GET['loan'];
     $company = $_SESSION['company'];
     require "../PHPMailer/PHPMailerAutoload.php";
     require "../PHPMailer/class.phpmailer.php";
@@ -15,39 +15,38 @@
     include "../classes/update.php";
     include "../classes/inserts.php";
 
-    //get customer
+    //get details
     $get_details = new selects();
-    $rows = $get_details->fetch_details_cond('kyc', 'kyc_id', $kyc);
+    $rows = $get_details->fetch_details_cond('loan_applications', 'loan_id', $loan);
     foreach($rows as $row){
         $customer = $row->customer;
     }
-    //get details 
+    //get customer details 
     $results = $get_details->fetch_details_cond('customers', 'customer_id', $customer);
     foreach($results as $result){
         $client = $result->customer;
         $customer_email = $result->customer_email;
     }
-    //approve kyc
+    //approve loan
     $update = new Update_table();
-    $update->update_tripple('kyc', 'verification', 1, 'verified_by', $user, 'verified_date', $date, 'kyc_id', $kyc);
+    $update->update_tripple('loan_applications', 'loan_status', 1, 'approved_by', $user, 'approve_date', $date, 'loan_id', $loan);
     //update reg status in customer table
-    $update->update('customers', 'reg_status', 'customer_id', 1, $customer);
-    $message = "<p>Dear $client, <br> We’re happy to inform you that your KYC verification has been successfully completed. 🎉<br><br> Your account is now fully verified, and you can enjoy uninterrupted access to all features and services.<br><br>Thank you for completing the verification process. If you have any questions or need assistance, feel free to reach out to our support team.<br><br>
-Best regards,<br>$company</p>";
+    $message = "<p>Dear $client, <br> We’re pleased to inform you that your loan application has been approved ✅.<br><br>Your loan is now awaiting disbursement, and you will receive a notification once the funds have been released to your account.<br><br>Thank you for choosing us. We’re excited to support your financial journey!.<br><br>Best regards,<br>$company</p>";
     if($update){
         //insert into notifications
         $notif_data = array(
             'client' => $customer,
-            'subject' => 'KYC Verification Approved',
+            'subject' => 'Your Loan Has Been Approved',
             'message' => 'Dear '.$client.', 
 
-            We’re happy to inform you that your KYC verification has been successfully completed. 🎉
-            
-            Your account is now fully verified, and you can enjoy uninterrupted access to all features and services.
+            We’re pleased to inform you that your loan application has been approved ✅.
 
-            Thank you for completing the verification process. If you have any questions or need assistance, feel free to reach out to our support team.
+Your loan is now awaiting disbursement, and you will receive a notification once the funds have been released to your account.
+
+Thank you for choosing us. We’re excited to support your financial journey!
             
-            Best regards,'.$company,
+            Best regards,
+            '.$company,
             'post_date' => $date,
         );
         $add_data = new add_data('notifications', $notif_data);
@@ -97,9 +96,13 @@ Best regards,<br>$company</p>";
         $from = 'admin@dorthprosuite.com';
         $from_name = "$company";
         $name = "$company";
-        $subj = 'KYC Verification Approved';
+        $subj = 'Your Loan Has Been Approved';
         $msg = "<div>$message</div>";
         
         $error=smtpmailer($to, $from, $name ,$subj, $msg);
-        echo "<div class='success'><p><i class='fas fa-thumbs-up'></i> KYC Approved for $client successfully!</p></div>";
+        ?>
+        <div class='not_available'>
+        <p><i class='fas fa-check-circle' style='color: #28a745;'></i> Loan Application Approved Successfully</p><br>
+        <a href="javascript:void(0)" style="padding:5px;background:var(--tertiaryColor);color:#fff;box-shadow:1px 1px 1px #222; text-align:center;" onclick="showPage('../view/pending_applications.php')"> Continue <i class="fas fa-paper-plane"></i></a></div>
+    <?php
     }
