@@ -1,4 +1,4 @@
-<div id="edit_customer">
+<div id="loan_applications">
 <?php
     session_start();
     $store = $_SESSION['store_id'];
@@ -182,7 +182,7 @@
         <div class="nomenclature">
             <a style="border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="approveLoan('<?php echo $loan?>')" title="Approve loan application">Approve <i class="fas fa-check-circle"></i></a>
             <a style="border-radius:15px; background:var(--primaryColor);color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="requestMoreInfo()" title="Request moreinformation">Request More Info <i class="fas fa-question-circle"></i></a>
-            <a style="border-radius:15px; background:brown;color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="declineLoan()" title="Reject Loan application">Reject <i class="fas fa-close"></i></a>
+            <a style="border-radius:15px; background:brown;color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="declineLoan('<?php echo $loan?>')" title="Reject Loan application">Decline <i class="fas fa-close"></i></a>
                         
         </div>
     </div>

@@ -1,4 +1,4 @@
-
+<div id="loan_applications">
 <?php
 session_start();
     include "../classes/dbh.php";
@@ -15,7 +15,7 @@ session_start();
 
 ?>
     <div class="info"></div>
-<div class="displays allResults" id="bar_items">
+<div class="displays allResults">
     
     <h2>Pending Loan Applications</h2>
     <hr>
@@ -94,3 +94,4 @@ session_start();
     ?>
 </div>
 <?php }?>
+</div>

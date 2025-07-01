@@ -145,13 +145,12 @@ date_default_timezone_set("Africa/Lagos");
                             <!-- <p>Direct sales</p> -->
                         </div>
                         
-                        <div class="links page_navs" onclick="showPage('expire_soon.php')" title="Soon to expire">
+                        <div class="links page_navs" onclick="showPage('pending_applications.php')" title="Pending Applications">
                             <i class="fas fa-chart-line" style="color:green"></i>
                             <p>
                                 <?php
-                                    $get_soon_expired = new selects();
-                                    $soon_expired = $get_soon_expired->fetch_expire_soon('inventory', 'expiration_date', 'quantity', 'store', $store_id);
-                                    echo $soon_expired;
+                                    $app = $fetch_comp->fetch_count_cond('loan_applications', 'loan_status', 0);
+                                    echo $app;
                                 ?>
                             </p>
                         </div>

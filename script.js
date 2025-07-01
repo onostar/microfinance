@@ -6894,3 +6894,26 @@ function completeApplication(){
           return false;
      }
 }
+
+//decline loan application
+function declineLoan(loan){
+     let reason = prompt("Input reason for decline", "");
+     if(reason){
+          $.ajax({
+               type : "POST",
+               url : "../controller/decline_loan.php",
+               data : {loan:loan, reason:reason}, 
+               beforeSend : function(){
+                    $("#loan_applications").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#loan_applications").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#loan_applications").load("pending_applications.php #loan_applications");
+          }, 3000);
+     }else{
+          return;
+     }
+}
