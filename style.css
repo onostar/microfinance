@@ -3531,7 +3531,12 @@ x
     border-radius: 15px;
     text-align: center;
 
- }
+}
+#requestBox{
+    width:100%;
+    margin:10px auto;
+    display:none;
+}
 @media screen and (max-width: 800px){
     #topHeader{
         justify-content: space-between;

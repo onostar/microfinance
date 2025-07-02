@@ -1,4 +1,9 @@
 <div id="loan_applications">
+    <style>
+        table td {
+            font-size:.7rem;
+        }
+    </style>
 <?php
     session_start();
     $store = $_SESSION['store_id'];
@@ -26,7 +31,7 @@
                 }
 
 ?>
-<a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('pending_applications.php')"><i class="fas fa-angle-double-left"></i> Return</a>
+<a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222; position:fixed;" href="javascript:void(0)" onclick="showPage('pending_applications.php')"><i class="fas fa-angle-double-left"></i> Return</a>
     <div id="patient_details">
         <h3 style="background:var(--tertiaryColor); color:#fff;">Loan Application Details</h3>
         <!-- <form method="POST" id="addUserForm"> -->
@@ -179,10 +184,91 @@
                  
             </div>
         </section>
+        <?php
+            //check for request
+            $requests = $get_details->fetch_details_2cond('info_request', 'customer', 'loan', $row->customer, $loan);
+            if(is_array($requests)){
+                 
+        ?>
+        <section class="main_consult">
+            <h3 style="background:transparent; text-align:left; color:#222; font-size:.8rem">Additional Information Requested</h3>
+            <form action="" class="add_user_form" style="display:flex; width:100%; margin:0; align-items:flex-start;flex-wrap:wrap;gap:.5rem; box-shadow:none;">
+                <?php
+                    foreach($requests as $request){
+                ?>
+                <div class="inputs" style="display:flex; align-items:flex-end; flex-wrap:wrap; gap:.5rem; width:48%!important; margin:0;padding:15px; box-shadow:2px 2px 2px #c4c4c4;">
+                    <div class="data" style="width:48%">
+                        <label for="">Requested By:</label>
+                        <?php
+                            //get requested by
+                            $names = $get_details->fetch_details_group('users', 'full_name', 'user_id', $request->requested_by);
+                            $requester = $names->full_name;
+                        ?>
+                        <input type="text" value="<?php echo $requester?>" readonly>
+                    </div>
+                    <div class="data" style="width:48%">
+                        <label for="">Request Date:</label>
+                        <input type="text" value="<?php echo date("d-M-Y, H:i:sa", strtotime($request->request_date))?>" readonly>
+                    </div>
+                    <div class="data" style="margin:5px 0; width:100%">
+                        <label for="">Request Details</label>
+                        <textarea readonly><?php echo $request->request_text?></textarea>
+                    </div>
+                    
+                </div>
+                <?php }?>
+            </form>
+        </section>
+        <?php
+            //check documents
+            $n = 1;
+            $docs = $get_details->fetch_details_2cond('document_uploads', 'customer', 'loan', $row->customer, $loan);
+            if(is_array($docs)){
+        ?>
+        <section class="main_consult" id="clientResponse">
+             <h3 style="background:var(--menuColor); text-align:left; color:#fff; font-size:.8rem">Client's Additional Submissions</h3>
+            <div class="displays allResults" style="width:100%!important; margin:0!important">
+                <!-- <div class="search">
+                    <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchItems(this.value, 'search_patients.php')">
+                </div> -->
+                <table id="item_list_table" class="searchTable">
+                    <thead>
+                        <tr style="background:var(--moreColor)">
+                            <td>S/N</td>
+                            <td>Document Type</td>
+                            <td>Title</td>
+                            <td>Date</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody id="result">
+                        <?php
+                            foreach($docs as $doc){
+                        ?>
+                        <tr>
+                            <td style="text-align:center; color:red;"><?php echo $n?></td>
+                            <td><?php echo $doc->doc_type?></td>
+                            <td><?php echo $doc->title?></td>
+                            
+                            <td style="color:var(--primaryColor)"><?php echo date("d-M-Y, h:ia", strtotime($doc->upload_date))?></td>
+                            <td>
+                                <a style="border-radius:15px; background:silver;color:#222;padding:3px 8px; box-shadow:1px 1px 1px #222; border:1px solid #fff; margin:2px" title="View Document" href="../documents/<?php echo $doc->document?>" target="_blank"><i class="fas fa-file-download"></i> View Document</a>
+                            </td>
+                        </tr>
+                        
+                        <?php $n++; };?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <?php }}?>
+        <section id="requestBox">
+            
+        </section>
         <div class="nomenclature">
-            <a style="border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="approveLoan('<?php echo $loan?>')" title="Approve loan application">Approve <i class="fas fa-check-circle"></i></a>
-            <a style="border-radius:15px; background:var(--primaryColor);color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="requestMoreInfo()" title="Request moreinformation">Request More Info <i class="fas fa-question-circle"></i></a>
-            <a style="border-radius:15px; background:brown;color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="declineLoan('<?php echo $loan?>')" title="Reject Loan application">Decline <i class="fas fa-close"></i></a>
+            <a style="border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="approveLoan('<?php echo $loan?>')" title="Approve loan application">Approve Loan <i class="fas fa-check-circle"></i></a>
+            <a style="border-radius:15px; background:var(--primaryColor);color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="requestMoreInfo('<?php echo $loan?>', '<?php echo $row->customer?>')" title="Request moreinformation">Request More Info <i class="fas fa-question-circle"></i></a>
+            <a style="border-radius:15px; background:brown;color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="declineLoan('<?php echo $loan?>')" title="Reject Loan application">Decline Loan <i class="fas fa-close"></i></a>
                         
         </div>
     </div>

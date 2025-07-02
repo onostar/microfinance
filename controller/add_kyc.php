@@ -147,7 +147,7 @@
                 echo "<p class='exist'>File too large</p>";
             }
         }else{
-            echo "<p class='exist'Your Image format is not supported</p>";
+            echo "<p class='exist'>Your Image format is not supported</p>";
 
         }                    
     }
