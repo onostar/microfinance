@@ -43,6 +43,8 @@
                     <td>Phone No.</td>
                     <td>Email</td>
                     <td>Occupation</td>
+                    <td>Business Name</td>
+                    <td>Business Address</td>
                     <td>Relationship</td>
                     <td></td>
                 </tr>
@@ -64,7 +66,9 @@
                     <td>
                         <?php 
                             //get current loan
-                            $loans = $select_cat->fetch_details_cond('loan_products', 'product_id', $row->product);
+                            $cur_loan = $select_cat->fetch_details_group('loan_applications', 'product', 'loan_id', $row->loan);
+                            $product = $cur_loan->product;
+                            $loans = $select_cat->fetch_details_cond('loan_products', 'product_id', $product);
                             foreach($loans as $ln){
                                 echo $ln->product;
                             }
@@ -93,10 +97,20 @@
                     </td>
                     <td>
                         <?php
+                            echo $row->business;
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $row->business_address;
+                        ?>
+                    </td>
+                    <td>
+                        <?php
                             echo $row->relationship;
                         ?>
                     </td>
-                    <td style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap">
+                    <td>
                         <a style="background:var(--tertiaryColor)!important; color:#fff!important; padding:3px 6px; margin:2px;border-radius:50%; border:1px solid #fff; box-shadow:1px 1px 1px #222" title="update details" href="javascript:void(0)" onclick="getForm('<?php echo $row->guarantor_id?>', 'get_guarantor.php');"><i class="fas fa-pen"></i></a>
                         
                         

@@ -3,6 +3,9 @@
         table td {
             font-size:.7rem;
         }
+        .main_consult{
+            margin: 10px 0;
+        }
     </style>
 <?php
     session_start();
@@ -259,6 +262,101 @@
                         <?php $n++; };?>
                     </tbody>
                 </table>
+            </div>
+        </section>
+        <?php
+            }
+            //check guaantors
+            $n = 1;
+            $guas = $get_details->fetch_details_2cond('guarantors', 'client', 'loan', $row->customer, $loan);
+            if(is_array($guas)){
+        ?>
+        <section class="main_consult" id="clientResponse">
+             <h3 style="background:var(--labColor); text-align:left; color:#fff; font-size:.8rem">Guarantors</h3>
+            <div class="displays allResults" style="width:100%!important; margin:0!important">
+                <!-- <div class="search">
+                    <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchItems(this.value, 'search_patients.php')">
+                </div> -->
+               <table id="priceTable" class="searchTable">
+            <thead>
+                <tr style="background:var(--labColor)">
+                    <td>S/N</td>
+                    <td>Loan Applied</td>
+                    <td>Guarantor</td>
+                    <td>Gender</td>
+                    <td>Address</td>
+                    <td>Phone No.</td>
+                    <td>Email</td>
+                    <td>Occupation</td>
+                    <td>Business Name</td>
+                    <td>Business Address</td>
+                    <td>Relationship</td>
+                </tr>
+            </thead>
+
+            
+            <tbody>
+            <?php
+                foreach($guas as $gua):
+                   
+            ?>
+                <tr>
+                    <td style="text-align:center;"><?php echo $n?></td>
+                    
+                    <td>
+                        <?php 
+                            //get current loan
+                            $cur_loan = $get_details->fetch_details_group('loan_applications', 'product', 'loan_id', $gua->loan);
+                            $product = $cur_loan->product;
+                            $loans = $get_details->fetch_details_cond('loan_products', 'product_id', $product);
+                            foreach($loans as $ln){
+                                echo $ln->product;
+                            }
+                        ?>
+                    </td>
+                    <td><?php echo $gua->full_name?></td>
+                    <td><?php echo $gua->gender?></td>
+                    <td>
+                        <?php
+                            echo $gua->address;
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $gua->phone_number
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $gua->email_address;
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $gua->occupation;
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $gua->business;
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $gua->business_address;
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $gua->relationship;
+                        ?>
+                    </td>
+                </tr>
+            <?php $n++; endforeach;?>
+
+            </tbody>
+
+        </table>
             </div>
         </section>
         <?php }}?>

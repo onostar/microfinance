@@ -6289,7 +6289,7 @@ function getAge(dob){
      age.value = new_age+" Year(s)";
 }
 
-// Register new patient
+// Register new client
 function NewRegistration(){
      // let last_name = document.getElementById("last_name").value;
      let full_name = document.getElementById("full_name").value;
@@ -6327,11 +6327,11 @@ function NewRegistration(){
           $("#gender").focus();
           return;
      }else if(email.length == 0 || email.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please input patient's email address");
+          alert("Please input client's email address");
           $("#email").focus();
           return;
      }else if(phone_number.length == 0 || phone_number.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please enter patient phone number");
+          alert("Please enter customer's phone number");
           $("#phone_number").focus();
           return;
      }else if(phone_number.length != 11){
@@ -6364,15 +6364,15 @@ function NewRegistration(){
           $("#marital_status").focus();
           return;
      }else if(nok_address.length == 0 || nok_address.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please input patient's Next of Kin address");
+          alert("Please input client's Next of Kin address");
           $("#nok_address").focus();
           return;
      }else if(nok.length == 0 || nok.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please input patient's Next of Kin");
+          alert("Please input client's Next of Kin");
           $("#nok").focus();
           return;
      }else if(nok_phone.length == 0 || nok_phone.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please input patient's Next of Kin phone number");
+          alert("Please input client's Next of Kin phone number");
           $("#nok_phone").focus();
           return;
      }else if(nok_relation.length == 0 || nok_relation.replace(/^\s+|\s+$/g, "").length == 0){
@@ -7056,4 +7056,166 @@ function uploadDocument(){
      $("#doc_type").val('');
      $("#title").val('');
      $("#doc_type").focus();
+}
+
+// Add aguarantor
+function addGuarantor(){
+     let customer = document.getElementById("customer").value;
+     let full_name = document.getElementById("full_name").value;
+     let phone = document.getElementById("phone").value;
+     let relationship = document.getElementById("relationship").value;
+     let gender = document.getElementById("gender").value;
+     let loan = document.getElementById("loan").value;
+     let occupation = document.getElementById("occupation").value;
+    /*  let income = document.getElementById("income").value; */
+     let address = document.getElementById("address").value;
+     let email_add = document.getElementById("email_add").value;
+     let business = document.getElementById("business").value;
+     let business_address = document.getElementById("business_address").value;
+     /* 
+     let todayDate = new Date();
+     let today = todayDate.toLocaleDateString(); */
+     if(full_name.length == 0 || full_name.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter full name!");
+          $("#full_name").focus();
+          return;
+     }else if(loan == ""){
+          alert("You have No Active loan Application!");
+          $("#loan").focus();
+          return;
+     }else if(gender.length == 0 || gender.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select Gender!");
+          $("#gender").focus();
+          return;
+     }else if(email_add.length == 0 || email_add.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input guarantors's email address");
+          $("#email").focus();
+          return;
+     }else if(phone.length == 0 || phone.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter phone number");
+          $("#phone").focus();
+          return;
+     }else if(phone.length != 11){
+          alert("Phone number is not correct");
+          $("#phone").focus();
+          return;
+    
+     }else if(relationship.length == 0 || relationship.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select relationship with guarantor");
+          $("#relationship").focus();
+          return;
+     }else if(address.length == 0 || address.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input customer address");
+          $("#address").focus();
+          return;
+     }else if(occupation.length == 0 || occupation.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select occupation");
+          $("#occupation").focus();
+          return;
+    
+     }else if(business.length == 0 || business.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input Business/company name");
+          $("#business").focus();
+          return;
+     }else if(business_address.length == 0 || business_address.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input Business/company address");
+          $("#business_address").focus();
+          return;
+    
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_guarantor.php",
+               data : {full_name:full_name,phone:phone, email_add:email_add, loan:loan, address:address, gender:gender,  occupation:occupation, relationship:relationship,  business:business, business_address:business_address, customer:customer},
+               beforeSend : function(){
+                    $("#package").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#package").html(response);
+                    setTimeout(function(){
+                         $("#package").load("add_guarantor.php #package");
+                    }, 3000)
+               }
+          })
+          
+          return false;   
+     }
+      
+}
+
+// update aguarantor
+function updateGuarantor(){
+     let item_id = document.getElementById("item_id").value;
+     let full_name = document.getElementById("full_name").value;
+     let phone = document.getElementById("phone").value;
+     let relationship = document.getElementById("relationship").value;
+     let gender = document.getElementById("gender").value;
+     let occupation = document.getElementById("occupation").value;
+    /*  let income = document.getElementById("income").value; */
+     let address = document.getElementById("address").value;
+     let email_add = document.getElementById("email_add").value;
+     let business = document.getElementById("business").value;
+     let business_address = document.getElementById("business_address").value;
+     if(full_name.length == 0 || full_name.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter full name!");
+          $("#full_name").focus();
+          return;
+     }else if(gender.length == 0 || gender.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select Gender!");
+          $("#gender").focus();
+          return;
+     }else if(email_add.length == 0 || email_add.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input guarantors's email address");
+          $("#email").focus();
+          return;
+     }else if(phone.length == 0 || phone.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter phone number");
+          $("#phone").focus();
+          return;
+     }else if(phone.length != 11){
+          alert("Phone number is not correct");
+          $("#phone").focus();
+          return;
+    
+     }else if(relationship.length == 0 || relationship.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select relationship with guarantor");
+          $("#relationship").focus();
+          return;
+     }else if(address.length == 0 || address.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input customer address");
+          $("#address").focus();
+          return;
+     }else if(occupation.length == 0 || occupation.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select occupation");
+          $("#occupation").focus();
+          return;
+    
+     }else if(business.length == 0 || business.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input Business/company name");
+          $("#business").focus();
+          return;
+     }else if(business_address.length == 0 || business_address.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input Business/company address");
+          $("#business_address").focus();
+          return;
+    
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/update_guarantor.php",
+               data : {item_id:item_id, full_name:full_name,phone:phone, email_add:email_add, address:address, gender:gender,  occupation:occupation, relationship:relationship,  business:business, business_address:business_address},
+               beforeSend : function(){
+                    $("#package").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#package").html(response);
+                    setTimeout(function(){
+                         $("#package").load("guarantors.php #package");
+                    }, 3000)
+               }
+          })
+          
+          return false;   
+     }
+      
 }

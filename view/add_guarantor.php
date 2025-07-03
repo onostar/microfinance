@@ -40,85 +40,101 @@
         <!-- <form method="POST" id="addUserForm"> -->
         <section>
             <div class="inputs" style="gap:.5rem;justify-content:left">
+                <input type="hidden" name="loan" id="loan" value="<?php echo $loan?>">
+                <input type="hidden" name="customer" id="customer" value="<?php echo $customer_id?>">
                 <div class="data" style="width:32%;">
-                    <label for="business"> Product Name</label>
-                    <input type="text" name="product" id="product" placeholder="Enter Product Name" required>
+                    <label for="business"> Guarantor's Full Name</label>
+                    <input type="text" name="full_name" id="full_name" required>
                 </div>
                 
                 <div class="data" style="width:32%;">
-                    <label for="interest"> Interest Rate (%)</label>
-                    <input type="text" name="interest" id="interest" required>
-                </div>
-                <div class="data" style="width:32%;">
-                    <label for="repayment"> Repayment Frequency</label>
-                    <select name="repayment" id="repayment">
-                        <option value="" selected disabled>Select Repayment Frequency</option>
-                        <option value="Weekly">Weekly</option>
-                        <option value="Monthly">Monthly</option>
-                        <option value="Yearly">Yearly</option>
+                    <label for="relationship"> Relationship</label>
+                    <select name="relationship" id="relationship" required>
+                        <option value="" selected disabled>--Select Relationship--</option>
+                        <option value="Parent">Parent</option>
+                        <option value="Sibling">Sibling</option>
+                        <option value="Spouse">Spouse</option>
+                        <option value="Friend">Friend</option>
+                        <option value="Employer">Employer</option>
+                        <option value="Colleague">Colleague</option>
+                        <option value="Landlord">Landlord/Landlady</option>
+                        <option value="Religious Leader">Religious Leader</option>
+                        <option value="Community Leader">Community Leader</option>
+                        <option value="Business Partner">Business Partner</option>
+                        <option value="Neighbor">Neighbor</option>
+                        <option value="Guardian">Legal Guardian</option>
+                        <option value="Other">Others (specify)</option>
                     </select>
                 </div>
                 <div class="data" style="width:32%;">
-                    <label for="minimum"> Minimum Amount (NGN)</label>
-                    <input type="number" name="minimum" id="minimum" required>
-                </div>
-                <div class="data" style="width:32%;">
-                    <label for="maximum"> Maximum Amount (NGN)</label>
-                    <input type="number" name="maximum" id="maximum" required>
-                </div>
-                <div class="data" style="width:32%;">
-                    <label for="duration"> Maximum Term (Duration)</label>
-                    <select name="duration" id="duration">
-                        <option value="" selected disabled>Select Duration</option>
-                        <option value="3">3 Months</option>
-                        <option value="6">6 Months</option>
-                        <option value="12">12 Months</option>
+                    <label for="gender"> Gender</label>
+                    <select name="gender" id="gender" required>
+                        <option value="" selected disabled>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
                     </select>
                 </div>
                 <div class="data" style="width:32%;">
-                    <label for="processing"> Processing Fee (%)</label>
-                    <input type="number" name="processing" id="processing" required>
+                    <label for="phone"> Phone Number</label>
+                    <input type="tel" name="phone" id="phone" required>
                 </div>
                 <div class="data" style="width:32%;">
-                    <label for="penalty"> Late Payment Penalty (%)</label>
-                    <input type="number" name="penalty" id="penalty" required>
+                    <label for="email"> Email Address</label>
+                    <input type="email" name="email_add" id="email_add" required>
                 </div>
                 <div class="data" style="width:32%;">
-                    <label for="collateral"> Collateral Required?</label>
-                    <select name="collateral" id="collateral">
-                        <option value="" disabled>Collateral</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
+                    <label for="address"> Residential Address</label>
+                    <input type="text" name="address" id="address" required>
+                </div>
+                <div class="data" style="width:32%;">
+                    <label for="occupation">Occupation <span class="important">*</span></label>
+                    <select name="occupation" id="occupation" required>
+                        <option value="">--Select Occupation--</option>
+                        <option value="Doctor">Doctor</option>
+                        <option value="Engineer">Engineer</option>
+                        <option value="Student">Student</option>
+                        <option value="Nurse">Nurse</option>
+                        <option value="Clergy">Clergy</option>
+                        <option value="Banker">Banker</option>
+                        <option value="Trader">Trader</option>
+                        <option value="Teacher/Lecturer">Teacher/Lecturer</option>
+                        <option value="Business Person">Business Person</option>
+                        <option value="Others">Others</option>
+                        <option value="Unemployed">Unemployed</option>
                     </select>
                 </div>
-                <div class="data" style="width:50%;">
-                    <label for="description"> Description</label>
-                    <textarea name="description" id="description"></textarea>
+                <div class="data" style="width:32%">
+                    <label for="business">Business/Company Name<span class="important">*</span></label>
+                    <input type="text" name="business" id="business" required>
+                </div>
+                <div class="data" style="width:32%">
+                    <label for="business_address">Business/Company Address<span class="important">*</span></label>
+                    <input type="text" name="business_address" id="business_address" required>
                 </div>
                 <div class="data" style="width:auto">
-                    <button type="button" id="add_store" name="add_store" onclick="addPackage()">Add Product <i class="fas fa-piggy-bank"></i></button>
+                    <button type="button" id="add_store" name="add_store" onclick="addGuarantor()">Add Guarantor <i class="fas fa-user-shield"></i></button>
                 </div>
             </div>
         </section>    
     </div>
-        <h2>List Of Loan Poducts</h2>
+        <h2>List Of Guarantors</h2>
         <hr>
         <div class="search">
             <input type="search" id="searchGuestPayment" placeholder="Enter keyword" onkeyup="searchData(this.value)">
         </div>
         <table id="priceTable" class="searchTable">
             <thead>
-                <tr style="background:var(--otherColor)">
+                <tr style="background:var(--labColor)">
                     <td>S/N</td>
-                    <td>Product</td>
-                    <td>Amount Range (NGN)</td>
-                    <td>Duration</td>
-                    <td>Interest (%)</td>
-                    <td>Repayment</td>
-                    <td>Trx Fee (%)</td>
-                    <td>Penalty Fee (%)</td>
-                    <td>Collat.</td>
-                    <td>Status</td>
+                    <td>Loan Applied</td>
+                    <td>Guarantor</td>
+                    <td>Address</td>
+                    <td>Phone No.</td>
+                    <td>Email</td>
+                    <td>Occupation</td>
+                    <td>Business Name</td>
+                    <td>Business Address</td>
+                    <td>Relationship</td>
                     <td></td>
                 </tr>
             </thead>
@@ -128,9 +144,9 @@
             <?php
                 $n = 1;
                 $select_cat = new selects();
-                $rows = $select_cat->fetch_details('loan_products');
+                $rows = $select_cat->fetch_details_condOrder('guarantors', 'client', $customer_id, 'full_name');
                 if(gettype($rows) == "array"){
-                foreach($rows as $row):
+                    foreach($rows as $row):
                    
             ?>
                 <tr>
@@ -138,62 +154,54 @@
                     
                     <td>
                         <?php 
-                            
-                            echo $row->product;
-                        ?>
-                    </td>
-                    <td style="color:green">
-                        <?php echo number_format($row->minimum, 2)." - ". number_format($row->maximum, 2)?>
-                    </td>
-                   <td>
-                        <?php
-                            echo $row->duration." Months";
-                        ?>
-                    </td>
-                    <td style="color:red">
-                        <?php
-                            echo number_format($row->interest, 2)."%";
-                        ?>
-                    </td>
-                    <td>
-                        <?php
-                            echo $row->repayment;
-                        ?>
-                    </td>
-                    <td>
-                        <?php
-                            echo number_format($row->processing, 2)."%";
-                        ?>
-                    </td>
-                    <td>
-                        <?php
-                            echo number_format($row->penalty, 2)."%";
-                        ?>
-                    </td>
-                    <td>
-                        <?php
-                            echo $row->collateral;
-                        ?>
-                    </td>
-                    <td>
-                        <?php
-                            if($row->product_status == 0){
-                                echo "<span style='color:green'>Active</span>";
-                            }else{
-                                echo "<span style='color:red'>Inactive</span>";
+                            //get current loan
+                            $cur_loan = $select_cat->fetch_details_group('loan_applications', 'product', 'loan_id', $row->loan);
+                            $product = $cur_loan->product;
+                            $loans = $select_cat->fetch_details_cond('loan_products', 'product_id', $product);
+                            foreach($loans as $ln){
+                                echo $ln->product;
                             }
                         ?>
                     </td>
-                    <td style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap">
-                        <a style="background:var(--tertiaryColor)!important; color:#fff!important; padding:3px 6px; margin:2px; border-radius:50%; border:1px solid #fff; box-shadow:1px 1px 1px #222" href="javascript:void(0)" onclick="getForm('<?php echo $row->product_id?>', 'get_package.php');"><i class="fas fa-pen"></i></a>
-                        <a style="background:brown!important; color:#fff!important; padding:3px 6px; border-radius:50%; border:1px solid #fff; box-shadow:1px 1px 1px #222" href="javascript:void(0)" onclick="deletePackage('<?php echo $row->product_id?>');"><i class="fas fa-trash"></i></a>
+                    <td><?php echo $row->full_name?></td>
+                    <td>
                         <?php
-                            if($row->product_status == 1){
+                            echo $row->address;
                         ?>
-                        <a style="padding:0; margin: 0 3px; border-radius:5px;  color:#777373;font-size:1.1rem;"href="javascript:void(0)" onclick="toggleNotif('<?php echo $row->product_id?>')" title="Actiate Product"><i class="fas fa-toggle-off"></i></a>
-                        <?php }else{?>
-                        <a style="padding:0; border-radius:5px;  margin: 0 3px; color:green;font-size:1.1rem;" href="javascript:void(0)" onclick="toggleNotif('<?php echo $row->product_id?>')" title="Disable Product"><i class="fas fa-toggle-on"></i></a>
-                        <?php }?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $row->phone_number
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $row->email_address;
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $row->occupation;
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $row->business;
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $row->business_address;
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            echo $row->relationship;
+                        ?>
+                    </td>
+                    <td>
+                        <a style="background:var(--tertiaryColor)!important; color:#fff!important; padding:3px 6px; margin:2px;border-radius:50%; border:1px solid #fff; box-shadow:1px 1px 1px #222" title="update details" href="javascript:void(0)" onclick="getForm('<?php echo $row->guarantor_id?>', 'get_guarantor.php');"><i class="fas fa-pen"></i></a>
+                        
                         
                         
                     </td>
