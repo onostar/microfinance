@@ -153,7 +153,7 @@
                 <div class="data" style="width:23%">
                     <label for="occupation">Occupation <span class="important">*</span></label>
                     <select name="occupation" id="occupation" required>
-                        <option value="">Select Occupation</option>
+                        <option value="">--Select Occupation--</option>
                         <option value="Doctor">Doctor</option>
                         <option value="Engineer">Engineer</option>
                         <option value="Student">Student</option>

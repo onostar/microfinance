@@ -32,8 +32,8 @@ session_start();
                 <td>Phone number</td>
                 <td>Loan Product</td>
                 <td>Requested Amount</td>
-                <td>Loan Term</td>
-                <td>Date</td>
+                <td>Approved By</td>
+                <td>Approval Date</td>
                 <td></td>
             </tr>
         </thead>
@@ -74,10 +74,20 @@ session_start();
                         echo "₦".number_format($detail->amount, 2);
                     ?>
                 </td>
-                <td><?php echo $detail->loan_term;?> Months</td>
-                <td><?php echo date("d-m-Y", strtotime($detail->application_date))?></td>
+                <!-- <td><?php echo $detail->loan_term;?> Months</td> -->
                 <td>
-                    <a style="padding:5px; border-radius:15px;background:var(--tertiaryColor);color:#fff;"href="javascript:void(0)" onclick="showPage('view_loan_details.php?loan=<?php echo $detail->loan_id?>')" title="view Loan details">view <i class="fas fa-eye"></i></a>
+                    <?php 
+                        //get user details
+                        $users = $get_items->fetch_details_cond('users', 'user_id', $detail->approved_by);
+                        foreach($users as $user){
+                            $approved_by = $user->full_name;
+                        }
+                        echo $approved_by;
+                    ?>
+                </td>
+                <td><?php echo date("d-m-Y", strtotime($detail->approve_date))?></td>
+                <td>
+                    <a style="padding:5px; border-radius:15px;background:var(--tertiaryColor);color:#fff;"href="javascript:void(0)" onclick="showPage('disburse_loan.php?loan=<?php echo $detail->loan_id?>')" title="view Loan details">Disburse <i class="fas fa-hand-holding-dollar"></i></a>
                 </td>
             </tr>
             
