@@ -67,8 +67,20 @@
     $delete_loan = new deletes();
     $delete_loan->delete_item('loan_applications', 'loan_id', $loan);
     if($delete_loan){
+        //insert notification
         $add_data = new add_data('notifications', $notif_data);
         $add_data->create_data();
+        //delete guarantors and documents with loan id
+        $tables = $get_details->fetch_tables('microfinance');
+        foreach($tables as $table){
+            //check for loan column exist in each table and delete it when thenumber is seen
+            $check_column = new selects();
+            $cols = $check_column->fetch_column($table->table_name, 'loan');
+            if($cols){
+                $delete_loan->delete_item($table->table_name, 'loan', $loan);
+            }
+            
+        }
         /* send mails to customer */
         function smtpmailer($to, $from, $from_name, $subject, $body){
             $mail = new PHPMailer();

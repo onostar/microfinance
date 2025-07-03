@@ -154,7 +154,7 @@ date_default_timezone_set("Africa/Lagos");
                                 ?>
                             </p>
                         </div>
-                        <div class="links page_navs" onclick="showPage('pending_disursement.php')" title="Loans awaiting disbursement">
+                        <div class="links page_navs" onclick="showPage('pending_disbursement.php')" title="Loans awaiting disbursement">
                             <i class="fas fa-hand-holding-dollar" style="color:brown"></i>
                             <p style="color:brown">
                                 <?php

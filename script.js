@@ -6927,9 +6927,9 @@ function declineLoan(loan){
                     $("#loan_applications").html(response);
                }
           })
-          setTimeout(function(){
+          /* setTimeout(function(){
                $("#loan_applications").load("pending_applications.php #loan_applications");
-          }, 3000);
+          }, 3000); */
      }else{
           return;
      }
