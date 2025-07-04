@@ -40,9 +40,9 @@
                 <?php
                     if($detail->not_status == 0){
                 ?>
-                <td><a style="font-size:.8rem;color:#222; font-weight:bold;" href="javascript:void(0)" onclick="showPage('view_notification.php?notification=<?php echo $detail->notification_id?>')" title="view patient details"><i class="fas fa-envelope"></i> <?php echo $detail->subject?></a></td>
+                <td><a style="font-size:.8rem;color:#222; font-weight:bold;" href="javascript:void(0)" onclick="showPage('view_notification.php?notification=<?php echo $detail->notification_id?>')" title="view notification details"><i class="fas fa-envelope"></i> <?php echo $detail->subject?></a></td>
                 <?php }else{?>
-                <td><a style="font-size:.8rem;color:#222;" href="javascript:void(0)" onclick="showPage('view_notification.php?notification=<?php echo $detail->notification_id?>')" title="view patient details"><i class="fas fa-envelope-open"></i> <?php echo $detail->subject?></a></td>
+                <td><a style="font-size:.8rem;color:#222;" href="javascript:void(0)" onclick="showPage('view_notification.php?notification=<?php echo $detail->notification_id?>')" title="view notification details"><i class="fas fa-envelope-open"></i> <?php echo $detail->subject?></a></td>
                 <?php }?>
                 <td style="color:var(--primaryColor); font-size:.8rem"><?php echo date("Y-M-d, h:i:sa", strtotime($detail->post_date))?></td>
                 <!-- <td>

@@ -37,6 +37,8 @@
         $client = $result->customer;
         $customer_email = $result->customer_email;
     }
+    //calculate repayment dates
+    
     //approve loan
     $update = new Update_table();
     $update->update_tripple('loan_applications', 'loan_status', 1, 'approved_by', $user, 'approve_date', $date, 'loan_id', $loan);
