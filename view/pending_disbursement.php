@@ -1,4 +1,4 @@
-<div id="loan_applications">
+<div id="disburse">
 <?php
 session_start();
     include "../classes/dbh.php";

@@ -7219,3 +7219,46 @@ function updateGuarantor(){
      }
       
 }
+
+//disburse loan
+function disburseLoan(){
+     let loan = document.getElementById("loan").value;
+     let customer = document.getElementById("customer").value;
+     let trx_date = document.getElementById("trx_date").value;
+     let amount = document.getElementById("amount").value;
+     let contra = document.getElementById("contra").value;
+     let todayDate = new Date();
+     if(contra.length == 0 || contra.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select contraledger");
+          $("#contra").focus();
+          return;
+     }else if(trx_date.length == 0 || trx_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input transaction date");
+          $("#trx_date").focus();
+          return;
+     }else if(new Date(trx_date) > todayDate){
+          alert("Transaction date cannot be futuristic!");
+          $("#trx_date").focus();
+          return;
+     }else{
+          let confirmPost = confirm("Are you sureyou want to post this transaction?", "");
+          if(confirmPost){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/disburse_loan.php",
+                    data : {loan:loan, customer:customer, contra:contra, trx_date:trx_date, amount:amount},
+                    beforeSend : function(){
+                         $("#disburse").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#disburse").html(response);
+                         setTimeout(function(){
+                              $("#disburse").load("pending_disbursement.php #disburse");
+                         }, 3000)
+                    }
+               })
+          }else{
+               return;
+          }
+     }
+}

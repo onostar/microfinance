@@ -35,6 +35,23 @@
             $product_name = $detail->product;
         }
     }
+    $data = array(
+        'customer' => $customer,
+        'product' => $product,
+        'amount' => $amount,
+        'purpose' => $purpose,
+        'frequency' => $frequency,
+        'installment' => $installment,
+        'interest_rate' => $interest_rate,
+        'interest' => $interest,
+        'collateral' => $collateral,
+        'processing_fee' => $processing,
+        'processing_rate' => $processing_rate,
+        'total_payable' => $total,
+        'loan_term' => $loan_term,
+        'posted_by' => $user,
+        'application_date' => $date
+    );
     $total = number_format($total, 2);
     $interest = number_format($interest, 2);
     $processing = number_format($processing, 2);
@@ -60,23 +77,7 @@
     <p>Kindly log in to the admin dashboard to review and process the application.<br><br>
     Best regards,<br>
     $company<br>Support Team</p>";
-    $data = array(
-        'customer' => $customer,
-        'product' => $product,
-        'amount' => $amount,
-        'purpose' => $purpose,
-        'frequency' => $frequency,
-        'installment' => $installment,
-        'interest_rate' => $interest_rate,
-        'interest' => $interest,
-        'collateral' => $collateral,
-        'processing_fee' => $processing,
-        'processing_rate' => $processing_rate,
-        'total_payable' => $total,
-        'loan_term' => $loan_term,
-        'posted_by' => $user,
-        'application_date' => $date
-    );
+    
     
     //check if customer has an existing loan application
     $existing = $get_details->fetch_details_cond('loan_applications', 'customer', $customer);
