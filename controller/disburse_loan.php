@@ -10,7 +10,7 @@
     $contra = htmlspecialchars(stripslashes($_POST['contra']));
     $trx_date = htmlspecialchars(stripslashes($_POST['trx_date']));
     $company = $_SESSION['company'];
-    $disburse_date = date("jS M, Y", strtotime($trx_date));
+    $disburse_date = date("jS F, Y", strtotime($trx_date));
     //generate transaction number
     //get current date
     $todays_date = date("dmyhis");
@@ -122,6 +122,7 @@
             );
             // Insert into repayment_schedule table
             $insert_repayment = new add_data('repayment_schedule', $repayment_data);
+            $insert_repayment->create_data();
         }
         //get first repayment date
         $first_ids = $get_details->fetch_lastInsertedConAsc('repayment_schedule', 'due_date', 'loan', $loan);
@@ -135,7 +136,7 @@
         }
         //update loan status to disbursed
         $update = new Update_table();
-        $update->update_tripple('loan_applications', 'loan_status', 2, 'start_date', $date, 'due_date', $last_repayment_date, 'loan_id', $loan);
+        $update->update_tripple('loan_applications', 'loan_status', 2, 'disbursed_date', $date, 'due_date', $last_repayment_date, 'loan_id', $loan);
         //cash flow transaction
         $flow_data = array(
             'account' => $contra_ledger,
@@ -209,27 +210,26 @@
         $notif_data = array(
             'client' => $customer,
             'subject' => 'Your Loan Has Been Disbursed',
-            'message' => 'Dear $client,
+            'message' => 'Dear '.$client.',
             We are pleased to inform you that your loan of ₦'.$amount. ' under the '.$product_name.' has been successfully disbursed on '.$disburse_date.'
             LOAN DETAILS:
-            <ul>
-                <li><strong>Loan Amount:</strong> NGN'.$amount.'</li>
-                <li><strong>Interest:</strong> NGN'.$interest.'</li>
-                <li><strong>Processing Fee:</strong> NGN'.$processing.'</li>
-                <li><strong>Total Payable:</strong> NGN'.$total.'</li>
-                <li><strong>Repayment Term:</strong> '.$loan_term.' Months</li>
-                <li><strong>Repayment Frequency:</strong> '.$frequency.'</li>
-                <li><strong>First Repayment Date:</strong> '.$first_repayment_date.'</li>
-            </ul>
+            * Loan Amount: NGN'.$amount.'
+            * Interest: NGN'.$interest.'
+            * Processing Fee: NGN'.$processing.'
+            * Total Payable: NGN'.$total.'
+            * Repayment Term: '.$loan_term.' Months
+            * Repayment Frequency: '.$frequency.'
+            * First Repayment Date: '.$first_repayment_date.'
+
             Please ensure that your repayments are made as scheduled to maintain a good credit standing.
 
-            You can log in to your account to view your repayment schedule and loan status.
+            You can click on loan status to view your status and repayment schedule.
             If you have any questions or need assistance, feel free to reach out to us.
 
-            <p>Thank you for choosing '.$company.'
+            Thank you for choosing '.$company.'
             Warm regards,
-            **'.$loan_officer.' '.
-            $company,
+            **'.$loan_officer.'**'
+            .$company,
             'post_date' => $date,
         );
         $add_data = new add_data('notifications', $notif_data);
