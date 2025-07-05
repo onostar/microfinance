@@ -70,7 +70,7 @@
         <li><strong>Installment:</strong> NGN$installment $frequency</li>
         <li><strong>Interest Rate:</strong> $interest_rate%</li>
         <li><strong>Interest:</strong> NGN$interest</li>
-        <p><strong>Processing Fee:</strong> NGN$processing</p>
+        <li><strong>Processing Fee:</strong> NGN$processing</li>
         <li><strong>Total Payable:</strong> NGN$total</li>
         <li><strong>Collateral:</strong> $collateral</li>
     </ul>

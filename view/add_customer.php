@@ -101,7 +101,7 @@
                         <option value="" selected disabled>Select State/Region</option>
                         <option value="Abia">Abia</option>
                         <option value="Adamawa">Adamawa</option>
-                        <option value="Akwa-Ibom">Ibom</option>
+                        <option value="Akwa-Ibom">Akwa-Ibom</option>
                         <option value="Anambra">Anambra</option>
                         <option value="Bauchi">Bauchi</option>
                         <option value="Bayelsa">Bayelsa</option>

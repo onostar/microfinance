@@ -70,7 +70,7 @@
     include "../classes/inserts.php";
     include "../classes/update.php";
 
-   //check if patient exists
+   //check if customer exists
    
    $check = new selects();
    $results = $check->fetch_count_cond('customers', 'customer', $customer);

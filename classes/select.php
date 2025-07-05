@@ -1835,6 +1835,30 @@
                 $rows = "<p class='no_result'>No records found</p>";
             }
         }
+        //fetch last inserted from any table with a condition
+        public function fetch_lastInsertedCon($table, $column, $column2, $value){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column2 = :$column2 ORDER BY $column DESC LIMIT 1");
+            $get_user->bindValue("$column2", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "<p class='no_result'>No records found</p>";
+            }
+        }
+        //fetch last inserted from any table with a condition ascending order
+        public function fetch_lastInsertedConAsc($table, $column, $column2, $value){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column2 = :$column2 ORDER BY $column ASC LIMIT 1");
+            $get_user->bindValue("$column2", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "<p class='no_result'>No records found</p>";
+            }
+        }
         //fetch all details with 1 condition grouped
         public function fetch_details_Allgroup($table, $condition, $value, $group){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition = :$condition GROUP BY $group");
