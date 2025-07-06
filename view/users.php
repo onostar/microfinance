@@ -146,7 +146,7 @@ date_default_timezone_set("Africa/Lagos");
                         </div>
                         
                         <div class="links page_navs" onclick="showPage('pending_applications.php')" title="Pending Applications">
-                            <i class="fas fa-chart-line" style="color:green"></i>
+                            <i class="fas fa-download" style="color:green"></i>
                             <p>
                                 <?php
                                     $app = $fetch_comp->fetch_count_cond('loan_applications', 'loan_status', 0);
@@ -163,13 +163,13 @@ date_default_timezone_set("Africa/Lagos");
                                 ?>
                             </p>
                         </div>
-                        <div class="links page_navs" onclick="showPage('reached_reorder.php')" title="Reached reorder level">
-                            <i class="fas fa-sort-amount-down"></i>
+                        <div class="links page_navs" onclick="showPage('active_loans.php')" title="Active Loans">
+                            <i class="fas fa-chart-line"></i>
                             <p>
                                 <?php
-                                    $get_level = new selects();
-                                    $levels = $get_level->fetch_lesser_cond('inventory',  'quantity', 'reorder_level', 'store', $store_id);
-                                    echo $levels;
+                                    $active = $fetch_comp->fetch_count_cond('loan_applications', 'loan_status', 2);
+                                    echo $active;
+                                
                                 ?>
                             </p>
                         </div>

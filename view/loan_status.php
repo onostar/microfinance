@@ -6,10 +6,10 @@
         padding:4px!important;
         font-size:.8rem!important;
     }
-    table td p{
+    /* table td p{
         padding:4px!important;
         font-size:.8rem!important;
-    }
+    } */
     @media screen and (max-width: 800px){
         .not_available{
             width: 85%;
@@ -26,7 +26,8 @@
 </style>
 <div id="loan_application">
 <?php
-    session_start();    
+    session_start();  
+    date_default_timezone_set("Africa/Lagos");  
     include "../classes/dbh.php";
     include "../classes/select.php";
     if(!isset($_SESSION['user_id'])) {
@@ -34,7 +35,6 @@
         exit();
     }else{
         $customer = $_SESSION['client_id'];
-        $today = date("d-m-Y");
         //check loan status
         $get_details = new selects();
         $existing = $get_details->fetch_details_cond('loan_applications', 'customer', $customer);
@@ -102,10 +102,6 @@
                         <input type="text" value="<?php echo "₦".number_format($total, 2)?>" readonly>
                     </div>
                     <div class="data" style="width:32%">
-                        <label for="">Total Repayable:</label>
-                        <input type="text" value="<?php echo "₦".number_format($total, 2)?>" readonly>
-                    </div>
-                    <div class="data" style="width:32%">
                         <label for="">Repayment Term:</label>
                         <input type="text" value="<?php echo $loan_term?>" readonly>
                     </div>
@@ -121,12 +117,12 @@
                 </div>
             </form>
         </section>
-        <section class="main_consult" style="width:100%">
+        <section style="width:100%">
              <h3 style="background:var(--labColor); text-align:left; color:#fff; font-size:.8rem;padding:5px;">Repayment Schedule</h3>
             <div class="displays allResults" style="width:100%!important; margin:0!important">
                 <table id="item_list_table" class="searchTable">
                     <thead>
-                        <tr style="background:var(--moreColor)">
+                        <tr style="background:var(--tertiaryColor)">
                             <td>S/N</td>
                             <td>Date</td>
                             <td>Amount Due</td>
@@ -140,18 +136,19 @@
                             foreach($repays as $repay){
                         ?>
                         <tr>
-                            <td style="text-align:left; color:red;"><?php echo $n?></td>
+                            <td style="text-align:center; color:red;"><?php echo $n?></td>
                             <td><?php echo date("d-M-Y", strtotime($repay->due_date))?></td>
-                            <td><?php  echo "₦".number_format($repay->amount_due, 2)?></td>
+                            <td style="color:var(--secondaryColor)"><?php  echo "₦".number_format($repay->amount_due, 2)?></td>
                             <td>
                                 <?php
-                                    $date_due = date("d-m-Y", strtotime($repay->due_date));
-                                    if($repay->payment_status == "0" && $today < $date_due){
-                                        echo "<p style='color:var(--primaryColor);'>Pending <i class='fas fa-spinner'></i></p>";
-                                    }elseif($repay->payment_status == "0" && $today > $date_due){
-                                        echo "<p style='color:red;'>Overdue <i class='fas fa-clock'></i></p>";
+                                    $date_due = new DateTime($repay->due_date);
+                                    $today = new DateTime();
+                                    if($repay->payment_status == "0" && $date_due > $today){
+                                        echo "<span style='color:var(--primaryColor);'>Pending <i class='fas fa-spinner'></i></span>";
+                                    }elseif($repay->payment_status == "0" && $date_due < $today){
+                                        echo "<span style='color:red;'>Overdue <i class='fas fa-clock'></i></span>";
                                     }else{
-                                        echo "<p style='color:var(--tertiaryColor);'>Paid <i class='fas fa-check-circle'></i></p>";
+                                        echo "<span style='color:var(--tertiaryColor);'>Paid <i class='fas fa-check-circle'></i></span>";
                                     }
                                 ?>
                             </td>
@@ -160,6 +157,14 @@
                         <?php $n++; };?>
                     </tbody>
                 </table>
+                <?php
+                    //get total due
+                    $tls = $get_details->fetch_sum_single('repayment_schedule', 'amount_due', 'loan', $ln->loan_id);
+                    foreach($tls as $tl){
+                        $total_due = $tl->total;
+                    }
+                    echo "<p class='total_amount' style='background:red; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Due: ₦".number_format($total_due, 2)."</p>";
+                ?>
             </div>
         </section>
     </div>
