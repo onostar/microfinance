@@ -10,6 +10,8 @@
         $customer_id = htmlspecialchars(stripslashes($_GET['customer']));
     //get customer details
     $get_customer = new selects();
+    $cus = $get_customer->fetch_details_group('customers', 'customer', 'customer_id', $customer_id);
+    $client = $cus->customer;
     //check for current loan
     $lns = $get_customer->fetch_details_2cond('loan_applications', 'customer', 'loan_status', $customer_id, 0);
     if(is_array($lns)){
@@ -20,11 +22,11 @@
         $loan = "";
     }
 ?>
-
 <div id="add_room" class="displays">
+    <a style="border-radius:15px; background:brown;color:#fff;padding:8px; margin:10px 0!important; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('client_document_upload.php')"><i class="fas fa-angle-double-left"></i> Return</a>
      <div class="info" style="width:60%; margin:10px;"></div>
     <div class="add_user_form" style="width:60%; margin:10px; box-shadow:none;background:transparent">
-        <h3 style="background:var(--tertiaryColor)!important">Upload Document</h3>
+        <h3 style="background:var(--tertiaryColor)!important">Upload Document for <?php echo $client?></h3>
         <div class="inputs" style="margin-top:10px; gap:1rem; display:flex; flex-wrap:wrap; justify-content:left;align-items:center">
             <input type="hidden" name="customer_id" id="customer_id" value="<?php echo $customer_id?>">
             <input type="hidden" name="loan" id="loan" value="<?php echo $loan?>">

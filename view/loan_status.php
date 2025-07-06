@@ -2,9 +2,25 @@
     .not_available{
         width: 50%;
     }
+    table td{
+        padding:4px!important;
+        font-size:.8rem!important;
+    }
+    table td p{
+        padding:4px!important;
+        font-size:.8rem!important;
+    }
     @media screen and (max-width: 800px){
         .not_available{
-            width: 80%;
+            width: 85%;
+        }
+        .inputs .data{
+            width:48%!important;
+            margin:0!important;
+        }
+        .inputs .data input{
+            width:100%!important;
+            margin:0!important;
         }
     }
 </style>
@@ -18,6 +34,7 @@
         exit();
     }else{
         $customer = $_SESSION['client_id'];
+        $today = date("d-m-Y");
         //check loan status
         $get_details = new selects();
         $existing = $get_details->fetch_details_cond('loan_applications', 'customer', $customer);
@@ -41,8 +58,113 @@
                     echo "<div class='not_available'>
                     <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Loan Application Pending Disbursement</strong><br>You currently have an active $product_name loan awaiting disbursement. Please note that you are not eligible to apply for a new loan until your current loan application is fully disbursed and repaid.</p></div>";
                 }elseif($exist->loan_status == 2){
-                    echo "<div class='not_available'>
-                    <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Existing Live Loan Detected</strong><br>You currently have an active $product_name loan. Please note that you are not eligible to apply for a new loan until your current loan is fully repaid.</p></div>";
+                    //get loan details
+                    $lns = $get_details->fetch_details_cond('loan_applications', 'loan_id', $exist->loan_id);
+                    foreach($lns as $ln){
+                        $request_date = $ln->application_date;
+                        $amount = $ln->amount;
+                        $total = $ln->total_payable;
+                        $processing = $ln->processing_fee;
+                        $interest = $ln->interest;
+                        $loan_term = $ln->loan_term." Months";
+                        $frequency = $ln->frequency;
+                        $due_date = $ln->due_date;
+                        $disbursed = $ln->disbursed_date;
+                    ?>
+    <div class="not_available" style="width:90%">
+        <p><strong><i class="fas fa-exclamation-triangle" style="color: #cfb20e;"></i> Existing Live Loan Detected</strong><br>You currently have an active <?php echo $product_name?> loan. Please note that you are not eligible to apply for a new loan until your current loan is fully repaid.</p>
+        <section class="main_consult">
+            <h3 style="background:var(--tertiaryColor); text-align:left; color:#fff; font-size:.8rem;padding:5px;">Loan Details</h3>
+            <form action="" class="add_user_form" style="width:100%; margin:0; box-shadow:none;">
+                <div class="inputs" style="display:flex; align-items:flex-end; flex-wrap:wrap; gap:.5rem; width:100%!important; margin:0;padding:15px; box-shadow:2px 2px 2px #c4c4c4;">
+                    <div class="data" style="width:32%">
+                        <label for="">Date Applied:</label>
+                        <input type="text" value="<?php echo date("jS M, Y, H:ia", strtotime($request_date))?>" readonly>
+                    </div>
+                    <div class="data" style="width:32%">
+                        <label for="">Disbursed Date:</label>
+                        <input type="text" value="<?php echo date("jS M, Y, H:ia", strtotime($disbursed))?>" readonly>
+                    </div>
+                    <div class="data" style="width:32%">
+                        <label for="">Amount Requested:</label>
+                        <input type="text" value="<?php echo "₦".number_format($amount, 2)?>" readonly>
+                    </div>
+                    <div class="data" style="width:32%">
+                        <label for="">Interest:</label>
+                        <input type="text" value="<?php echo "₦".number_format($interest, 2)?>" readonly>
+                    </div>
+                    <div class="data" style="width:32%">
+                        <label for="">Transaction fee:</label>
+                        <input type="text" value="<?php echo "₦".number_format($processing, 2)?>" readonly>
+                    </div>
+                    <div class="data" style="width:32%">
+                        <label for="">Total Repayable:</label>
+                        <input type="text" value="<?php echo "₦".number_format($total, 2)?>" readonly>
+                    </div>
+                    <div class="data" style="width:32%">
+                        <label for="">Total Repayable:</label>
+                        <input type="text" value="<?php echo "₦".number_format($total, 2)?>" readonly>
+                    </div>
+                    <div class="data" style="width:32%">
+                        <label for="">Repayment Term:</label>
+                        <input type="text" value="<?php echo $loan_term?>" readonly>
+                    </div>
+                    <div class="data" style="width:32%">
+                        <label for="">Repayment Frequency:</label>
+                        <input type="text" value="<?php echo $frequency?>" readonly>
+                    </div>
+                    <div class="data" style="width:32%">
+                        <label for="">Due Date:</label>
+                        <input type="text" value="<?php echo date("d-M-Y", strtotime($due_date))?>" readonly>
+                    </div>
+                    
+                </div>
+            </form>
+        </section>
+        <section class="main_consult" style="width:100%">
+             <h3 style="background:var(--labColor); text-align:left; color:#fff; font-size:.8rem;padding:5px;">Repayment Schedule</h3>
+            <div class="displays allResults" style="width:100%!important; margin:0!important">
+                <table id="item_list_table" class="searchTable">
+                    <thead>
+                        <tr style="background:var(--moreColor)">
+                            <td>S/N</td>
+                            <td>Date</td>
+                            <td>Amount Due</td>
+                            <td>Status</td>
+                        </tr>
+                    </thead>
+                    <tbody id="result">
+                        <?php
+                            $n = 1;
+                            $repays = $get_details->fetch_details_cond('repayment_schedule', 'loan', $ln->loan_id);
+                            foreach($repays as $repay){
+                        ?>
+                        <tr>
+                            <td style="text-align:left; color:red;"><?php echo $n?></td>
+                            <td><?php echo date("d-M-Y", strtotime($repay->due_date))?></td>
+                            <td><?php  echo "₦".number_format($repay->amount_due, 2)?></td>
+                            <td>
+                                <?php
+                                    $date_due = date("d-m-Y", strtotime($repay->due_date));
+                                    if($repay->payment_status == "0" && $today < $date_due){
+                                        echo "<p style='color:var(--primaryColor);'>Pending <i class='fas fa-spinner'></i></p>";
+                                    }elseif($repay->payment_status == "0" && $today > $date_due){
+                                        echo "<p style='color:red;'>Overdue <i class='fas fa-clock'></i></p>";
+                                    }else{
+                                        echo "<p style='color:var(--tertiaryColor);'>Paid <i class='fas fa-check-circle'></i></p>";
+                                    }
+                                ?>
+                            </td>
+                        </tr>
+                        
+                        <?php $n++; };?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <?php
+                    }
                 }else{
                     echo "<div class='not_available'>
                     <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> No Active Loan</strong><br>You currently have No Active Loan.</p></div>";
