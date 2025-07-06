@@ -1,36 +1,28 @@
+<div id="package">
 <?php
     session_start();
     if(isset($_SESSION['user_id'])){
         $user = $_SESSION['user_id'];
-?>
-<div id="package">
-<style>
-    table td {
-        font-size:.7rem;
-    }
-</style>
-<?php
     include "../classes/dbh.php";
     include "../classes/select.php";
-    
-    if(isset($_SESSION['success'])){
-        echo $_SESSION['success'];
-    }
+    if(!isset($_GET['customer'])){
+        header("Location: ../index.php");
+    }else{
+        $customer_id = htmlspecialchars(stripslashes($_GET['customer']));
     //get customer details
     $get_customer = new selects();
-    $rows = $get_customer->fetch_details_cond('customers', 'user_id', $user);
-    foreach($rows as $row){
-        $customer_id = $row->customer_id;
-    }
+    $cus = $get_customer->fetch_details_group('customers', 'customer', 'customer_id', $customer_id);
+    $client = $cus->customer;
     //check for current loan
     $lns = $get_customer->fetch_details_2cond('loan_applications', 'customer', 'loan_status', $customer_id, 0);
     if(is_array($lns)){
         foreach($lns as $ln){
             $loan = $ln->loan_id;
         }
-?>
+    
 
-    <div class="info" style="margin:0!important; width:90%!important"></div>
+?>
+<div class="info" style="margin:0!important; width:90%!important"></div>
     <div class="displays allResults" style="width:100%;">
     <div class="add_user_form" style="width:80%; margin:20px 0">
         <h3 style="background:var(--labColor)">Add New Guarantor</h3>
@@ -109,7 +101,7 @@
                     <input type="text" name="business_address" id="business_address" required>
                 </div>
                 <div class="data" style="width:auto">
-                    <button type="button" id="add_store" name="add_store" onclick="addGuarantor('add_guarantor.php')">Add Guarantor <i class="fas fa-user-shield"></i></button>
+                    <button type="button" id="add_store" name="add_store" onclick="addGuarantor('customer_guarantor.php?customer=<?php echo $customer_id?>')">Add Guarantor <i class="fas fa-user-shield"></i></button>
                 </div>
             </div>
         </section>    
@@ -218,10 +210,12 @@
     
 </div>
 <?php
-}else{
+    }else{
          echo "<div class='not_available'><p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> No Active Loan Application</strong><br>The selected customer have no loan application pending. Please help the customer apply for a loan to enable them add guarantors.</p></div>";
     }
+}
     }else{
         header("Location: ../index.php");
     }
 ?>
+</div>

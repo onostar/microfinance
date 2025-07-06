@@ -18,9 +18,6 @@
         foreach($lns as $ln){
             $loan = $ln->loan_id;
         }
-    }else{
-        $loan = "";
-    }
 ?>
 <div id="add_room" class="displays">
     <a style="border-radius:15px; background:brown;color:#fff;padding:8px; margin:10px 0!important; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('client_document_upload.php')"><i class="fas fa-angle-double-left"></i> Return</a>
@@ -59,6 +56,9 @@
     </div>
 </div>
 <?php
+        }else{
+            echo "<div class='not_available'><p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> No Active Loan Application</strong><br>The selected customer have no loan application pending. Please help the customer apply for a loan to enable them upload documents.</p></div>";
+        }
     }
     }else{
         header("Location: ../index.php");

@@ -7059,7 +7059,7 @@ function uploadDocument(){
 }
 
 // Add aguarantor
-function addGuarantor(){
+function addGuarantor(url){
      let customer = document.getElementById("customer").value;
      let full_name = document.getElementById("full_name").value;
      let phone = document.getElementById("phone").value;
@@ -7133,7 +7133,7 @@ function addGuarantor(){
                success : function(response){
                     $("#package").html(response);
                     setTimeout(function(){
-                         $("#package").load("add_guarantor.php #package");
+                         $("#package").load(url+ " #package");
                     }, 3000)
                }
           })

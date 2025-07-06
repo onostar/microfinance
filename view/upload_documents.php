@@ -16,9 +16,7 @@
         foreach($lns as $ln){
             $loan = $ln->loan_id;
         }
-    }else{
-        $loan = "";
-    }
+    
 ?>
 
 <div id="add_room" class="displays">
@@ -57,6 +55,9 @@
     </div>
 </div>
 <?php
+        }else{
+            echo "<div class='not_available'><p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> No Active Loan Application</strong><br>You have no active loan application. Kindly apply for a loan to enable you add documents.</p></div>";
+        }
     }else{
         header("Location: ../index.php");
     }
