@@ -118,7 +118,7 @@
             </form>
         </section>
         <section style="width:100%">
-             <h3 style="background:var(--labColor); text-align:left; color:#fff; font-size:.8rem;padding:5px;">Repayment Schedule</h3>
+             <h3 style="background:var(--labColor); text-align:center; color:#fff; font-size:.9rem;padding:5px;">Repayment Schedule</h3>
             <div class="displays allResults" style="width:100%!important; margin:0!important">
                 <table id="item_list_table" class="searchTable">
                     <thead>
