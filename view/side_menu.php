@@ -67,6 +67,9 @@
                     }
                 }
             ?>
+            <li>
+                <a href="javascript:void(0);"><i class="fas fa-rocket"></i> </a>
+            </li>
         </ul>
         
         <?php
