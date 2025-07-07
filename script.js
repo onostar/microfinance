@@ -6465,6 +6465,7 @@ Webcam.set({
              data: {image: base64data, patient:patient},
              success: function(data) { 
                   alert(data);
+                  window.close();
              }
         });
    }
@@ -7264,7 +7265,7 @@ function disburseLoan(){
 }
 
 //loan repayment
-function deposit(){
+function payLoan(){
      let invoice = document.getElementById("invoice").value;
      let posted = document.getElementById("posted").value;
      let trans_date = document.getElementById("trans_date").value;
@@ -7304,17 +7305,22 @@ function deposit(){
           $("#trans_date").focus();
           return;
      }else{
-          $.ajax({
-               type : "POST",
-               url : "../controller/pay_loan.php",
-               data : {posted:posted, customer:customer, schedule:schedule, payment_mode:payment_mode, amount:amount, details:details, store:store, invoice:invoice, bank:bank, trans_date:trans_date},
-               beforeSend : function(){
-                    $("#fund_account").html("<div class='processing'><div class='loader'></div></div>");
-               },
-               success : function(response){
-               $("#fund_account").html(response);
-               }
-          })
+          let confirmPost = confirm("Are you sure you want to post this transaction?", "");
+          if(confirmPost){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/pay_loan.php",
+                    data : {posted:posted, customer:customer, schedule:schedule, payment_mode:payment_mode, amount:amount, details:details, store:store, invoice:invoice, bank:bank, trans_date:trans_date},
+                    beforeSend : function(){
+                         $("#fund_account").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                    $("#fund_account").html(response);
+                    }
+               })
+               return false;   
+          }else{
+               return;
+          }
      }
-     return false;    
 }

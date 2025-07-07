@@ -9,7 +9,7 @@ include "../classes/select.php";
     if(isset($_GET['receipt'])){
         $user = $_SESSION['user_id'];
         $invoice = $_GET['receipt'];
-        $type = "Deposit";        
+        // $type = "Deposit";        
         //get customer
         $get_customer_id = new selects();
         $custs = $get_customer_id->fetch_details_cond('deposits', 'invoice', $invoice);
@@ -53,7 +53,7 @@ include "../classes/select.php";
             <h3>CLIENT</h3>
         </div>
         <p><strong><span><?php echo $full_name?></span></strong></p>
-        <p><strong><span><?php echo $cust_address?></span></strong></p>
+        <!-- <p><strong><span><?php echo $cust_address?></span></strong></p> -->
         <p><strong><span><?php echo $cust_phone?></span></strong></p>
         <!-- <p><strong>Invoice Date:</strong> <span><?php echo date("d-m-Y", strtotime($paid_date))?></span></p> -->
 
@@ -78,7 +78,7 @@ include "../classes/select.php";
             <tr style="font-size:.8rem">
                 <!-- <td style="text-align:center; color:red;"><?php echo $n?></td> -->
                 <td style="color:var(--moreClor);font-weight:.8rem">
-                    Being <?php echo $pay_mode?> deposit
+                    Being <?php echo $pay_mode?> deposit for <?php echo $payment->details?>
                 </td>
                 <td style="font-weight:.8rem">
                     <?php 

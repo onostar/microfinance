@@ -144,7 +144,7 @@
             'trx_number' => $trx_num,
             'amount' => $amount,
             'trans_type' => 'outflow',
-            'activity' => 'operating',
+            'activity' => 'financing',
             'post_date' => $date,
             'posted_by' => $user,
             'store' => $store

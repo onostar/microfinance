@@ -10,8 +10,8 @@
     $bank = htmlspecialchars(stripslashes($_POST['bank']));
     $trans_date = htmlspecialchars(stripslashes($_POST['trans_date']));
     $details = ucwords(htmlspecialchars(stripslashes($_POST['details'])));
-    $trans_type = "Deposit";
-    $type = "Deposit";
+    $trans_type = "Loan Repayment";
+    // $type = "Deposit";
     $date = date("Y-m-d H:i:s");
      //generate transaction number
     //get current date
@@ -64,14 +64,15 @@
         foreach($results as $result){
             $amount_due = $result->amount_due;
             $amount_paid = $result->amount_paid;
-            $loan_id = $result->loan_id;
+            $loan_id = $result->loan;
         }
         //get loan details
-        $loan_details = $get_details->fetch_details_cond('loans', 'loan_id', $loan_id);
+        $loan_details = $get_details->fetch_details_cond('loan_applications', 'loan_id', $loan_id);
         foreach($loan_details as $loan){
             $loan_amount = $loan->amount;
             $interest_rate = $loan->interest_rate;
             $processing_rate = $loan->processing_rate;
+            $total_payable = $loan->total_payable;
         }
         //calculate interests and processing fee
         $interest = ($amount * $interest_rate) / 100;
@@ -79,82 +80,42 @@
         //get balance 
         $balance = $amount_due - $amount_paid;
         $new_balance = $balance - $amount;
-        if($new_balance == 0){
-            $total_paid = $amount_paid + $amount;
+        $total_paid = $amount_paid + $amount;
+        if($new_balance <= 0){
             //update repayment schedule
             $update = new Update_table();
-            $update->update_double('repayment_schedule', 'amount_paid', $total_paid, 'payment_status', 1, 'repayment_id', $schedule);
-            //add into repayment table
-            $repayment_data = array(
-                'customer' => $customer,
-                'store' => $store,
-                'loan' => $loan_id,
-                'amount' => $amount,
-                'schedule' => $schedule,
-                'interest' => $interest,
-                'processing_fee' => $processing_fee,
-                'payment_mode' => $mode,
-                'details' => $details,
-                'invoice' => $receipt,
-                'bank' => $bank,
-                'posted_by' => $user,
-                'post_date' => $date,
-                'trx_number' => $trx_num,
-            );
-            $add_repayment = new add_data('repayments', $repayment_data);
-            $add_repayment->create_data();
-        }elseif($new_balance > 0){
-            $total_paid = $amount_paid + $amount;
+            $update->update_double('repayment_schedule', 'amount_paid', $amount_due, 'payment_status', 1, 'repayment_id', $schedule);
+            
+        }else{
             //update repayment schedule
             $update = new Update_table();
             $update->update('repayment_schedule', 'amount_paid', 'repayment_id', $total_paid, $schedule);
-            //add into repayment table
-            $repayment_data = array(
-                'customer' => $customer,
-                'store' => $store,
-                'loan' => $loan_id,
-                'amount' => $amount,
-                'schedule' => $schedule,
-                'interest' => $interest,
-                'processing_fee' => $processing_fee,
-                'payment_mode' => $mode,
-                'details' => $details,
-                'invoice' => $receipt,
-                'bank' => $bank,
-                'posted_by' => $user,
-                'post_date' => $date,
-                'trx_number' => $trx_num,
-            );
-            $add_repayment = new add_data('repayments', $repayment_data);
-            $add_repayment->create_data();
-        }else{
+        }
+        //add into repayment table
+        $repayment_data = array(
+            'customer' => $customer,
+            'store' => $store,
+            'loan' => $loan_id,
+            'amount' => $amount,
+            'schedule' => $schedule,
+            'interest' => $interest,
+            'processing_fee' => $processing_fee,
+            'payment_mode' => $mode,
+            'details' => $details,
+            'invoice' => $receipt,
+            'bank' => $bank,
+            'posted_by' => $user,
+            'post_date' => $date,
+            'trx_number' => $trx_num,
+        );
+        $add_repayment = new add_data('repayments', $repayment_data);
+        $add_repayment->create_data();
+        //handle excess payment
+        if($new_balance < 0){
             //if new balance is less than 0, then customer has overpaid
             $overpaid = $new_balance * (-1);
-            $total_paid = $amount_due;
-            //update repayment schedule
-            $update = new Update_table();
-            $update->update_double('repayment_schedule', 'amount_paid', $total_paid, 'payment_status', 1, 'repayment_id', $schedule);
-            //add into repayment table
-            $repayment_data = array(
-                'customer' => $customer,
-                'store' => $store,
-                'loan' => $loan_id,
-                'amount' => $amount,
-                'schedule' => $schedule,
-                'interest' => $interest,
-                'processing_fee' => $processing_fee,
-                'payment_mode' => $mode,
-                'details' => $details,
-                'invoice' => $receipt,
-                'bank' => $bank,
-                'posted_by' => $user,
-                'post_date' => $date,
-                'trx_number' => $trx_num,
-            );
-            $add_repayment = new add_data('repayments', $repayment_data);
-            $add_repayment->create_data();
             //checkif there isan exisitng loan repayment schedule
-            $check_schedule = $get_details->fetch_details_2condLimit('repayment_schedule', 'payment_status', 0, 'loan_id', $loan_id, 1);
+            $check_schedule = $get_details->fetch_details_2condLimit('repayment_schedule', 'payment_status', 0, 'loan', $loan_id, 1);
             if(is_array($check_schedule)){
                 //if there is, then use excess amount to pay next repaymentschedule
                 foreach($check_schedule as $next){
@@ -367,7 +328,19 @@
         );
         $add_flow = new add_data('cash_flows', $flow_data);
         $add_flow->create_data();
-
+        //check if all repayments have been paid and update loan status
+        $check_repayments = $get_details->fetch_sum_single('repayment_schedule', 'amount_paid', 'loan', $loan_id);
+        if(is_array($check_repayments)){
+            foreach($check_repayments as $rep){
+                $total_loan_paid = $rep->total;
+            }
+            if($total_loan_paid == $total_payable){
+                //update loan status
+                $update_loan = new Update_table();
+                $update_loan->update('loan_applications', 'loan_status', 'loan_id', 3, $loan_id);
+            }
+            
+        }
         
 ?>
     <div id="printBtn">

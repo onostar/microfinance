@@ -27,15 +27,41 @@
             $random_num = random_int(0, 3);
             $ran_num .= $random_num;
         }
-        $receipt_id = "DEP".$todays_date.$ran_num.$user_id.$schedule;
+        $receipt_id = "LP".$todays_date.$ran_num.$user_id.$schedule;
         //get balance from transactions
-        $get_balance = new selects();
-        $bals = $get_balance->fetch_account_balance($acn);
+        $bals = $get_details->fetch_account_balance($acn);
         if(gettype($bals) == 'array'){
             foreach($bals as $bal){
                 $balance = $bal->balance;
             }
         }
+        //get loan details
+        $lns = $get_details->fetch_details_cond('repayment_schedule', 'repayment_id', $schedule);
+        foreach($lns as $lns){
+            $loan = $lns->loan;
+            $amount_due = $lns->amount_due;
+            $payment_status = $lns->payment_status;
+        }
+       //get total paid
+       $ttls = $get_details->fetch_sum_single('repayment_schedule', 'amount_paid', 'loan', $loan);
+       if(gettype($ttls) == 'array'){
+            foreach($ttls as $ttl){
+                $total_paid = $ttl->total;
+            }
+        }else{
+            $total_paid = 0;
+        }
+       //get total due
+       $ttlx = $get_details->fetch_sum_single('repayment_schedule', 'amount_due', 'loan', $loan);
+       if(gettype($ttlx) == 'array'){
+            foreach($ttlx as $ttx){
+                $total_due = $ttx->total;
+            }
+        }else{
+            $total_due = 0;
+        }
+        //
+        $debt = $total_due - $total_paid;
 
 ?>
 <div class="back_invoice">
@@ -108,7 +134,7 @@
                     <?php if($balance >= 0){?>
                     <div class="data">
                         <label for="balance">Account balance:</label>
-                        <input type="text" value="<?php echo "-₦".number_format($balance, 2)?>" style="color:red;">
+                        <input type="text" value="<?php echo "₦".number_format(0, 2)?>" style="color:red;">
                     </div>
                     <?php }else{?>
                     <div class="data">
@@ -116,7 +142,10 @@
                         <input type="text" value="<?php echo "₦".number_format(-($balance), 2)?>" style="color:green;">
                     </div>
                     <?php }?>
-                    
+                    <div class="data">
+                        <label for="balance">Loan Due:</label>
+                        <input type="text" value="<?php echo "₦".number_format($debt, 2)?>" style="color:red;">
+                    </div>
                 </div>
             </section> 
         </div>

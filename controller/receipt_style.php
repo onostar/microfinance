@@ -53,16 +53,18 @@
     padding:20px;
 }
 .patient_details{
-    width:40%;
+    width:100%;
 
 }
 .patient_details h3{
     color:#fff;
     background:rgba(11, 99, 134, 0.7);
-    padding:5px;
+    padding:0px;
+    margin:2px 0;
+
 }
 .patient_details p{
-    text-transform: uppercase;
+    text-transform: capitalize;
     font-size:.9rem;
     margin:5px 0;
     text-align: left;
@@ -71,40 +73,42 @@
     text-decoration: underline;
 } */
 .comp_details{
-    display:flex;
-    justify-content: space-between;
+    /* display:flex;
+    justify-content: space-between; */
     background:#e6e4e4;
-    padding:10px;
+    padding:5px;
 }
-.comp{
+/* .comp{
     display:flex;
     align-items:flex-start;
     gap:.5rem;
     flex-wrap: wrap;
-}
+} */
 .receipt_logo{
-    width:100px;
-    height:100px;
+    width:50px;
+    height:50px;
+    margin:auto;
 }
 .receipt_logo img{
     width:100%;
     height:100%;
 }
 .com_name{
-    text-align: left!important;
+    text-align: center!important;
 }
 .com_name h2{
     font-size: 1.1rem;
-    text-align: left!important;
+    text-align: center!important;
 
 }
 .com_name p{
-    text-align: left!important;
-    width:50%;
+    text-align: center!important;
+    /* width:50%; */
 }
 .inv_val h2{
-    font-size:1.5rem;
+    font-size:1.1rem;
     color:rgba(11, 99, 134, 0.7);
+    margin:0;
 }
 .inv_val p{
     margin:5px;
@@ -114,5 +118,12 @@
     text-align: right;
     text-decoration: underline;
     margin-right:5px;
+}
+.rec{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size:.8rem;
+    padding:5px 0;
 }
 </style>
