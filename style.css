@@ -3129,7 +3129,7 @@ x
     height:100%!important;
 }
 .details_forms .customer_details{
-    background: var(--primaryColor);
+    background: var(--tertiaryColor);
     color:#fff;
     padding:10px;
     width:50%;

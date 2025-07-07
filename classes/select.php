@@ -94,6 +94,33 @@
                 return $rows;
             }
         }
+        //fetch details with condition and a limit
+        public function fetch_details_condLimit($table, $column, $condition, $limit){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column LIMIT $limit");
+            $get_user->bindValue("$column", $condition);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch details with 2 condition and a limit
+        public function fetch_details_2condLimit($table, $con, $val1, $con2, $val2, $limit){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $con = :$con AND $con2 = :$con2 LIMIT $limit");
+            $get_user->bindValue("$con", $val1);
+            $get_user->bindValue("$con2", $val2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch details with condition order by
         public function fetch_details_condOrder($table, $column, $condition, $order){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column ORDER BY $order");

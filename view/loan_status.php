@@ -3,8 +3,8 @@
         width: 50%;
     }
     table td{
-        padding:4px!important;
-        font-size:.8rem!important;
+        padding:6px!important;
+        font-size:.7rem!important;
     }
     /* table td p{
         padding:4px!important;
@@ -126,6 +126,7 @@
                             <td>S/N</td>
                             <td>Date</td>
                             <td>Amount Due</td>
+                            <td>Amount Paid</td>
                             <td>Status</td>
                         </tr>
                     </thead>
@@ -139,6 +140,7 @@
                             <td style="text-align:center; color:red;"><?php echo $n?></td>
                             <td><?php echo date("d-M-Y", strtotime($repay->due_date))?></td>
                             <td style="color:var(--secondaryColor)"><?php  echo "₦".number_format($repay->amount_due, 2)?></td>
+                            <td><?php  echo "₦".number_format($repay->amount_paid, 2)?></td>
                             <td>
                                 <?php
                                     $date_due = new DateTime($repay->due_date);

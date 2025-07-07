@@ -140,7 +140,7 @@ date_default_timezone_set("Africa/Lagos");
                 <div id="quickLinks">
                     <div class="quick_links">
                         <?php if($role == "Admin" || $role == "Accountant"){?>
-                        <div class="links page_navs" onclick="showPage('invoicing.php')" title="Create a new invoice">
+                        <div class="links page_navs" onclick="showPage('loan_repayment.php')" title="Create a new invoice">
                             <i class="fas fa-pen-alt"></i>
                             <!-- <p>Direct sales</p> -->
                         </div>

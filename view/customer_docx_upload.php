@@ -4,9 +4,7 @@
         $user = $_SESSION['user_id'];
     include "../classes/dbh.php";
     include "../classes/select.php";
-    if(!isset($_GET['customer'])){
-        header("Location: ../index.php");
-    }else{
+    if(isset($_GET['customer'])){
         $customer_id = htmlspecialchars(stripslashes($_GET['customer']));
     //get customer details
     $get_customer = new selects();
