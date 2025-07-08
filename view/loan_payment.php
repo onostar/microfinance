@@ -80,6 +80,7 @@
                     <input type="hidden" name="invoice" id="invoice" value="<?php echo $receipt_id?>">
                     <input type="hidden" name="posted" id="posted" value="<?php echo $user_id?>">
                     <input type="hidden" name="customer" id="customer" value="<?php echo $customer_id?>">
+                    <input type="hidden" name="balance" id="balance" value="<?php echo $debt?>">
                     <input type="hidden" name="store" id="store" value="<?php echo $store?>">
                     <input type="hidden" name="schedule" id="schedule" value="<?php echo $schedule?>">
                     

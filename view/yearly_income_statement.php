@@ -90,7 +90,7 @@
                 </td>
             </tr>
             <tr>
-                <td style="color:#222;text-align:left">Other Revenue (Gain from disposal of Asset, etc)</td>
+                <td style="color:#222;text-align:left">Other Revenue (Gain from disposal of Asset, Interest, Loan fees)</td>
                 <td>
                     <?php
                         // get accounts

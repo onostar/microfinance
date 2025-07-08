@@ -31,6 +31,7 @@
         'invoice' => $receipt,
         'store' => $store,
         'bank' => $bank,
+        'trx_type' => $trans_type,
         'trans_date' => $trans_date,
         'post_date' => $date,
         'trx_number' => $trx_num
@@ -89,7 +90,7 @@
         // Proportional interest and fee for this payment
         $interest = ($amount_received * $interest_portion) / $total_payable;
         $processing_fee = ($amount_received * $processing_portion) / $total_payable;
-        $principal = $amount - $interest - $processing_fee;
+        $principal = $amount_received - $interest - $processing_fee;
         
         $total_paid = $amount_paid + $amount_received;
         if($new_balance <= 0){
@@ -159,7 +160,13 @@
                 $update->update('customers', 'wallet_balance', 'customer_id', $new_wallet, $customer);
             }
         }
-        
+        //accounting entries
+        // Accounting entries are done once per total amount paid,
+        // not per repayment schedule. Even if the amount affects multiple schedules,
+        // we post one consolidated debit and credit here for the full amount.
+         // Proportional interest and fee for this payment
+        $interest_income = ($amount * $interest_portion) / $total_payable;
+        $processing_fee_income = ($amount * $processing_portion) / $total_payable;
         //get customer details
         $get_balance = new selects();
         $bals = $get_balance->fetch_details_cond('customers', 'customer_id', $customer);
@@ -215,7 +222,7 @@
             'sub_group' => $ledger_group,
             'class' => $ledger_class,
             'details' => 'Loan Repayment',
-            'credit' => ($amount - ($interest + $processing_fee)),
+            'credit' => ($amount - ($interest_income + $processing_fee_income)),
             'post_date' => $date,
             'posted_by' => $user,
             'trx_number' => $trx_num,
@@ -243,7 +250,7 @@
             'sub_group' => $int_group,
             'class' => $int_class,
             'details' => 'Interest from Loan Repayment',
-            'credit' => $interest,
+            'credit' => $interest_income,
             'post_date' => $date,
             'posted_by' => $user,
             'trx_number' => $trx_num,
@@ -267,7 +274,7 @@
             'sub_group' => $pro_group,
             'class' => $pro_class,
             'details' => 'Processing fee from Loan Repayment',
-            'credit' => $processing_fee,
+            'credit' => $processing_fee_income,
             'post_date' => $date,
             'posted_by' => $user,
             'trx_number' => $trx_num,
@@ -289,6 +296,31 @@
         );
         $add_flow = new add_data('cash_flows', $flow_data);
         $add_flow->create_data();
+        //add to other income table
+        //add inerest first
+        $interest_income_data = array(
+            'income_head' => $loan_id,
+            'amount' => $interest_income,
+            'activity' => 'gain',
+            'details' => 'Interest from Loan Repayment',
+            'trx_number' => $trx_num,
+            'post_date' => $date,
+            'posted_by' => $user
+        );
+        $add_interest_income = new add_data('other_income', $interest_income_data);
+        $add_interest_income->create_data();
+        //add processingfee next
+        $process_data = array(
+            'income_head' => $loan_id,
+            'amount' => $processing_fee_income,
+            'activity' => 'gain',
+            'details' => 'Fees from Loan Repayment',
+            'trx_number' => $trx_num,
+            'post_date' => $date,
+            'posted_by' => $user
+        );
+        $add_processing_income = new add_data('other_income', $process_data);
+        $add_processing_income->create_data();
         //check if all repayments have been paid and update loan status
         $check_repayments = $get_details->fetch_sum_single('repayment_schedule', 'amount_paid', 'loan', $loan_id);
         if(is_array($check_repayments)){

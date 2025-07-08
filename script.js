@@ -5454,8 +5454,13 @@ function getDepreciationYear(year){
                type : "POST",
                url : "../controller/monthly_fin_position.php",
                data : {fin_month:fin_month, fin_year:fin_year},
+               beforeSend : function(){
+                    $(".new_data").html("<div class='processing'><div class='loading'></div></div>");
+               },
                success : function(response){
                     $(".new_data").html(response)
+                    $(".new_date").scrollIntoView();
+
                }
           })
      }
@@ -5472,8 +5477,12 @@ function getDepreciationYear(year){
                type : "POST",
                url : "../controller/yearly_fin_position.php",
                data : {fin_year:fin_year},
+               beforeSend : function(){
+                    $(".new_data").html("<div class='processing'><div class='loading'></div></div>");
+               },
                success : function(response){
                     $(".new_data").html(response)
+                    $(".new_date").scrollIntoView();
                }
           })
      }
@@ -5490,8 +5499,13 @@ function getDepreciationYear(year){
                type : "POST",
                url : "../controller/yearly_income_statement.php",
                data : {fin_year:fin_year},
+               beforeSend : function(){
+                    $(".new_data").html("<div class='processing'><div class='loading'></div></div>");
+               },
                success : function(response){
                     $(".new_data").html(response)
+                    $(".new_date").scrollIntoView();
+
                }
           })
      }
@@ -7270,6 +7284,7 @@ function payLoan(){
      let posted = document.getElementById("posted").value;
      let trans_date = document.getElementById("trans_date").value;
      let customer = document.getElementById("customer").value;
+     let balance = document.getElementById("balance").value;
      let store = document.getElementById("store").value;
      let schedule = document.getElementById("schedule").value;
      let amount = document.getElementById("amount").value;
@@ -7291,6 +7306,10 @@ function payLoan(){
      }else if(amount.length == 0 || amount.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input transaction amount");
           $("#amount").focus();
+          return;
+     }else if(parseFloat(amount) > parseFloat(balance)){
+          alert("The amount entered exceeds the balance due. Please enter an amount that is less than or equal to the balance.");
+          $("#balance").focus();
           return;
      }else if(trans_date.length == 0 || trans_date.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input transaction date");

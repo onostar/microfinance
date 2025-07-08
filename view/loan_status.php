@@ -39,6 +39,7 @@
         $get_details = new selects();
         $existing = $get_details->fetch_details_cond('loan_applications', 'customer', $customer);
         if(is_array($existing)){
+            $no_loan = true;
             foreach($existing as $exist){
                 //get loan product details
                 $product_details = $get_details->fetch_details_cond('loan_products', 'product_id', $exist->product);
@@ -48,6 +49,7 @@
                     }
                 }
                 if($exist->loan_status == 0){
+                    $no_loan = false;
                     //get loan product details
                     $product_details = $get_details->fetch_details_cond('loan_products', 'product_id', $exist->product);
                     echo "<div class='not_available'>
@@ -55,9 +57,12 @@
                     </div>";
                     exit();
                 }elseif($exist->loan_status == 1){
+                    $no_loan = false;
                     echo "<div class='not_available'>
                     <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Loan Application Pending Disbursement</strong><br>You currently have an active $product_name loan awaiting disbursement. Please note that you are not eligible to apply for a new loan until your current loan application is fully disbursed and repaid.</p></div>";
+                    exit();
                 }elseif($exist->loan_status == 2){
+                    $no_loan = false;
                     //get loan details
                     $lns = $get_details->fetch_details_cond('loan_applications', 'loan_id', $exist->loan_id);
                     foreach($lns as $ln){
@@ -191,13 +196,10 @@
     </div>
     <?php
                     }
-                }else{
-                    echo "<div class='not_available'>
-                    <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> No Active Loan</strong><br>You currently have No Active Loan.</p></div>";
-                    
                 }
             }
-        }else{
+        }
+        if($no_loan){
             echo "<div class='not_available'>
                 <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> No Active Loan</strong><br>You currently have no Active Loan.</p></div>";
             }
