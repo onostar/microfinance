@@ -85,18 +85,22 @@
             //update repayment schedule
             $update = new Update_table();
             $update->update_double('repayment_schedule', 'amount_paid', $amount_due, 'payment_status', 1, 'repayment_id', $schedule);
-            
         }else{
             //update repayment schedule
             $update = new Update_table();
             $update->update('repayment_schedule', 'amount_paid', 'repayment_id', $total_paid, $schedule);
+        }
+        if($amount <= $balance){
+            $amount_received = $amount;
+        }else{
+            $amount_received = $balance;
         }
         //add into repayment table
         $repayment_data = array(
             'customer' => $customer,
             'store' => $store,
             'loan' => $loan_id,
-            'amount' => $amount,
+            'amount' => $amount_received,
             'schedule' => $schedule,
             'interest' => $interest,
             'processing_fee' => $processing_fee,
@@ -111,92 +115,40 @@
         $add_repayment = new add_data('repayments', $repayment_data);
         $add_repayment->create_data();
         //handle excess payment
-        if($new_balance < 0){
-            //if new balance is less than 0, then customer has overpaid
-            $overpaid = $new_balance * (-1);
-            //checkif there isan exisitng loan repayment schedule
-            $check_schedule = $get_details->fetch_details_2condLimit('repayment_schedule', 'payment_status', 0, 'loan', $loan_id, 1);
-            if(is_array($check_schedule)){
-                //if there is, then use excess amount to pay next repaymentschedule
-                foreach($check_schedule as $next){
-                    $next_schedule = $next->repayment_id;
-                    $next_amount_due = $next->amount_due;
-                    $next_amount_paid = $next->amount_paid;
-                    $next_balance = $next_amount_due - $next_amount_paid;
-                    $next_interest = ($overpaid * $interest_rate) / 100;
-                    $next_processing_fee = ($overpaid * $processing_rate) / 100;
-                    if($overpaid >= $next_balance){
-                        //pay next schedule
-                        $new_next_balance = $next_balance - $overpaid;
-                        if($new_next_balance == 0){
-                            //update repayment schedule
-                            $update_next = new Update_table();
-                            $update_next->update_double('repayment_schedule', 'amount_paid', ($next_amount_paid + $overpaid), 'payment_status', 1, 'repayment_id', $next_schedule);
-                            
-                            //add into repayment table
-                            $repayment_data = array(
-                                'customer' => $customer,
-                                'store' => $store,
-                                'loan' => $loan_id,
-                                'schedule' => $next_schedule,
-                                'amount' => $overpaid,
-                                'interest' => $next_interest,
-                                'processing_fee' => $next_processing_fee,
-                                'payment_mode' => $mode,
-                                'details' => $details,
-                                'invoice' => $receipt,
-                                'bank' => $bank,
-                                'posted_by' => $user,
-                                'post_date' => $date,
-                                'trx_number' => $trx_num,
-                            );
-                            $add_repayment = new add_data('repayments', $repayment_data);
-                            $add_repayment->create_data();
-                            break; //exit loop
-                        }else{
-                            //update repayment schedule
-                            $update_next = new Update_table();
-                            $update_next->update('repayment_schedule', 'amount_paid', 'repayment_id', ($next_amount_paid + $overpaid), $next_schedule);
-                            //add into repayment table
-                            $repayment_data = array(
-                                'customer' => $customer,
-                                'store' => $store,
-                                'loan' => $loan_id,
-                                'schedule' => $next_schedule,
-                                'amount' => $overpaid,
-                                'interest' => $next_interest,
-                                'processing_fee' => $next_processing_fee,
-                                'payment_mode' => $mode,
-                                'details' => $details,
-                                'invoice' => $receipt,
-                                'bank' => $bank,
-                                'posted_by' => $user,
-                                'post_date' => $date,
-                                'trx_number' => $trx_num,
-                            );
-                            $add_repayment = new add_data('repayments', $repayment_data);
-                            $add_repayment->create_data();
-                            break; //exit loop
-                            break; //exit loop
-                        }
-                    }else{
-                        //if overpaid is less than next balance, then just add it to the next balance
-                        //no need to update repayment schedule
-                        break; //exit loop
+        if($new_balance < 0) {
+            $overpaid = -$new_balance;
+            $schedules = $get_details->fetch_details_2condLimit('repayment_schedule', 'payment_status', 0, 'loan', $loan_id, 1);
+            if(is_array($schedules)) {
+                foreach ($schedules as $next) {
+                    $next_balance = $next->amount_due - $next->amount_paid;
+                    $to_pay = min($overpaid, $next_balance);
+                    $next_interest = ($to_pay * $interest_rate) / 100;
+                    $next_fee = ($to_pay * $processing_rate) / 100;
+                    $new_paid = $next->amount_paid + $to_pay;
+
+                    if ($new_paid >= $next->amount_due) {
+                        $update->update_double('repayment_schedule', 'amount_paid', $next->amount_due, 'payment_status', 1, 'repayment_id', $next->repayment_id);
+                    } else {
+                        $update->update('repayment_schedule', 'amount_paid', 'repayment_id', $new_paid, $next->repayment_id);
                     }
+
+                    $extra_data = $repayment_data;
+                    $extra_data['schedule'] = $next->repayment_id;
+                    $extra_data['amount'] = $to_pay;
+                    $extra_data['interest'] = $next_interest;
+                    $extra_data['processing_fee'] = $next_fee;
+                    $extra_data['details'] = 'Excess from previous';
+                    (new add_data('repayments', $extra_data))->create_data();
+
+                    $overpaid -= $to_pay;
+                    if ($overpaid <= 0) break;
                 }
-            }else{
-                //deposit excess amount into customer wallet
-                $bals = $get_details->fetch_details_cond('customers', 'customer_id', $customer);
-                foreach($bals as $bal){
-                    $old_balance = $bal->wallet_balance;
-                }
-                $new_wallet = $old_balance + $overpaid;
-                //update wallet balance
-                $update_wallet = new Update_table();
-                $update_wallet->update('customers', 'wallet_balance', 'customer_id', $new_wallet, $customer);
             }
-            
+            if ($overpaid > 0) {
+                $cust = $get_details->fetch_details_cond('customers', 'customer_id', $customer)[0];
+                $new_wallet = $cust->wallet_balance + $overpaid;
+                $update->update('customers', 'wallet_balance', 'customer_id', $new_wallet, $customer);
+            }
         }
         
         //get customer details

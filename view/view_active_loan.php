@@ -165,34 +165,40 @@
                         <?php
                             $n = 1;
                             $repays = $get_details->fetch_details_cond('repayment_schedule', 'loan', $row->loan_id);
-                            foreach($repays as $repay){
+                            $allow_next = true; // True until first unpaid schedule is found
+                            foreach($repays as $index => $repay){
                         ?>
                         <tr>
                             <td style="text-align:center; color:red;"><?php echo $n?></td>
                             <td><?php echo date("d-M-Y", strtotime($repay->due_date))?></td>
-                            <td style="color:var(--secondaryColor)"><?php  echo "₦".number_format($repay->amount_due, 2)?></td>
-                            <td><?php  echo "₦".number_format($repay->amount_paid, 2)?></td>
+                            <td style="color:var(--secondaryColor)"><?php echo "₦".number_format($repay->amount_due, 2)?></td>
+                            <td><?php echo "₦".number_format($repay->amount_paid, 2)?></td>
                             <td>
                                 <?php
                                     $date_due = new DateTime($repay->due_date);
                                     $today = new DateTime();
-                                    if($repay->payment_status == "0" && $date_due > $today){
-                                        ?>
-                                        <span style="color:var(--primaryColor);"><i class="fas fa-spinner"></i> Pending </span> <a style="border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:3px 6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('loan_payment.php?schedule=<?php echo $repay->repayment_id?>&customer=<?php echo $row->customer?>')" title="Post payment">Add Payment <i class="fas fa-hand-holding-dollar"></i></a>
-                                    <?php
-                                    }elseif($repay->payment_status == "0" && $date_due < $today){
-                                    ?>
-                                        <span style="color:red;"><i class='fas fa-clock'></i> Overdue </span> <a style="border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:3px 6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('loan_payment.php?schedule=<?php echo $repay->repayment_id?>&customer=<?php echo $row->customer?>')" title="Post payment">Add Payment <i class="fas fa-hand-holding-dollar"></i></a>
-                                    <?php
-                                    }else{
+
+                                    $button = "<a style='border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:3px 6px; box-shadow:1px 1px 1px #222; border:1px solid #fff' href='javascript:void(0)' onclick=\"showPage('loan_payment.php?schedule={$repay->repayment_id}&customer={$row->customer}')\" title='Post payment'>Add Payment <i class='fas fa-hand-holding-dollar'></i></a>";
+
+                                    if($repay->payment_status == "1"){
                                         echo "<span style='color:var(--tertiaryColor);'>Paid <i class='fas fa-check-circle'></i></span>";
+                                    } else {
+                                        // First unpaid schedule (or any overdue) is allowed to pay only if previous schedules are paid
+                                        if($allow_next || $date_due < $today){
+                                            if($date_due > $today){
+                                                echo "<span style='color:var(--primaryColor);'><i class='fas fa-spinner'></i> Pending </span> {$button}";
+                                            } else {
+                                                echo "<span style='color:red;'><i class='fas fa-clock'></i> Overdue </span> {$button}";
+                                            }
+                                            $allow_next = false; // After showing Add Payment for one, others must wait
+                                        } else {
+                                            echo "<span style='color:#999;'>Waiting for previous payment <i class='fas fa-lock'></i></span>";
+                                        }
                                     }
                                 ?>
                             </td>
-                            
                         </tr>
-                        
-                        <?php $n++; };?>
+                        <?php $n++; }; ?>
                     </tbody>
                 </table>
                 <?php
