@@ -134,6 +134,7 @@
                         <?php
                             $n = 1;
                             $repays = $get_details->fetch_details_cond('repayment_schedule', 'loan', $ln->loan_id);
+                            $allow_next = true; // True until first unpaid schedule is found
                             foreach($repays as $repay){
                         ?>
                         <tr>
@@ -145,12 +146,23 @@
                                 <?php
                                     $date_due = new DateTime($repay->due_date);
                                     $today = new DateTime();
-                                    if($repay->payment_status == "0" && $date_due > $today){
-                                        echo "<span style='color:var(--primaryColor);'>Pending <i class='fas fa-spinner'></i></span>";
-                                    }elseif($repay->payment_status == "0" && $date_due < $today){
-                                        echo "<span style='color:red;'>Overdue <i class='fas fa-clock'></i></span>";
-                                    }else{
+
+                                    $button = "<a style='border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:3px 6px; box-shadow:1px 1px 1px #222; border:1px solid #fff' href='javascript:void(0)' onclick=\"showPage('loan_payment.php?schedule={$repay->repayment_id}&customer={$customer}')\" title='Post payment'>Add Payment <i class='fas fa-hand-holding-dollar'></i></a>";
+
+                                    if($repay->payment_status == "1"){
                                         echo "<span style='color:var(--tertiaryColor);'>Paid <i class='fas fa-check-circle'></i></span>";
+                                    } else {
+                                        // First unpaid schedule (or any overdue) is allowed to pay only if previous schedules are paid
+                                        if($allow_next || $date_due < $today){
+                                            if($date_due > $today){
+                                                echo "<span style='color:var(--primaryColor);'><i class='fas fa-spinner'></i> Pending </span> {$button}";
+                                            } else {
+                                                echo "<span style='color:red;'><i class='fas fa-clock'></i> Overdue </span> {$button}";
+                                            }
+                                            $allow_next = false; // After showing Add Payment for one, others must wait
+                                        } else {
+                                            echo "<span style='color:#999;'>Waiting for previous payment <i class='fas fa-lock'></i></span>";
+                                        }
                                     }
                                 ?>
                             </td>
@@ -165,7 +177,14 @@
                     foreach($tls as $tl){
                         $total_due = $tl->total;
                     }
-                    echo "<p class='total_amount' style='background:red; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Due: ₦".number_format($total_due, 2)."</p>";
+                    //get total paid
+                    $paids = $get_details->fetch_sum_single('repayment_schedule', 'amount_paid', 'loan', $ln->loan_id);
+                    foreach($paids as $paid){
+                        $total_paid = $paid->total;
+                    }
+                    $balance = $total_due - $total_paid;
+                    echo "<p class='total_amount' style='background:red; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Due: ₦".number_format($balance, 2)."</p>";
+                
                 ?>
             </div>
         </section>

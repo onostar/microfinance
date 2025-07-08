@@ -75,7 +75,7 @@ session_start();
                     ?>
                 </td>
                 <td><?php echo $detail->loan_term;?> Months</td>
-                <td><?php echo date("d-m-Y", strtotime($detail->application_date))?></td>
+                <td><?php echo date("d-m-Y, h:ia", strtotime($detail->application_date))?></td>
                 <td>
                     <a style="padding:5px; border-radius:15px;background:var(--tertiaryColor);color:#fff;"href="javascript:void(0)" onclick="showPage('view_loan_details.php?loan=<?php echo $detail->loan_id?>')" title="view Loan details">view <i class="fas fa-eye"></i></a>
                 </td>

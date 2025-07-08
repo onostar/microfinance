@@ -30,9 +30,10 @@ session_start();
                 <td>Client name</td>
                 <td>Phone number</td>
                 <td>Loan Product</td>
-                <td>Requested Amount</td>
-                <td>Request Date</td>
-                <td>Disbursed Date</td>
+                <td>Amount</td>
+                <td>Total Due</td>
+                <td>Requested</td>
+                <td>Disbursed</td>
                 <td>Due Date</td>
                 <td></td>
             </tr>
@@ -69,9 +70,20 @@ session_start();
                         ?>
                 </td>
                 
-                <td style="color:red">
+                <td style="color:green">
                     <?php 
                         echo "₦".number_format($detail->amount, 2);
+                    ?>
+                </td>
+                <td style="color:red">
+                    <?php
+                        //get total paid from payment schedule
+                        $ttls = $get_items->fetch_sum_single('repayment_schedule', 'amount_paid', 'loan', $detail->loan_id);
+                        foreach($ttls as $ttl){
+                            $total_paid = $ttl->total;
+                        }
+                        $total_due = $detail->total_payable - $total_paid;
+                        echo "₦".number_format($total_due, 2);
                     ?>
                 </td>
                 <!-- <td><?php echo $detail->loan_term;?> Months</td> -->

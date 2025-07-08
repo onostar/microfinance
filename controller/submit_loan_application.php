@@ -77,36 +77,10 @@
     <p>Kindly log in to the admin dashboard to review and process the application.<br><br>
     Best regards,<br>
     $company<br>Support Team</p>";
-    
-    
-    //check if customer has an existing loan application
-    $existing = $get_details->fetch_details_cond('loan_applications', 'customer', $customer);
-    if(is_array($existing)){
-        foreach($existing as $exist){
-            if($exist->loan_status == 0){
-                echo "<div class='not_available'>
-                <p><strong>Existing Loan Application <i class='fas fa-exclamation-triangle' style='color:#cfb20e'></i></strong><br>You have an existing loan application pending approval. Please wait for it to be processed.</p>
-                </div>";
-                exit();
-            }elseif($exist->loan_status == 1){
-                echo "<div class='not_available'>
-                    <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Existing Loan Application Approved</strong><br>You currently have an existing loan application awaiting disbursement. Please note that you are not eligible to apply for a new loan until your current loan is fully disbursed and repaid.</p></div>";
-            }elseif($exist->loan_status == 2){
-                echo "<div class='not_available'>
-                    <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Existing Loan Detected</strong><br>You currently have an active loan. Please note that you are not eligible to apply for a new loan until your current loan is fully repaid.</p></div>";
-            }else{
-                //submitloan application
-                $add_loan = new add_data('loan_applications', $data);
-                $add_loan->create_data();
-                
-            }
-        }
-    }else{
-        //submitloan application
-        $add_loan = new add_data('loan_applications', $data);
-        $add_loan->create_data();
+    //submitloan application
+    $add_loan = new add_data('loan_applications', $data);
+    $add_loan->create_data();
         
-    }
     if($add_loan){
         /* send mails to customer */
         function smtpmailer($to, $from, $from_name, $subject, $body){

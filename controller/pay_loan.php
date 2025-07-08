@@ -74,13 +74,24 @@
             $processing_rate = $loan->processing_rate;
             $total_payable = $loan->total_payable;
         }
-        //calculate interests and processing fee
-        $interest = ($amount * $interest_rate) / 100;
-        $processing_fee = ($amount * $processing_rate) / 100;
         //get balance 
         $balance = $amount_due - $amount_paid;
         $new_balance = $balance - $amount;
-        $total_paid = $amount_paid + $amount;
+        if($amount <= $balance){
+            $amount_received = $amount;
+        }else{
+            $amount_received = $balance;
+        }
+        // Calculate total interest and processing fee based on loan
+        $interest_portion = ($loan_amount * $interest_rate) / 100;
+        $processing_portion = ($loan_amount * $processing_rate) / 100;
+
+        // Proportional interest and fee for this payment
+        $interest = ($amount_received * $interest_portion) / $total_payable;
+        $processing_fee = ($amount_received * $processing_portion) / $total_payable;
+        $principal = $amount - $interest - $processing_fee;
+        
+        $total_paid = $amount_paid + $amount_received;
         if($new_balance <= 0){
             //update repayment schedule
             $update = new Update_table();
@@ -90,11 +101,7 @@
             $update = new Update_table();
             $update->update('repayment_schedule', 'amount_paid', 'repayment_id', $total_paid, $schedule);
         }
-        if($amount <= $balance){
-            $amount_received = $amount;
-        }else{
-            $amount_received = $balance;
-        }
+        
         //add into repayment table
         $repayment_data = array(
             'customer' => $customer,
@@ -117,13 +124,16 @@
         //handle excess payment
         if($new_balance < 0) {
             $overpaid = -$new_balance;
-            $schedules = $get_details->fetch_details_2condLimit('repayment_schedule', 'payment_status', 0, 'loan', $loan_id, 1);
-            if(is_array($schedules)) {
+            $schedules = $get_details->fetch_details_2condOrder('repayment_schedule', 'payment_status', 'loan', 0, $loan_id, 'due_date');
+            if (is_array($schedules)) {
                 foreach ($schedules as $next) {
+                    if ($overpaid <= 0) break;
+
                     $next_balance = $next->amount_due - $next->amount_paid;
                     $to_pay = min($overpaid, $next_balance);
-                    $next_interest = ($to_pay * $interest_rate) / 100;
-                    $next_fee = ($to_pay * $processing_rate) / 100;
+                    // Proportional interest and fee for this overpaid portion
+                    $next_interest = ($to_pay * $interest_portion) / $total_payable;
+                    $next_fee = ($to_pay * $processing_portion) / $total_payable;
                     $new_paid = $next->amount_paid + $to_pay;
 
                     if ($new_paid >= $next->amount_due) {
@@ -141,7 +151,6 @@
                     (new add_data('repayments', $extra_data))->create_data();
 
                     $overpaid -= $to_pay;
-                    if ($overpaid <= 0) break;
                 }
             }
             if ($overpaid > 0) {

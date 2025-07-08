@@ -28,6 +28,7 @@
 <?php
             }else{
                 //check for current loan applications
+                $can_apply = true;
                 $existing = $get_details->fetch_details_cond('loan_applications', 'customer', $customer);
                 if(is_array($existing)){
                     foreach($existing as $exist){
@@ -39,23 +40,26 @@
                             }
                         }
                         if($exist->loan_status == 0){
-                            //get loan product details
-                            $product_details = $get_details->fetch_details_cond('loan_products', 'product_id', $exist->product);
+                            $can_apply = false;
                             echo "<div class='not_available'>
                             <p><strong>Existing Loan Application <i class='fas fa-exclamation-triangle' style='color:#cfb20e'></i></strong><br>You have an existing $product_name loan application pending approval. Please wait for it to be processed.</p>
                             </div>";
                             exit();
                         }elseif($exist->loan_status == 1){
+                            $can_apply = false;
                             echo "<div class='not_available'>
                             <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Loan Application Pending Disbursement</strong><br>You currently have an active $product_name loan awaiting disbursement. Please note that you are not eligible to apply for a new loan until your current loan application is fully disbursed and repaid.</p></div>";
+                            exit();
                         }elseif($exist->loan_status == 2){
+                            $can_apply = false;
                             echo "<div class='not_available'>
                             <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Existing Live Loan Detected</strong><br>You currently have an active $product_name loan. Please note that you are not eligible to apply for a new loan until your current loan is fully repaid.</p></div>";
-                        }else{
-                            include "application_form.php";
+                            exit();
+                        
                         }
                     }
-                }else{
+                }
+                if($can_apply){
                     include "application_form.php";
                 }
             }
