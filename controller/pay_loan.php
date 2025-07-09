@@ -1,4 +1,5 @@
 <?php
+    session_start();
     date_default_timezone_set("Africa/Lagos");
     $user = htmlspecialchars(stripslashes($_POST['posted']));
     $receipt = htmlspecialchars(stripslashes($_POST['invoice']));
@@ -13,6 +14,7 @@
     $trans_type = "Loan Repayment";
     // $type = "Deposit";
     $date = date("Y-m-d H:i:s");
+    $company = $_SESSION['company'];
      //generate transaction number
     //get current date
     $todays_date = date("dmyhis");
@@ -42,6 +44,9 @@
     include "../classes/select.php";
     include "../classes/inserts.php";
     include "../classes/update.php";
+    require "../PHPMailer/PHPMailerAutoload.php";
+    require "../PHPMailer/class.phpmailer.php";
+    require "../PHPMailer/class.smtp.php";
     
     //post deposit
     $add_data = new add_data('deposits', $data);
@@ -88,8 +93,8 @@
         $processing_portion = ($loan_amount * $processing_rate) / 100;
 
         // Proportional interest and fee for this payment
-        $interest = ($amount_received * $interest_portion) / $total_payable;
-        $processing_fee = ($amount_received * $processing_portion) / $total_payable;
+        $interest = round(($amount_received * $interest_portion) / $total_payable, 2);
+        $processing_fee = round(($amount_received * $processing_portion) / $total_payable, 2);
         $principal = $amount_received - $interest - $processing_fee;
         
         $total_paid = $amount_paid + $amount_received;
@@ -133,13 +138,13 @@
                     $next_balance = $next->amount_due - $next->amount_paid;
                     $to_pay = min($overpaid, $next_balance);
                     // Proportional interest and fee for this overpaid portion
-                    $next_interest = ($to_pay * $interest_portion) / $total_payable;
-                    $next_fee = ($to_pay * $processing_portion) / $total_payable;
+                    $next_interest = round(($to_pay * $interest_portion) / $total_payable, 2);
+                    $next_fee = round(($to_pay * $processing_portion) / $total_payable, 2);
                     $new_paid = $next->amount_paid + $to_pay;
 
-                    if ($new_paid >= $next->amount_due) {
+                    if($new_paid >= $next->amount_due) {
                         $update->update_double('repayment_schedule', 'amount_paid', $next->amount_due, 'payment_status', 1, 'repayment_id', $next->repayment_id);
-                    } else {
+                    }else{
                         $update->update('repayment_schedule', 'amount_paid', 'repayment_id', $new_paid, $next->repayment_id);
                     }
 
@@ -165,14 +170,16 @@
         // not per repayment schedule. Even if the amount affects multiple schedules,
         // we post one consolidated debit and credit here for the full amount.
          // Proportional interest and fee for this payment
-        $interest_income = ($amount * $interest_portion) / $total_payable;
-        $processing_fee_income = ($amount * $processing_portion) / $total_payable;
+        $interest_income = round(($amount * $interest_portion) / $total_payable, 2);
+        $processing_fee_income = round(($amount * $processing_portion) / $total_payable,2);
         //get customer details
         $get_balance = new selects();
         $bals = $get_balance->fetch_details_cond('customers', 'customer_id', $customer);
         foreach($bals as $bal){
             $old_balance = $bal->wallet_balance;
             $ledger = $bal->acn;
+            $customer_email = $bal->customer_email;
+            $client = $bal->customer;
             // $old_debt = $bal->amount_due;
         };
         //get customer account type
@@ -327,13 +334,103 @@
             foreach($check_repayments as $rep){
                 $total_loan_paid = $rep->total;
             }
-            if($total_loan_paid == $total_payable){
-                //update loan status
-                $update_loan = new Update_table();
-                $update_loan->update('loan_applications', 'loan_status', 'loan_id', 3, $loan_id);
+            
+            
+        }else{
+            $total_loan_paid = 0;
+        }
+        $check_dues = $get_details->fetch_sum_single('repayment_schedule', 'amount_due', 'loan', $loan_id);
+        if(is_array($check_dues)){
+            foreach($check_dues as $due){
+                $total_loan_due = $rep->total;
             }
             
+            
+        }else{
+            $total_loan_due = 0;
         }
+        if($total_loan_paid == $total_loan_due){
+            //update loan status
+            $update_loan = new Update_table();
+            $update_loan->update('loan_applications', 'loan_status', 'loan_id', 3, $loan_id);
+        }
+        $amount = number_format($amount, 2);
+        $trx_date = date("jS F Y, h:ia", strtotime($date));
+        $message = "<p>Dear $client, <br>We confirm the receipt of your payment of ₦$amount on $trx_date towards your loan repayment.<br>
+        Transaction ID: $receipt<br>
+        Your account has been updated accordingly. Thank you for your commitment.<br>
+        If you have any questions or need a receipt, feel free to contact us.</p>
+       
+        <p>Warm regards,<br> 
+        $company<br>
+        Customer Support";
+        //insert into notifications
+        $notif_data = array(
+            'client' => $customer,
+            'subject' => 'Loan Payment Confirmation',
+            'message' => 'Dear '.$client.',
+            We confirm the receipt of your payment of ₦'.$amount.' on '.$trx_date.' towards your loan repayment.
+            Transaction ID: '.$receipt.'
+            Your account has been updated accordingly. Thank you for your commitment.
+            
+            If you have any questions or need a receipt, feel free to contact us
+
+            Warm regards,
+            '.$company.'
+            Customer Support',
+            'post_date' => $date,
+        );
+        $add_data = new add_data('notifications', $notif_data);
+        $add_data->create_data();
+        /* send mails to customer */
+        function smtpmailer($to, $from, $from_name, $subject, $body){
+            $mail = new PHPMailer();
+            $mail->IsSMTP();
+            $mail->SMTPAuth = true; 
+    
+            $mail->SMTPSecure = 'ssl'; 
+            $mail->Host = 'www.dorthprosuite.com';
+            $mail->Port = 465; 
+            $mail->Username = 'admin@dorthprosuite.com';
+            $mail->Password = 'yMcmb@her0123!';   
+    
+    
+            $mail->IsHTML(true);
+            $mail->From="admin@dorthprosuite.com";
+            $mail->FromName=$from_name;
+            $mail->Sender=$from;
+            $mail->AddReplyTo($from, $from_name);
+            $mail->Subject = $subject;
+            $mail->Body = $body;
+            $mail->AddAddress($to);
+            $mail->AddAddress('onostarmedia@gmail.com');
+            
+            if(!$mail->Send())
+            {
+                $error = "Failed to send mail";
+                
+                return $error; 
+            }
+            else 
+            {
+                
+                /* success message */
+                
+                $error = "Message Sent Successfully";
+                
+                // header("Location: index.html");
+                return $error;
+            }
+        }
+        
+        $to = $customer_email;
+        $from = 'admin@dorthprosuite.com';
+        $from_name = "$company";
+        $name = "$company";
+        $subj = 'Loan Payment Confirmation';
+        $msg = "<div>$message</div>";
+        
+        $error=smtpmailer($to, $from, $name ,$subj, $msg);
         
 ?>
     <div id="printBtn">

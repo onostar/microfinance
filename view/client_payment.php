@@ -1,4 +1,12 @@
 <div id="fund_account">
+    <style>
+        @media screen and (max-width: 800px){
+            .fund_account{
+                width: 100%!important;
+            }
+            
+        }
+    </style>
 <?php
     session_start();
     include "../classes/dbh.php";
@@ -71,13 +79,13 @@
     <!-- <a href="javascript:void(0)" onclick="showPage('debt_payment.php?customer=<?php echo $customer_id?>') "title="view customer invoices" style="background:green; color:#fff; padding:10px; border-radius:10px; box-shadow:1px 1px 1px #222">View Invoices <i class="fas fa-receipt"></i></a> -->
 </div>
 <div id="deposit" class="displays">
-    <div class="info" style="width:70%; margin:5px 0;"></div>
-    <div class="fund_account" style="width:80%; margin:5px 0;">
-        <h3 style="background:var(--labColor); text-align:left">Post Loan payments</h3>
+    <div class="info" style="width:50%; margin:5px 0;"></div>
+    <div class="fund_account" style="width:50%; margin:5px 0;">
+        <h3 style="background:var(--tertiaryColor); text-align:left">Post Loan payments</h3>
         <!-- <form method="POST" id="addUserForm"> -->
-        <div class="details_forms">
-            <section class="addUserForm">
-                <div class="inputs" style="flex-wrap:wrap">
+        <div class="details_forms" style="flex-wrap:wrap; width:100%;margin:0">
+            <section class="addUserForm" style="width:100%; margin:0;">
+                <div class="inputs" style="flex-wrap:wrap; padding:10px">
                     <input type="hidden" name="invoice" id="invoice" value="<?php echo $receipt_id?>">
                     <input type="hidden" name="email" id="email" value="<?php echo $email?>">
                     <input type="hidden" name="posted" id="posted" value="<?php echo $user_id?>">
@@ -85,7 +93,23 @@
                     <input type="hidden" name="balance" id="balance" value="<?php echo $debt?>">
                     <input type="hidden" name="store" id="store" value="<?php echo $store?>">
                     <input type="hidden" name="schedule" id="schedule" value="<?php echo $schedule?>">
-                    
+                    <input type="hidden" name="payment_mode" id="payment_mode" value="Transfer">
+                    <input type="hidden" name="bank" id="bank" value="1">
+                    <?php if($balance >= 0){?>
+                    <div class="data" style="width:48%; margin:5px 0">
+                        <label for="balance">Account balance:</label>
+                        <input type="text" value="<?php echo "₦".number_format(0, 2)?>" style="color:red;">
+                    </div>
+                    <?php }else{?>
+                    <div class="data" style="width:48%; margin:5px 0">
+                        <label for="balance">Account balance:</label>
+                        <input type="text" value="<?php echo "₦".number_format(-($balance), 2)?>" style="color:green;">
+                    </div>
+                    <?php }?>
+                    <div class="data" style="width:48%; margin:5px 0">
+                        <label for="balance">Loan Due:</label>
+                        <input type="text" value="<?php echo "₦".number_format($debt, 2)?>" style="color:red;">
+                    </div>
                     <div class="data" style="width:48%; margin:5px 0">
                         <label for="amount"> Transaction Date</label>
                         <input type="date" name="trans_date" id="trans_date" value="<?php echo date('Y-m-d')?>">
@@ -124,36 +148,14 @@
                     </div>
                 </div>
             </section>
-            <section class="customer_details" style="height:100%;">
-                <div class="inputs">
-                    <div class="data">
-                        <label for="customer_id">Customer ID:</label>
-                        <input type="text" value="<?php echo $acn?>">
-                    </div>
-                    <div class="data">
-                        <label for="customer_name"><span class="ledger" style="color:#fff">Cr. Ledger</span> (Client):</label>
-                        <input type="text" value="<?php echo $customer?>">
-                    </div>
-                    <?php if($balance >= 0){?>
-                    <div class="data">
-                        <label for="balance">Account balance:</label>
-                        <input type="text" value="<?php echo "₦".number_format(0, 2)?>" style="color:red;">
-                    </div>
-                    <?php }else{?>
-                    <div class="data">
-                        <label for="balance">Account balance:</label>
-                        <input type="text" value="<?php echo "₦".number_format(-($balance), 2)?>" style="color:green;">
-                    </div>
-                    <?php }?>
-                    <div class="data">
-                        <label for="balance">Loan Due:</label>
-                        <input type="text" value="<?php echo "₦".number_format($debt, 2)?>" style="color:red;">
-                    </div>
-                </div>
-            </section> 
+            
         </div>
     </div>
 </div>
+<script src="../jquery.js"></script>
+    <script src="../script.js"></script>
+    <!-- <script src="https://dropin-sandbox.vpay.africa/dropin/v1/initialise.js"></script> -->
+    
 <?php
             }
         
@@ -162,3 +164,4 @@
     }
 ?>
 </div>
+    

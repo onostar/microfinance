@@ -3504,7 +3504,7 @@ x
 #notifs p{
     position:absolute;
     top:2px;
-    right:12px;
+    right:8px;
 }
 .not_available{
     display:flex;

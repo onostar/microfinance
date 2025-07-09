@@ -153,7 +153,7 @@
                                     $date_due = new DateTime($repay->due_date);
                                     $today = new DateTime();
 
-                                    $button = "<a style='border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:3px 6px; box-shadow:1px 1px 1px #222; border:1px solid #fff' href='javascript:void(0)' onclick=\"showPage('loan_payment.php?schedule={$repay->repayment_id}&customer={$customer}')\" title='Post payment'>Add Payment <i class='fas fa-hand-holding-dollar'></i></a>";
+                                    $button = "<a style='border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:3px 6px; box-shadow:1px 1px 1px #222; border:1px solid #fff' href='javascript:void(0)' onclick=\"showPage('client_payment.php?schedule={$repay->repayment_id}&customer={$customer}')\" title='Post payment'>Add Payment <i class='fas fa-hand-holding-dollar'></i></a>";
 
                                     if($repay->payment_status == "1"){
                                         echo "<span style='color:var(--tertiaryColor);'>Paid <i class='fas fa-check-circle'></i></span>";

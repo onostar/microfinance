@@ -257,6 +257,7 @@ date_default_timezone_set("Africa/Lagos");
     <script src="../select2.min.js"></script>
     <script src="../Chart.min.js"></script> 
     <script src="../script.js"></script>
+    <script src="https://dropin.vpay.africa/dropin/v1/initialise.js"></script>
     <script>
         
             setTimeout(function(){

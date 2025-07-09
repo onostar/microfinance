@@ -7363,27 +7363,54 @@ function isValidEmail(email) {
 }
  //online payment for renewal of package with vpay
 function clientPayment(){
-     // event.preventDefault();
-     let fee = document.getElementById("fee").value;
-     let processing = document.getElementById("processing").value;
+     let invoice = document.getElementById("invoice").value;
+     let posted = document.getElementById("posted").value;
+     let trans_date = document.getElementById("trans_date").value;
+     let customer = document.getElementById("customer").value;
+     let balance = document.getElementById("balance").value;
+     let store = document.getElementById("store").value;
+     let schedule = document.getElementById("schedule").value;
+     let amount = document.getElementById("amount").value;
+     let payment_mode = document.getElementById("payment_mode").value;
+     let details = document.getElementById("details").value;
+     let bank = document.getElementById("bank").value;
+     let todayDate = new Date();
+     let fee = amount;
+    /*  let processing = document.getElementById("processing").value;
      let total_due = document.getElementById("total_due").value;
      let company = document.getElementById("company").value;
-     let package = document.getElementById("package").value;
-     let email_add = document.getElementById("email_add").value;
+     let package = document.getElementById("package").value; */
+     let email = document.getElementById("email").value;
+     let email_ad = email;
      let date = new Date();
-     let year = date.getFullYear();
-     let transNum = generateString(5)+company+year;
+     // let year = date.getFullYear();
+     let transNum = generateString(5)+invoice;
      // alert(transNum);
-     
-     if(email_add.length == 0 || email_add.replace(/^\s+|\s+$/g, "").length == 0){
-         alert("Please input email address!");
-         $("#email_add").focus();
-         return;
-     }else if (!isValidEmail(email_add)) {
+     if(!isValidEmail(email)) {
           alert("Please enter a valid email address.");
-          $("#email_add").focus();
+          $("#amount").focus();
           return;
-    
+     
+     }else if(amount.length == 0 || amount.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input transaction amount");
+          $("#amount").focus();
+          return;
+     }else if(parseFloat(amount) > parseFloat(balance)){
+          alert("The amount entered exceeds the balance due. Please enter an amount that is less than or equal to the balance.");
+          $("#balance").focus();
+          return;
+     }else if(trans_date.length == 0 || trans_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input transaction date");
+          $("#trans_date").focus();
+          return;
+     }else if(details.length == 0 || details.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter description of transaction");
+          $("#details").focus();
+          return;
+     }else if(new Date(trans_date) > todayDate){
+          alert("Transaction date cannot be futuristic!");
+          $("#trans_date").focus();
+          return;
      }else{
          confirm_booking = confirm("Are you sure you want to continue with your payment", "");
          if(confirm_booking){
@@ -7392,17 +7419,20 @@ function clientPayment(){
                  currency: 'NGN',
                  domain: 'live',
                  key: 'c48a27aa-9cbc-416f-9793-099ad78f2fd5',
-                 email: email_add,
+                 email: email_ad,
                  transactionref: transNum,
-                 customer_logo: 'https://www.dorthpro.com/company/images/logo.png',
+                 customer_logo: '../images/logo.png',
                  customer_service_channel: '+2347068897068, support@dorthpro.com',
                  txn_charge: 3,
                  txn_charge_type: 'percentage',
                  onSuccess: function(response) { 
                      $.ajax({
                          type : "POST",
-                         url : "../controller/renew_package.php",
-                         data : {fee:fee, email_add:email_add, total_due:total_due, processing:processing, package:package, company:company, transNum:transNum},
+                         url : "../controller/pay_loan.php",
+                         data : {posted:posted, customer:customer, schedule:schedule, payment_mode:payment_mode, amount:amount, details:details, store:store, invoice:invoice, bank:bank, trans_date:trans_date, transNum:transNum},
+                         beforeSend : function(){
+                              $("#fund_account").html("<div class='processing'><div class='loader'></div></div>");
+                         },
                      });
                      alert('Payment Successful!', response.message);
                      window.open("../view/users.php", "_parent");

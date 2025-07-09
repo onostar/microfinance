@@ -23,7 +23,7 @@ include "../classes/select.php";
         $rows = $get_customer->fetch_details_cond('customers', 'customer_id', $customer);
         foreach($rows as $row){
             $wallet = $row->wallet_balance;
-            $debt = $row->amount_due;
+            // $debt = $row->amount_due;
             $cust_address = $row->customer_address;
             $cust_phone = $row->phone_numbers;
             $full_name = $row->customer;
@@ -110,11 +110,31 @@ include "../classes/select.php";
          //balances
         //  echo "<p class='total_amount' style='color:green'>Account balance: ₦".number_format($wallet, 2)."</p>";
         if($balance > 0){
-            echo "<p class='total_amount' style='color:green'>Account balance: -₦".number_format($balance, 2)."</p>";
+            echo "<p class='total_amount' style='color:green; margin:0'>Account balance: ₦".number_format(0, 2)."</p>";
         }else{
-            echo "<p class='total_amount' style='color:green'>Account balance: ₦".number_format($balance, 2)."</p>";
+            echo "<p class='total_amount' style='color:green; margin:0'>Account balance: ₦".number_format($balance, 2)."</p>";
         }
-         
+        //get loan due
+        $dues_p = $get_balance->fetch_sum_single('repayment_schedule', 'amount_paid', 'customer', $customer);
+        if(is_array($dues_p)){
+            foreach($dues_p as $due){
+                $total_paid = $due->total;
+            }
+        }else{
+            $total_paid = 0;
+        }
+        $dues_o = $get_balance->fetch_sum_single('repayment_schedule', 'amount_due', 'customer', $customer);
+        if(is_array($dues_o)){
+            foreach($dues_o as $dueo){
+                $total_due = $dueo->total;
+            }
+        }else{
+            $total_due = 0;
+        }
+        $debt = $total_due - $total_paid;
+        if($debt > 0){
+            echo "<p class='total_amount' style='color:red; margin:0'>Loan Due: ₦".number_format($debt, 2)."</p>";
+        }
         /*  echo "<p class='total_amount' style='color:green'>Amount due: ₦".number_format($debt, 2)."</p>"; */
         //sold by
         $get_seller = new selects();

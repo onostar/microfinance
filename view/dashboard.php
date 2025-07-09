@@ -9,111 +9,88 @@
         <div class="cards" id="card4">
             <a href="javascript:void(0)" onclick="showPage('deposit_report.php')">
                 <div class="infos">
-                    <p><i class="fas fa-coins"></i> Monthly Receipts</p>
+                    <p><i class="fas fa-calendar-day"></i> Today's Receipts</p>
+                    <p>
+                    <?php
+                        $get_sales = new selects();
+                        $rows = $get_sales->fetch_sum_curdate('deposits', 'amount', 'post_date');
+                        if(is_array($rows) == "array"){
+                            foreach($rows as $row){
+                                $amount = $row->total;
+                            }
+                        }else{
+                            $amount = 0;
+                        }
+                        echo "₦".number_format($amount, 2);
+                       
+                    ?>
+                    </p>
+                </div>
+            </a>
+        </div> 
+        <div class="cards" id="card1">
+            <a href="javascript:void(0)" onclick="showPage('deposit_report.php')">
+                <div class="infos">
+                    <p><i class="fas fa-piggy-bank"></i> Monthly Receipts</p>
                     <p>
                     <?php
                         $get_sales = new selects();
                         $rows = $get_sales->fetch_sum_curMonth('deposits', 'amount', 'post_date');
-                        foreach($rows as $row){
-                            $amount = $row->total;
-                        }
-                        //if credit was sold
-                       /*  $get_credit = new selects();
-                        $credits = $get_credit->fetch_sum_curdate2Con('payments', 'amount_due', 'post_date', 'payment_mode', 'Credit', 'store', $store_id);
-                        if(gettype($credits) === "array"){
-                            foreach($credits as $credit){
-                                $owed_amount = $credit->total;
+                        if(is_array($rows) == "array"){
+                            foreach($rows as $row){
+                                $amount = $row->total;
                             }
-                            $total_revenue = $owed_amount + $amount;
-                            echo "₦".number_format($total_revenue, 2);
-
-                        } */
-                        //if no credit sales
-                        if(gettype($rows) == "array"){
-                            echo "₦".number_format($amount, 2);
-                            
+                        }else{
+                            $amount = 0;
                         }
-                        if(gettype($rows) == "string"){
-                            echo "₦0.00";
-                            
-                        }
+                        echo "₦".number_format($amount, 2);
+                       
                     ?>
                     </p>
                 </div>
             </a>
         </div> 
-        <div class="cards" id="card1" style="background:#000">
-            <a href="javascript:void(0)"onclick="showPage('post_vendor_payments.php')"class="page_navs">
+        <div class="cards" id="card5" style="background:var(--moreColor)">
+            <a href="javascript:void(0)"onclick="showPage('disbursement_report.php')"class="page_navs">
                 <div class="infos">
-                    <p><i class="fas fa-clipboard-list"></i> Vendor Payables</p>
+                    <p><i class="fas fa-people-arrows-left-right"></i> Monthly Disbursements</p>
                     <p>
                     <?php
-                        //get total sales
-                        /* $get_sales = new selects();
-                        $rows = $get_sales->fetch_sum_singleGreat('vendors', 'balance', 'balance', 0);
-                        if(gettype($rows) == "array"){
+                        $get_sales = new selects();
+                        $rows = $get_sales->fetch_sum_curMonth('disbursal', 'amount', 'disbursed_date');
+                        if(is_array($rows) == "array"){
                             foreach($rows as $row){
-                                $debt = $row->total;
+                                $amount = $row->total;
                             }
-                        }
-                        if(gettype($rows) == "string"){
-                            $debt = 0;
-                        } */
-                        
-                        /* echo "₦".number_format($debt, 2); */
-                        //get total debits from vendor
-                        $get_debit = new selects();
-                        $debs = $get_debit->fetch_sum_single('transactions', 'debit', 'class', 7);
-                        if(gettype($debs) == 'array'){
-                            foreach($debs as $deb){
-                                $debit = $deb->total;
-                            }
-                        }
-                        if(gettype($debs) == 'string'){
-                            $debit = 0;
-                        }
-                        //get total credits from customers
-                        $get_credit = new selects();
-                        $creds = $get_credit->fetch_sum_single('transactions', 'credit', 'class', 7);
-                        if(gettype($creds) == 'array'){
-                            foreach($creds as $cred){
-                                $credit = $cred->total;
-                            }
-                        }
-                        if(gettype($creds) == 'string'){
-                            $credit = 0;
-                        }
-                        $balance = $credit - $debit;
-                        if($balance > 0){
-                            echo "₦".number_format($balance, 2);
                         }else{
-                            echo "₦0.00";
+                            $amount = 0;
                         }
+                        echo "₦".number_format($amount, 2);
                     ?>
                     </p>
                 </div>
             </a>
         </div> 
-        <div class="cards" id="card5">
+        <!-- <div class="cards" id="card5">
             <a href="javascript:void(0)" class="page_navs" onclick="showPage('expense_report.php')">
                 <div class="infos">
                     <p><i class="fas fa-hand-holding-dollar"></i> Monthly Expense</p>
                     <p>
                     <?php
-                        $get_exp = new selects();
+                       /*  $get_exp = new selects();
                         $exps = $get_exp->fetch_sum_curMonth('expenses', 'amount', 'expense_date');
                         foreach($exps as $exp){
                             echo "₦".number_format($exp->total, 2);
-                        }
+                        } */
                     ?>
                     </p>
                 </div>
             </a>
-        </div> 
+        </div>  -->
         <div class="cards" id="card0">
-            <a href="javascript:void(0)" onclick="showPage('debtors_list.php')"class="page_navs">
+            <a href="javascript:void(0)" onclick="showPage('active_loans.php')"class="page_navs">
                 <div class="infos">
-                    <p><i class="fas fa-money-check"></i> Receiveables</p>
+                    <p><i class="fas fa-hand-holding-dollar"></i> Receiveables</p>
                     <p>
                     <?php
                         //get total debits from customers
