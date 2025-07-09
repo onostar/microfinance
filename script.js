@@ -7343,3 +7343,79 @@ function payLoan(){
           }
      }
 }
+
+//generate random characters
+function generateString(length) {
+     // random characters
+     const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = ' ';
+    const charactersLength = characters.length;
+    for ( let i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    return result;
+}
+function isValidEmail(email) {
+    // Basic regex pattern for most email formats
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+ //online payment for renewal of package with vpay
+function clientPayment(){
+     // event.preventDefault();
+     let fee = document.getElementById("fee").value;
+     let processing = document.getElementById("processing").value;
+     let total_due = document.getElementById("total_due").value;
+     let company = document.getElementById("company").value;
+     let package = document.getElementById("package").value;
+     let email_add = document.getElementById("email_add").value;
+     let date = new Date();
+     let year = date.getFullYear();
+     let transNum = generateString(5)+company+year;
+     // alert(transNum);
+     
+     if(email_add.length == 0 || email_add.replace(/^\s+|\s+$/g, "").length == 0){
+         alert("Please input email address!");
+         $("#email_add").focus();
+         return;
+     }else if (!isValidEmail(email_add)) {
+          alert("Please enter a valid email address.");
+          $("#email_add").focus();
+          return;
+    
+     }else{
+         confirm_booking = confirm("Are you sure you want to continue with your payment", "");
+         if(confirm_booking){
+             const options = {
+                 amount: fee,
+                 currency: 'NGN',
+                 domain: 'live',
+                 key: 'c48a27aa-9cbc-416f-9793-099ad78f2fd5',
+                 email: email_add,
+                 transactionref: transNum,
+                 customer_logo: 'https://www.dorthpro.com/company/images/logo.png',
+                 customer_service_channel: '+2347068897068, support@dorthpro.com',
+                 txn_charge: 3,
+                 txn_charge_type: 'percentage',
+                 onSuccess: function(response) { 
+                     $.ajax({
+                         type : "POST",
+                         url : "../controller/renew_package.php",
+                         data : {fee:fee, email_add:email_add, total_due:total_due, processing:processing, package:package, company:company, transNum:transNum},
+                     });
+                     alert('Payment Successful!', response.message);
+                     window.open("../view/users.php", "_parent");
+                     return;
+                 },
+             onExit: function(response) { console.log('Hello World!',
+         response.message); }
+         }
+         
+         if(window.VPayDropin){
+             const {open, exit} = VPayDropin.create(options);
+             open();                    
+         }
+         }    
+     }            
+ };

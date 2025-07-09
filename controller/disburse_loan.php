@@ -158,7 +158,7 @@
             'sub_group' => $ledger_group,
             'class' => $ledger_class,
             'debit' => $amount,
-            'details' => 'Loan Disbursement to'.$client,
+            'details' => 'Loan Disbursement to '.$client,
             'post_date' => $date,
             'posted_by' => $user,
             'trx_number' => $trx_num, 

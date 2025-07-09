@@ -38,8 +38,9 @@
         //check loan status
         $get_details = new selects();
         $existing = $get_details->fetch_details_cond('loan_applications', 'customer', $customer);
-        if(is_array($existing)){
             $no_loan = true;
+        //check if there is an existing loan application
+        if(is_array($existing)){
             foreach($existing as $exist){
                 //get loan product details
                 $product_details = $get_details->fetch_details_cond('loan_products', 'product_id', $exist->product);
