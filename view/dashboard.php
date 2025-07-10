@@ -1,6 +1,9 @@
 <div id="general_dashboard">
 <div class="dashboard_all">
     <h3><i class="fas fa-home"></i> Dashboard for <span style="color:var(--secondaryColor);font-size:1rem"><?php echo $store?></span></h3>
+    <?php
+        $get_dashboard = new selects();
+    ?>
     <?php 
         if($role === "Admin" || $role === "Accountant"){
     ?>
@@ -12,8 +15,7 @@
                     <p><i class="fas fa-calendar-day"></i> Today's Receipts</p>
                     <p>
                     <?php
-                        $get_sales = new selects();
-                        $rows = $get_sales->fetch_sum_curdate('deposits', 'amount', 'post_date');
+                        $rows = $get_dashboard->fetch_sum_curdate('deposits', 'amount', 'post_date');
                         if(is_array($rows) == "array"){
                             foreach($rows as $row){
                                 $amount = $row->total;
@@ -29,13 +31,12 @@
             </a>
         </div> 
         <div class="cards" id="card1">
-            <a href="javascript:void(0)" onclick="showPage('deposit_report.php')">
+            <a href="javascript:void(0)">
                 <div class="infos">
                     <p><i class="fas fa-piggy-bank"></i> Monthly Receipts</p>
                     <p>
                     <?php
-                        $get_sales = new selects();
-                        $rows = $get_sales->fetch_sum_curMonth('deposits', 'amount', 'post_date');
+                        $rows = $get_dashboard->fetch_sum_curMonth('deposits', 'amount', 'post_date');
                         if(is_array($rows) == "array"){
                             foreach($rows as $row){
                                 $amount = $row->total;
@@ -56,8 +57,7 @@
                     <p><i class="fas fa-people-arrows-left-right"></i> Monthly Disbursements</p>
                     <p>
                     <?php
-                        $get_sales = new selects();
-                        $rows = $get_sales->fetch_sum_curMonth('disbursal', 'amount', 'disbursed_date');
+                        $rows = $get_dashboard->fetch_sum_curMonth('disbursal', 'amount', 'disbursed_date');
                         if(is_array($rows) == "array"){
                             foreach($rows as $row){
                                 $amount = $row->total;
@@ -93,7 +93,140 @@
                     <p><i class="fas fa-hand-holding-dollar"></i> Receiveables</p>
                     <p>
                     <?php
-                        //get total debits from customers
+                        //get total due amount
+                        $dues = $get_dashboard->fetch_sum_single('repayment_schedule', 'amount_due', 'payment_status', 0);
+                        if(is_array($dues) == "array"){
+                            foreach($dues as $due){
+                                $amount_due = $due->total;
+                            }
+                        }else{
+                            $amount_due = 0;
+                        }
+                        //get total paid amount
+                        $paid = $get_dashboard->fetch_sum_single('repayment_schedule', 'amount_paid', 'payment_status', 0);
+                        if(is_array($paid) == "array"){
+                            foreach($paid as $pay){
+                                $amount_paid = $pay->total;
+                            }
+                        }else{
+                            $amount_paid = 0;
+                        }
+                        $debt = $amount_due - $amount_paid;
+                        echo "₦".number_format($debt, 2);
+                        
+                    ?>
+                    </p>
+                </div>
+            </a>
+            
+        </div> 
+        
+        
+    </div>
+    <?php
+        }elseif($role == "Loan Officer"){
+    ?>
+    <div id="dashboard">
+    <div class="cards" id="card0">
+            <a href="javascript:void(0)" class="page_navs">
+                <div class="infos">
+                    <p><i class="fas fa-users"></i> Customers</p>
+                    <p>
+                    <?php
+                        //get total customers
+                       $get_cus = new selects();
+                       $customers =  $get_cus->fetch_count_2condDateGro('invoices', 'invoice_status', 1, 'posted_by', $user_id, 'post_date', 'invoice');
+                       echo $customers;
+                    ?>
+                    </p>
+                </div>
+            </a>
+        </div> 
+        <div class="cards" id="card4">
+            <a href="javascript:void(0)" onclick="showPage('invoices_due.php')">
+                <div class="infos">
+                    <p><i class="fas fa-coins"></i> Invoices Due</p>
+                    <p>
+                    <?php
+                        $get_sales = new selects();
+                        $dues = $get_sales->fetch_count_curdategreaterGro2con('invoices', 'due_date', 'store', $store, 'invoice_status', 1, 'invoice');
+                        echo $dues;
+                    ?>
+                    </p>
+                </div>
+            </a>
+        </div> 
+        <div class="cards" id="card3">
+            <a href="javascript:void(0)" onclick="showPage('post_vendor_payments.php')"class="page_navs">
+                <div class="infos">
+                <p><i class="fas fa-clipboard-list"></i> Vendor Payables</p>
+                    <p>
+                    <?php
+                        //get total sales
+                        /* $get_sales = new selects();
+                        $rows = $get_sales->fetch_sum_singleGreat('vendors', 'balance', 'balance', 0);
+                        if(gettype($rows) == "array"){
+                            foreach($rows as $row){
+                                $debt = $row->total;
+                            }
+                        }
+                        if(gettype($rows) == "string"){
+                            $debt = 0;
+                        }
+                        
+                        echo "₦".number_format($debt, 2); */
+                        $get_debit = new selects();
+                        $debs = $get_debit->fetch_sum_single('transactions', 'debit', 'class', 7);
+                        if(gettype($debs) == 'array'){
+                            foreach($debs as $deb){
+                                $debit = $deb->total;
+                            }
+                        }
+                        if(gettype($debs) == 'string'){
+                            $debit = 0;
+                        }
+                        //get total credits from customers
+                        $get_credit = new selects();
+                        $creds = $get_credit->fetch_sum_single('transactions', 'credit', 'class', 7);
+                        if(gettype($creds) == 'array'){
+                            foreach($creds as $cred){
+                                $credit = $cred->total;
+                            }
+                        }
+                        if(gettype($creds) == 'string'){
+                            $credit = 0;
+                        }
+                        $balance = $credit - $debit;
+                        if($balance > 0){
+                            echo "₦".number_format($balance, 2);
+                        }else{
+                            echo "₦0.00";
+                        }
+                    ?>
+                    </p>
+                </div>
+            </a>
+        </div> 
+        <div class="cards" id="card2" style="background: var(--moreColor)">
+        <a href="javascript:void(0)" onclick="showPage('debtors_list.php')"class="page_navs">
+                <div class="infos">
+                <p><i class="fas fa-money-check"></i> Receiveables</p>
+                    <p>
+                    <?php
+                        //get total sales
+                        /* $get_sales = new selects();
+                        $rows = $get_sales->fetch_sum_singleless('customers', 'wallet_balance', 'wallet_balance', 0);
+                        if(gettype($rows) == "array"){
+                            foreach($rows as $row){
+                                $debt = $row->total;
+                            }
+                        }
+                        if(gettype($rows) == "string"){
+                            $debt = 0;
+                        }
+                        
+                        echo "₦".number_format($debt * -1, 2);
+                        */
                         $get_debit = new selects();
                         $debs = $get_debit->fetch_sum_single('transactions', 'debit', 'class', 4);
                         if(gettype($debs) == 'array'){
@@ -121,41 +254,12 @@
                         }else{
                             echo "₦0.00";
                         }
-                        //get total sales
-                        /* $get_sales = new selects();
-                        $rows = $get_sales->fetch_sum_singleless('customers', 'wallet_balance', 'wallet_balance', 0);
-                        if(gettype($rows) == "array"){
-                            foreach($rows as $row){
-                                $debt = $row->total;
-                            }
-                        }
-                        if(gettype($rows) == "string"){
-                            $debt = 0;
-                        }
-                        
-                        echo "₦".number_format($debt * -1, 2); */
-                       
                     ?>
                     </p>
                 </div>
             </a>
-            <!-- <a href="javascript:void(0)" class="page_navs" onclick="showPage('pay_debt.php')">
-                <div class="infos">
-                    <p><i class="fas fa-calendar"></i> Receivables</p>
-                    <p>
-                    <?php
-                        /* $receivables = new selects();
-                        $dues = $receivables->fetch_sum_double('debtors', 'amount', 'debt_status', 0, 'store', $store_id);
-                        foreach($dues as $due){
-                            echo "₦".number_format($due->total);
-                        } */
-                    ?>
-                    </p>
-                </div>
-            </a> -->
         </div> 
-        
-        
+            
     </div>
     <?php
         }else{

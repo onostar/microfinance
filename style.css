@@ -2801,10 +2801,11 @@ x
     /* width:50%; */
 }
 .sum_amount{
-    border-radius: 10px;
-    padding:10px;
+    border-radius: 15px;
+    padding:8px 10px;
     color:#fff;
     cursor: pointer;
+    box-shadow: 2px 2px 2px #222;
 }
 #total_amount{
     display:flex!important;

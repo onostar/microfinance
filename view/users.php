@@ -139,7 +139,7 @@ date_default_timezone_set("Africa/Lagos");
                 <!-- quick links -->
                 <div id="quickLinks">
                     <div class="quick_links">
-                        <?php if($role == "Admin" || $role == "Accountant"){?>
+                        <?php if($role == "Admin" || $role == "Accountant" || $role == "Loan Officer"){?>
                         <div class="links page_navs" onclick="showPage('loan_repayment.php')" title="Create a new invoice">
                             <i class="fas fa-pen-alt"></i>
                             <!-- <p>Direct sales</p> -->
@@ -173,13 +173,12 @@ date_default_timezone_set("Africa/Lagos");
                                 ?>
                             </p>
                         </div>
-                        <div class="links page_navs" onclick="showPage('out_of_stock.php')" title="Out of stock">
-                            <i class="fas fa-drum" style="color:red"></i>
-                            <p style="color:red">
+                        <div class="links page_navs" onclick="showPage('verify_kyc.php')" title="Pending KYC Verification">
+                            <i class="fas fa-user-shield" style="color:var(--otherColor)"></i>
+                            <p style="color:var(--otherColor)">
                                 <?php
-                                    $out_stock = new selects();
-                                    $stock = $out_stock->fetch_count_2cond('inventory', 'quantity', 0, 'store', $store_id);
-                                    echo $stock;
+                                     $kyc = $fetch_comp->fetch_count_cond('kyc', 'verification', 0);
+                                    echo $kyc;
                                 ?>
                             </p>
                         </div>

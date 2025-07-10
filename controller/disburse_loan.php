@@ -68,10 +68,21 @@
     //get contra ledger account details
     $cons = $get_details->fetch_details_cond('ledgers', 'ledger_id', $contra);
     foreach($cons as $con){
+        $ledger_name= $con->ledger;
         $contra_ledger = $con->acn;
         $contra_type = $con->account_group;
         $contra_group = $con->sub_group;
         $contra_class = $con->class;
+    }
+    //get mode of payment and bank
+    if($ledger_name == "CASH ACCOUNT"){
+        $mode = "Cash";
+        $bank = 0;
+    }else{
+        $mode = "Transfer";
+        //get bank id
+        $bnks = $get_details->fetch_details_group('banks', 'bank_id', 'account_number', $contra_ledger);
+        $bank = $bnks->bank_id;
     }
     //calculate repayment dates
     //first get total installments
@@ -89,6 +100,8 @@
         'loan' => $loan,
         'customer' => $customer,
         'amount' => $amount,
+        'mode' => $mode,
+        'bank' => $bank,
         'trx_date' => $trx_date,
         'disbursed_by' => $user,
         'disbursed_date' => $date,

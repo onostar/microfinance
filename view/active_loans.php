@@ -108,13 +108,26 @@ session_start();
             <?php $n++; endforeach;}?>
         </tbody>
     </table>
-    
+                        
     <?php
         
         if(gettype($details) == "string"){
             echo "<p class='no_result'>'$details'</p>";
         }
-    
+        //get total due
+        if($role == "Admin" || $role == "Accountant"){
+            $tls = $get_items->fetch_sum_single('repayment_schedule', 'amount_due', 'payment_status', 0);
+            foreach($tls as $tl){
+                $total_due = $tl->total;
+            }
+            //get total paid
+            $paids = $get_items->fetch_sum_single('repayment_schedule', 'amount_paid', 'payment_status', 0);
+            foreach($paids as $paid){
+                $total_paid = $paid->total;
+            }
+            $balance = $total_due - $total_paid;
+            echo "<p class='total_amount' style='background:red; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Due: ₦".number_format($balance, 2)."</p>";
+        }
     ?>
 </div>
 <?php }?>
