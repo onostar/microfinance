@@ -356,6 +356,18 @@
                 return "0";
             }
         }
+        //fetch details count with 1 condition and current date and grouped by
+        public function fetch_count_condDateGro($table, $column1, $condition1, $date, $group){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 = :$column1  AND date($date) = CURDATE() GROUP BY $group");
+            $get_user->bindValue("$column1", $condition1);
+            // $get_user->bindValue("$column2", $condition2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                return "0";
+            }
+        }
         //fetch details count with condition and curdate
         public function fetch_count_curDate($table, $column){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date($column) = CURDATE()");
@@ -369,6 +381,18 @@
         //fetch details count with condition and curdate greater than
         public function fetch_count_curDategreaterGro2con($table, $column, $condition, $value, $condition2, $value2, $group){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date($column) <= CURDATE() AND $condition = :$condition AND $condition2 = :$condition2 GROUP BY $group");
+            $get_user->bindValue("$condition", $value);
+            $get_user->bindValue("$condition2", $value2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                return "0";
+            }
+        }
+        //fetch details count with condition and curdate greater than
+        public function fetch_count_curDategreater2con($table, $column, $condition, $value, $condition2, $value2){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date($column) <= CURDATE() AND $condition = :$condition AND $condition2 = :$condition2");
             $get_user->bindValue("$condition", $value);
             $get_user->bindValue("$condition2", $value2);
             $get_user->execute();
@@ -789,6 +813,20 @@
                 return $rows;
             }
         }
+        //fetch with current date less than condition and 2 condition 
+        public function fetch_details_curdategreater2con($table, $column, $condition, $value, $condition2, $value2){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date($column) <= CURDATE() AND $condition = :$condition AND $condition2 = :$condition2");
+            $get_user->bindValue("$condition", $value);
+            $get_user->bindValue("$condition2", $value2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch sums of certain column with current date grouped by condition
         public function fetch_details_curdateGroMany($table, $column4, $column1, $column2, $column3, $condition, $value, $group, $order){
             $get_user = $this->connectdb()->prepare("SELECT $column4, SUM($column1) AS column1, SUM($column2) AS column2 FROM $table WHERE date($column3) = CURDATE() AND $condition = :$condition GROUP BY $group ORDER BY $order DESC");
@@ -1030,6 +1068,19 @@
         //fetch sum with current month
         public function fetch_sum_curMonth($table, $column1, $column2){
             $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE MONTH($column2) = MONTH(CURDATE()) AND YEAR($column2) = YEAR(CURDATE())");
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch sum with current month and a condition
+        public function fetch_sum_curMonthCon($table, $column1, $column2, $con, $val){
+            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE MONTH($column2) = MONTH(CURDATE()) AND YEAR($column2) = YEAR(CURDATE()) AND $con = :$con");
+            $get_user->bindValue("$con", $val);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();

@@ -21,7 +21,7 @@
         </section>
     </div> -->
 <div class="displays allResults new_data" id="revenue_report">
-    <h2>Invoices due for payment</h2>
+    <h2>Loan Schedule due for payment</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchCheckout" placeholder="Enter keyword" onkeyup="searchData(this.value)">
@@ -31,15 +31,12 @@
         <thead>
             <tr style="background:var(--primaryColor)">
                 <td>S/N</td>
-                <td>Ref. No.</td>
-                <td>Invoice No.</td>
                 <td>Client</td>
-                
-                <td>Amount</td>
-                <td>Trx Date</td>
+                <td>Loan Product</td>
+                <td>Amount Due</td>
+                <td>Amount Paid</td>
+                <td>Balance</td>
                 <td>Due Date</td>
-                <td>Post Time</td>
-                <td>Posted by</td>
                 <td></td>
             </tr>
         </thead>
@@ -47,14 +44,12 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_curdategreaterGro2con('invoices', 'due_date', 'store', $store, 'invoice_status', 1, 'invoice');
+                $details = $get_users->fetch_details_curdategreater2con('repayment_schedule', 'due_date', 'store', $store, 'payment_status', 0);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
-                <td><?php echo $detail->invoice?></td>
-                <td><?php echo $detail->manual_invoice?></td>
                 <td>
                     <?php 
                         //get customer
@@ -65,33 +60,35 @@
                         }
                     ?>
                 </td>
-                
-
+                <td>
+                    <?php
+                        //get loan details
+                        $lns = $get_customer->fetch_details_group('loan_applications', 'product', 'loan_id', $detail->loan);
+                        //get product name
+                        $prds = $get_customer->fetch_details_group('loan_products', 'product', 'product_id', $lns->product);
+                        echo $prds->product;
+                    ?>
+                </td>
+                <td style="color:red">
+                    <?php
+                        echo "₦".number_format($detail->amount_due, 2);
+                    ?>
+                </td>
                 <td style="color:green">
                     <?php
-                        $get_amount = new selects();
-                        $rows = $get_amount->fetch_sum_single('invoices', 'total_amount', 'invoice', $detail->invoice);
-                        foreach($rows as $row){
-                            $total_amount = $row->total;
-                        }
-                        echo "₦".number_format($total_amount, 2);
+                        echo "₦".number_format($detail->amount_paid, 2);
                     ?>
                 </td>
-           
-                
-                <td style="color:var(--secondaryColor)"><?php echo date("d-M-Y", strtotime($detail->trx_date));?></td>
-                <td style="color:var(--secondaryColor)"><?php echo date("d-M-Y", strtotime($detail->due_date));?></td>
-                <td style="color:var(--moreColor)"><?php echo date("h:i:sa", strtotime($detail->post_date));?></td>
-                <td>
+                <td style="color:var(--otherColor)">
                     <?php
-                        //get posted by
-                        $get_posted_by = new selects();
-                        $checkedin_by = $get_posted_by->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
-                        echo $checkedin_by->full_name;
+                        echo "₦".number_format(($detail->amount_due - $detail->amount_paid), 2);
                     ?>
                 </td>
+                
+                <td style="color:var(--primaryColor)"><?php echo date("d-M-Y", strtotime($detail->due_date));?></td>
                 <td>
-                    <a href="javascript:void(0);" title="View details" style="padding:5px; background:var(--otherColor);color:#fff; border-radius:15px;" onclick="showPage('client_invoice_details.php?payment_id=<?php echo $detail->invoice?>')">View <i class="fas fa-eye"></i></a>
+                    <a href="javascript:void(0);" title="View details" style="padding:5px; background:var(--otherColor);color:#fff; border-radius:15px;" onclick="showPage('view_active_loan.php?loan=<?php echo $detail->loan?>')">View <i class="fas fa-eye"></i></a>
+                    <a href="javascript:void(0);" title="Post Payment" style="padding:5px; background:var(--tertiaryColor);color:#fff; border-radius:15px;" onclick="showPage('loan_payment.php?schedule=<?php echo $detail->repayment_id?>&customer=<?php echo $detail->customer?>')">Make Payment <i class="fas fa-hand-holding-dollar"></i></a>
                 </td>
             </tr>
             <?php $n++; endforeach;}?>
@@ -108,14 +105,19 @@
         <?php
         // get sum
         $get_total = new selects();
-        $amounts = $get_total->fetch_sum_curdategreater2Con('invoices', 'total_amount', 'due_date', 'store', $store, 'invoice_status', 1);
+        $amounts = $get_total->fetch_sum_curdategreater2Con('repayment_schedule', 'amount_paid', 'due_date', 'store', $store, 'payment_status', 0);
         foreach($amounts as $amount){
             $paid_amount = $amount->total;
             
         }
+        $dues = $get_total->fetch_sum_curdategreater2Con('repayment_schedule', 'amount_due', 'due_date', 'store', $store, 'payment_status', 0);
+        foreach($dues as $due){
+            $due_amount = $due->total;
+            
+        }
+        $total_due = $due_amount - $paid_amount;
         
-        
-            echo "<p class='sum_amount' style='background:green'><strong>Total</strong>: ₦".number_format($paid_amount, 2)."</p>";
+            echo "<p class='sum_amount' style='background:green'><strong>Total</strong>: ₦".number_format($total_due, 2)."</p>";
             
         
     ?>

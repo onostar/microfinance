@@ -189,9 +189,15 @@
                         $total_paid = $paid->total;
                     }
                     $balance = $total_due - $total_paid;
-                    echo "<p class='total_amount' style='background:red; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Due: ₦".number_format($balance, 2)."</p>";
-                
                 ?>
+                   <div class="totals" style="display:flex; gap:1rem; justify-content:right">
+                        <?php
+                        echo "<p class='total_amount' style='background:green; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Paid: ₦".number_format($total_paid, 2)."</p>";
+                        echo "<p class='total_amount' style='background:red; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Due: ₦".number_format($balance, 2)."</p>";
+                    ?>
+                    </div>
+                
+                
             </div>
         </section>
     </div>

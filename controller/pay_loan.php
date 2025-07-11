@@ -330,26 +330,14 @@
         $add_processing_income->create_data();
         //check if all repayments have been paid and update loan status
         $check_repayments = $get_details->fetch_sum_single('repayment_schedule', 'amount_paid', 'loan', $loan_id);
-        if(is_array($check_repayments)){
-            foreach($check_repayments as $rep){
-                $total_loan_paid = $rep->total;
-            }
-            
-            
-        }else{
-            $total_loan_paid = 0;
+        foreach($check_repayments as $rep){
+            $total_loan_paid = $rep->total;
         }
         $check_dues = $get_details->fetch_sum_single('repayment_schedule', 'amount_due', 'loan', $loan_id);
-        if(is_array($check_dues)){
-            foreach($check_dues as $due){
-                $total_loan_due = $rep->total;
-            }
-            
-            
-        }else{
-            $total_loan_due = 0;
+        foreach($check_dues as $due){
+            $total_loan_due = $due->total;
         }
-        if($total_loan_paid == $total_loan_due){
+        if($total_loan_paid === $total_loan_due){
             //update loan status
             $update_loan = new Update_table();
             $update_loan->update('loan_applications', 'loan_status', 'loan_id', 3, $loan_id);

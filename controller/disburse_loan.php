@@ -130,6 +130,7 @@
                 'customer' => $customer,
                 'due_date' => $due_date->format('Y-m-d'),
                 'amount_due' => $installment_payment,
+                'store' => $store,
                 'posted_by' => $user,
                 'post_date' => $date
             );
