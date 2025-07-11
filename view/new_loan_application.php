@@ -61,6 +61,8 @@
                             echo "<div class='not_available'>
                             <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Existing Live Loan Detected</strong><br>The customer is still repaying an active $product_name loan. A new application can only be submitted once the current loan is fully settled.</p></div>";
                             exit();
+                        }else{
+                            $can_apply = true;
                         }
                     }
                 }

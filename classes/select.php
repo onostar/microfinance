@@ -1981,7 +1981,7 @@
         }
         // fetch daily invoicing
         public function fetch_daily_invoice($store){
-            $get_daily = $this->connectdb()->prepare("SELECT COUNT(distinct invoice) AS customers, SUM(total_amount) AS revenue, post_date FROM invoices WHERE store = :store AND invoice_status = 1 GROUP BY date(post_date) ORDER BY date(post_date) DESC");
+            $get_daily = $this->connectdb()->prepare("SELECT COUNT(distinct customer) AS customers, SUM(amount) AS revenue, post_date FROM repayments WHERE store = :store GROUP BY date(post_date) ORDER BY date(post_date) DESC LIMIT 30");
             $get_daily->bindValue('store', $store);
             $get_daily->execute();
             if($get_daily->rowCount() > 0){
@@ -2051,7 +2051,7 @@
         }
         //fetch monthly invoices
         public function fetch_monthly_invoice($store){
-            $get_monthly = $this->connectdb()->prepare("SELECT COUNT(distinct invoice) AS customers, SUM(total_amount) AS revenue, post_date, COUNT(post_date) AS arrivals, COUNT(DISTINCT date(post_date)) AS daily_average FROM invoices WHERE store = :store AND invoice_status = 1 GROUP BY MONTH(post_date) ORDER BY MONTH(post_date)");
+            $get_monthly = $this->connectdb()->prepare("SELECT COUNT(distinct trx_number) AS customers, SUM(amount) AS disbursed, disbursed_date, COUNT(disbursed_date) AS arrivals, COUNT(DISTINCT date(disbursed_date)) AS daily_average FROM disbursal WHERE store = :store GROUP BY MONTH(disbursed_date) ORDER BY  MONTH(disbursed_date)");
             $get_monthly->bindValue('store', $store);
             $get_monthly->execute();
             if($get_monthly->rowCount() > 0){
@@ -2065,7 +2065,7 @@
         }
         //fetch monthly deposits
         public function fetch_monthly_revenue($store){
-            $get_monthly = $this->connectdb()->prepare("SELECT COUNT(distinct invoice) AS customers, SUM(amount) AS revenue, post_date, COUNT(post_date) AS arrivals, COUNT(DISTINCT date(post_date)) AS daily_average FROM deposits WHERE store = :store GROUP BY MONTH(post_date) ORDER BY MONTH(post_date)");
+            $get_monthly = $this->connectdb()->prepare("SELECT COUNT(distinct customer) AS customers, SUM(amount) AS revenue, post_date, COUNT(post_date) AS arrivals, COUNT(DISTINCT date(post_date)) AS daily_average FROM deposits WHERE store = :store GROUP BY MONTH(post_date), YEAR(post_date) ORDER BY YEAR(post_date), MONTH(post_date)");
             $get_monthly->bindValue('store', $store);
             $get_monthly->execute();
             if($get_monthly->rowCount() > 0){

@@ -56,6 +56,8 @@
                             <p><strong><i class='fas fa-exclamation-triangle' style='color: #cfb20e;'></i> Existing Live Loan Detected</strong><br>You currently have an active $product_name loan. Please note that you are not eligible to apply for a new loan until your current loan is fully repaid.</p></div>";
                             exit();
                         
+                        }else{
+                            $can_apply = true;
                         }
                     }
                 }

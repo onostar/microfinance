@@ -11,6 +11,7 @@
     include "../classes/inserts.php";
     include "../classes/select.php";
     include "../classes/delete.php";
+    include "../classes/update.php";
     // include "../classes/update.php";
 
     $get_details = new selects();
@@ -65,15 +66,18 @@
     
     //delete loan applications
     $delete_loan = new deletes();
-    $delete_loan->delete_item('loan_applications', 'loan_id', $loan);
-    if($delete_loan){
+    /*$delete_loan->delete_item('loan_applications', 'loan_id', $loan); */
+    //update loan status to negative
+    $update = new Update_table();
+    $update->update_tripple('loan_applications', 'loan_status', '-1', 'approve_date', $date, 'approved_by', $user, 'loan_id', $loan);
+    if($update){
         //insert notification
         $add_data = new add_data('notifications', $notif_data);
         $add_data->create_data();
         //delete guarantors and documents with loan id
         $tables = $get_details->fetch_tables('microfinance');
         foreach($tables as $table){
-            //check for loan column exist in each table and delete it when thenumber is seen
+            //check for loan column exist in each table and delete it when the number is seen
             $check_column = new selects();
             $cols = $check_column->fetch_column($table->table_name, 'loan');
             if($cols){

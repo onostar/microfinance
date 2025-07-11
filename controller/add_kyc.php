@@ -35,119 +35,51 @@
     include "../classes/select.php";
     include "../classes/inserts.php";
 
-    //check if customer already added kyc
-    $check = new selects();
-    $results = $check->fetch_details_cond('kyc', 'customer', $customer);
-    if(is_array($results) && count($results) > 0){
-        //get current kyc status
-        foreach($results as $result){
-            $kyc_status = $result->verification;
-        }
-        //check if kyc is verified
-        if($kyc_status == 1){
-            echo "<p class='exist'>KYC verification is complete. You're all set!</p>";
-            exit();
-        }else if($kyc_status == 0){
-            echo "<p class='exist'>Your KYC is currently under verification. Please wait for the process to complete.</p>";
-            exit();
-        }else{
-            //add new kyc
-            if(in_array($file_ext, $allowed_ext)){
-                if($photo_size <= 500000){
-                    //compress image
-                    function compressImage($source, $destination, $quality){
-                        //get image info
-                        $imgInfo = getimagesize($source);
-                        $mime = $imgInfo['mime'];
-                        //create new image from file
-                        switch($mime){
-                            case 'image/png':
-                                $image = imagecreatefrompng($source);
-                                imagejpeg($image, $destination, $quality);
-                                break;
-                            case 'image/jpeg':
-                                $image = imagecreatefromjpeg($source);
-                                imagejpeg($image, $destination, $quality);
-                                break;
-                            
-                            case 'image/webp':
-                                $image = imagecreatefromwebp($source);
-                                imagejpeg($image, $destination, $quality);
-                                break;
-                            default:
-                                $image = imagecreatefromjpeg($source);
-                                imagejpeg($image, $destination, $quality);
-                        }
-                        //return compressed image
-                        return $destination;
-                    }
-                    $compress = compressImage($_FILES['id_card']['tmp_name'], $photo_folder, 70);
-                    if($compress){
-                        //update kyc data
-                        $add_kyc = new add_data('kyc', $data);
-                        if($add_kyc){
-                            echo "<p><span>KYC added Successfully<br>Kindly await approval</p>";
-                        }else{
-                            echo "<p class='exist'>Failed to update KYC</p>";
-                        }
-                    }else{
-                        echo "<p class='exist'>Failed to compress image</p>";
-                    }
+    if(in_array($file_ext, $allowed_ext)){
+        if($photo_size <= 500000){
+            //compress image
+            function compressImage($source, $destination, $quality){
+                //get image info
+                $imgInfo = getimagesize($source);
+                $mime = $imgInfo['mime'];
+                //create new image from file
+                switch($mime){
+                    case 'image/png':
+                        $image = imagecreatefrompng($source);
+                        imagejpeg($image, $destination, $quality);
+                        break;
+                    case 'image/jpeg':
+                        $image = imagecreatefromjpeg($source);
+                        imagejpeg($image, $destination, $quality);
+                        break;
+                    
+                    case 'image/webp':
+                        $image = imagecreatefromwebp($source);
+                        imagejpeg($image, $destination, $quality);
+                        break;
+                    default:
+                        $image = imagecreatefromjpeg($source);
+                        imagejpeg($image, $destination, $quality);
+                }
+                //return compressed image
+                return $destination;
+            }
+            $compress = compressImage($_FILES['id_card']['tmp_name'], $photo_folder, 70);
+            if($compress){
+                $add_item = new add_data('kyc', $data);
+                $add_item->create_data();
+                if($add_item){
+                    echo "<div class='not_available'><p><strong><i class='fas fa-check-circle' style='color: green;'></i> KYC Added Successfully</strong><br>KYC & Identity verification uploaded successfully. Kindly await approval</p></div>";
                 }else{
-                    echo "<p class='exist'>File too large</p>";
+                    echo "<p class='exist'>Failed to add KYC</p>";
                 }
             }else{
-                echo "<p class='exist'Your Image format is not supported</p>";
-
-            }  
-        }
-    }else{
-        if(in_array($file_ext, $allowed_ext)){
-            if($photo_size <= 500000){
-                //compress image
-                function compressImage($source, $destination, $quality){
-                    //get image info
-                    $imgInfo = getimagesize($source);
-                    $mime = $imgInfo['mime'];
-                    //create new image from file
-                    switch($mime){
-                        case 'image/png':
-                            $image = imagecreatefrompng($source);
-                            imagejpeg($image, $destination, $quality);
-                            break;
-                        case 'image/jpeg':
-                            $image = imagecreatefromjpeg($source);
-                            imagejpeg($image, $destination, $quality);
-                            break;
-                        
-                        case 'image/webp':
-                            $image = imagecreatefromwebp($source);
-                            imagejpeg($image, $destination, $quality);
-                            break;
-                        default:
-                            $image = imagecreatefromjpeg($source);
-                            imagejpeg($image, $destination, $quality);
-                    }
-                    //return compressed image
-                    return $destination;
-                }
-                $compress = compressImage($_FILES['id_card']['tmp_name'], $photo_folder, 70);
-                if($compress){
-                    $add_item = new add_data('kyc', $data);
-                    $add_item->create_data();
-                    if($add_item){
-                        echo "<p><span>KYC added Successfully<br>Kindly await approval</p>";
-                    }else{
-                        echo "<p class='exist'>Failed to add KYC</p>";
-                    }
-                }else{
-                    echo "<p class='exist'>Failed to compress image</p>";
-                }
-            }else{
-                echo "<p class='exist'>File too large</p>";
+                echo "<p class='exist'>Failed to compress image</p>";
             }
         }else{
-            echo "<p class='exist'>Your Image format is not supported</p>";
+            echo "<p class='exist'>File too large</p>";
+        }
+    }else{
+        echo "<p class='exist'>Your Image format is not supported</p>";
 
-        }                    
-    }
+    }                    

@@ -6814,43 +6814,34 @@ function calculateInterest(){
     let frequency = document.getElementById("frequency").value;
     let loan_term = parseFloat(document.getElementById("loan_term").value); // in months
 
-     if(amount < 1) {
-        alert("Loan amount must be greater than 0");
-        $("#amount").focus();
-        return;
-     }else{
-          // Calculate interest and fees
-          let total_interest = (amount * interest_rate) / 100;
-          let total_processing = (amount * processing) / 100;
-          let total_due = amount + total_interest + total_processing;
+     let total_interest = (amount * interest_rate) / 100;
+     let total_processing = (amount * processing) / 100;
+     let total_due = amount + total_interest + total_processing;
 
-          // Determine number of installments
-          let installments = 0;
-          if (frequency === "Weekly") {
-               installments = loan_term * 4; // 4 weeks per month
-          } else if (frequency === "Monthly") {
-               installments = loan_term;
-          } else if (frequency === "Yearly") {
-               installments = loan_term / 12; // convert months to years
-          } else {
-               installments = 1; // fallback
-          }
-
-          let repayment = total_due / installments;
-
-          // Update UI
-          $("#installment").val(repayment.toFixed(2));
-          $("#interest").val(total_interest.toFixed(2));
-          $("#processing_fee").val(total_processing.toFixed(2));
-          $("#total_payable").val(total_due.toFixed(2));
-          //format for display
-          $("#installmental").val("₦"+repayment.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-          $("#interest_amount").val("₦"+total_interest.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-          $("#processing_amount").val("₦"+total_processing.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-          $("#total_fee").val("₦"+total_due.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+     // Determine number of installments
+     let installments = 0;
+     if (frequency === "Weekly") {
+          installments = loan_term * 4; // 4 weeks per month
+     } else if (frequency === "Monthly") {
+          installments = loan_term;
+     } else if (frequency === "Yearly") {
+          installments = loan_term / 12; // convert months to years
+     } else {
+          installments = 1; // fallback
      }
 
-    
+     let repayment = total_due / installments;
+
+     // Update UI
+     $("#installment").val(repayment.toFixed(2));
+     $("#interest").val(total_interest.toFixed(2));
+     $("#processing_fee").val(total_processing.toFixed(2));
+     $("#total_payable").val(total_due.toFixed(2));
+     //format for display
+     $("#installmental").val("₦"+repayment.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+     $("#interest_amount").val("₦"+total_interest.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+     $("#processing_amount").val("₦"+total_processing.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+     $("#total_fee").val("₦"+total_due.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));  
 }
 
 //submit loan application
@@ -6889,6 +6880,10 @@ function completeApplication(){
           return;
      }else if(amount.length == 0 || amount.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input loan amount");
+          $("#amount").focus();
+          return;
+     }else if(parseFloat(amount) < 1){
+          alert("Requested amount must be greater than 0");
           $("#amount").focus();
           return;
      }else if(isNaN(amount)){

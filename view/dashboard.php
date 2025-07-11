@@ -355,7 +355,7 @@
                         <td>S/N</td>
                         <td>Date</td>
                         <td>Clients</td>
-                        <td>Revenue</td>
+                        <td>Payments</td>
                     </tr>
                 </thead>
                 <?php
@@ -393,16 +393,16 @@
                 $monthlys = $get_monthly->fetch_monthly_invoice($store_id);
                 if(gettype($monthlys) == "array"){
                     foreach($monthlys as $monthly){
-                        $revenue[] = $monthly->revenue;
-                        $month[] = date("M, Y", strtotime($monthly->post_date));
+                        $disbursed[] = $monthly->disbursed;
+                        $months[] = date("M, Y", strtotime($monthly->disbursed_date));
                     }
                 }
                 ?>
-                <h3 style="background:var(--moreColor)">Monthly statistics (revenue)</h3>
+                <h3 style="background:var(--moreColor)">Monthly statistics (Loan Disbursed)</h3>
                 <canvas id="chartjs_bar2"></canvas>
             </div>
             <div class="monthly_encounter">
-                <h3 style="background:var(--otherColor)">Monthly Receipts (Inflow)</h3>
+                <h3 style="background:rgb(117, 32, 12)">Monthly Payments</h3>
                 <table>
                     <thead>
                         <tr>
@@ -448,6 +448,64 @@
     </div>
 </div>
 
+<?php 
+    }elseif($role == "Loan Officer"){
+?>
+<div class="check_out_due">
+    <hr>
+    <div class="displays allResults" id="check_out_guest" style="width:100%!important; margin:0 auto!important">
+       
+        <h3 style="background:var(--otherColor)">My Daily transactions</h3>
+        <table id="check_out_table" class="searchTable" style="width:100%;">
+            <thead>
+                <tr style="background:var(--moreColor)">
+                    <td>S/N</td>
+                    <td>Invoice No.</td>
+                    <td>Customer</td>
+                    <td>Amount</td>
+                    <td>Payment Mode</td>
+                    <!-- <td>Trans. Date</td> -->
+                    <td>Post Time</td>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    $n = 1;
+                    $details = $get_dashboard->fetch_details_curdateCon('deposits', 'post_date',  'posted_by', $user_id);
+                    if(gettype($details) === 'array'){
+                    foreach($details as $detail):
+                ?>
+                <tr>
+                    <td style="text-align:center; color:red;"><?php echo $n?></td>
+                    <td style="color:green"><?php echo $detail->invoice?></td>
+                    <td>
+                        <?php
+                            $name = $get_dashboard->fetch_details_group('customers', 'customer', 'customer_id', $detail->customer);
+                            echo $name->customer;
+                        ?>
+                    </td>
+                    
+                    <td><?php echo "₦".number_format($detail->amount)?></td>
+                    <td>
+                        <?php
+                            //get payment mode
+                            echo $detail->payment_mode;
+                            ?>
+                    </td>
+                    <td><?php echo date("h:i:sa", strtotime($detail->post_date))?></td>
+                </tr>
+                <?php $n++; endforeach;}?>
+            </tbody>
+        </table>
+        
+        <?php
+            if(gettype($details) == "string"){
+                echo "<p class='no_result'>'$details'</p>";
+            }
+        ?>
+    </div>
+</div>
 <?php 
     }else{
 ?>

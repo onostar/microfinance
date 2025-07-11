@@ -203,6 +203,8 @@
     </div>
     <?php
                     }
+                }else{
+                    $no_loan = true;
                 }
             }
         }

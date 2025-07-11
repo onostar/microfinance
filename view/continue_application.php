@@ -80,24 +80,24 @@
                     <div class="data" style="width:32%;">
                         <label for="interest" style="text-align:left!important;">Interest:</label>
                         <input type="hidden" name="interest_rate" id="interest_rate" value="<?php echo $row->interest?>">
-                        <input type="text" style="color:red" name="interest_amount" id="interest_amount" readonly>
+                        <input type="text" style="color:red; background:#ebeaea" name="interest_amount" id="interest_amount" readonly>
                         <input type="hidden" name="interest" id="interest" readonly>
                     </div>
                     <div class="data" style="width:32%;">
                         <label for="processing"> Processing Fee:</label>
                         <input type="hidden" name="processing" id="processing" value="<?php echo $row->processing?>">
                         <input type="hidden"  name="processing_fee" id="processing_fee" readonly>
-                        <input type="text" style="color:var(--primaryColor)" name="processing_amount" id="processing_amount" readonly>
+                        <input type="text" style="color:var(--primaryColor); background:#ebeaea" name="processing_amount" id="processing_amount" readonly>
                     </div>
                     <div class="data" style="width:32%;">
                         <label for="">Total Repayable Amount:</label>
                         <input type="hidden" name="total_payable" id="total_payable" readonly>
-                        <input type="text" style="color:green" name="total_fee" id="total_fee" readonly>
+                        <input type="text" style="color:green; background:#ebeaea" name="total_fee" id="total_fee" readonly>
                     </div>
                     <div class="data" style="width:32%;">
                         <label for=""><?php echo $row->repayment?> Installment:</label>
                         <input type="hidden" name="installment" id="installment" readonly>
-                        <input type="text" style="color:green" name="installmental" id="installmental" readonly>
+                        <input type="text" style="color:green; background:#ebeaea" name="installmental" id="installmental" readonly>
                     </div>
                     <input type="hidden" name="collateral_type" id="collateral_type" value="<?php echo $row->collateral?>">
                     <?php if($row->collateral == "Yes"){?>

@@ -38,7 +38,7 @@
         //check loan status
         $get_details = new selects();
         $existing = $get_details->fetch_details_2cond('loan_applications', 'customer', 'loan_status', $customer, 2);
-            $no_loan = true;
+        $no_loan = true;
         if(is_array($existing)){
             foreach($existing as $exist){
                 $no_loan = false;
