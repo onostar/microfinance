@@ -203,132 +203,111 @@
         }else{
     ?>
     <div id="dashboard">
-    <div class="cards" id="card0">
+        <div class="cards" id="card1">
             <a href="javascript:void(0)" class="page_navs">
                 <div class="infos">
-                    <p><i class="fas fa-users"></i> Customers</p>
+                    <p><i class="fas fa-wallet"></i> Available Balance</p>
                     <p>
                     <?php
                         //get total customers
-                       $get_cus = new selects();
-                       $customers =  $get_cus->fetch_count_2condDateGro('invoices', 'invoice_status', 1, 'posted_by', $user_id, 'post_date', 'invoice');
-                       echo $customers;
+                        //get customer balance
+                        $bals = $get_dashboard->fetch_details_group('customers', 'wallet_balance', 'customer_id', $customer_id);
+                        echo "₦".number_format($bals->wallet_balance, 2);
                     ?>
                     </p>
                 </div>
             </a>
         </div> 
         <div class="cards" id="card4">
-            <a href="javascript:void(0)" onclick="showPage('invoices_due.php')">
+            <a href="javascript:void(0)" class="page_navs">
                 <div class="infos">
-                    <p><i class="fas fa-coins"></i> Invoices Due</p>
+                    <p><i class="fas fa-briefcase"></i> Loan Satus</p>
                     <p>
                     <?php
-                        $get_sales = new selects();
-                        $dues = $get_sales->fetch_count_curdategreaterGro2con('invoices', 'due_date', 'store', $store, 'invoice_status', 1, 'invoice');
-                        echo $dues;
+                        $active_loan = false;
+                        $status = $get_dashboard->fetch_details_cond('loan_applications', 'customer', $customer_id);
+                       if(is_array($status)) {
+                        foreach ($status as $stat) {
+                            $date_due = new DateTime($stat->due_date);
+                            $today = new DateTime();
+
+                            if ($stat->loan_status == 0) {
+                                $active_loan = true;
+                                echo "Under Review";
+                                break;
+                            } elseif ($stat->loan_status == 1) {
+                                $active_loan = true;
+                                echo "Approved";
+                                break;
+                            } elseif ($stat->loan_status == 2) {
+                                $active_loan = true;
+                                if ($date_due >= $today) {
+                                    echo "Disbursed";
+                                } else {
+                                    echo "Overdue";
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!$active_loan) {
+                        echo "No Active Loan";
+                    }
                     ?>
                     </p>
                 </div>
             </a>
         </div> 
-        <div class="cards" id="card3">
-            <a href="javascript:void(0)" onclick="showPage('post_vendor_payments.php')"class="page_navs">
+        <div class="cards" id="card5" style="background: var(--moreColor)">
+            <a href="javascript:void(0)" onclick="showPage('loan_status.php')">
                 <div class="infos">
-                <p><i class="fas fa-clipboard-list"></i> Vendor Payables</p>
+                    <p><i class="fas fa-piggy-bank"></i> Loan Balance</p>
                     <p>
                     <?php
-                        //get total sales
-                        /* $get_sales = new selects();
-                        $rows = $get_sales->fetch_sum_singleGreat('vendors', 'balance', 'balance', 0);
-                        if(gettype($rows) == "array"){
-                            foreach($rows as $row){
-                                $debt = $row->total;
-                            }
-                        }
-                        if(gettype($rows) == "string"){
-                            $debt = 0;
-                        }
-                        
-                        echo "₦".number_format($debt, 2); */
-                        $get_debit = new selects();
-                        $debs = $get_debit->fetch_sum_single('transactions', 'debit', 'class', 7);
-                        if(gettype($debs) == 'array'){
-                            foreach($debs as $deb){
-                                $debit = $deb->total;
-                            }
-                        }
-                        if(gettype($debs) == 'string'){
-                            $debit = 0;
-                        }
-                        //get total credits from customers
-                        $get_credit = new selects();
-                        $creds = $get_credit->fetch_sum_single('transactions', 'credit', 'class', 7);
-                        if(gettype($creds) == 'array'){
-                            foreach($creds as $cred){
-                                $credit = $cred->total;
-                            }
-                        }
-                        if(gettype($creds) == 'string'){
-                            $credit = 0;
-                        }
-                        $balance = $credit - $debit;
-                        if($balance > 0){
-                            echo "₦".number_format($balance, 2);
+                       //balance
+                       $oweds = $get_dashboard->fetch_sum_double('repayment_schedule', 'amount_due', 'payment_status', 0, 'customer', $customer_id);
+                       if(is_array($oweds)){
+                           foreach($oweds as $owed){
+                               $balance_due = $owed->total;
+                           }
                         }else{
-                            echo "₦0.00";
+                            $balance_due = 0;
                         }
+                        //get total paid amount
+                        $paid = $get_dashboard->fetch_sum_double('repayment_schedule', 'amount_paid', 'payment_status', 0, 'customer', $customer_id);
+                        if(is_array($paid)){
+                            foreach($paid as $pay){
+                                $amount_paid = $pay->total;
+                            }
+                        }else{
+                            $amount_paid = 0;
+                        }
+                        $debt = $balance_due - $amount_paid;
+                        echo "₦".number_format($debt, 2);
                     ?>
                     </p>
                 </div>
             </a>
         </div> 
-        <div class="cards" id="card2" style="background: var(--moreColor)">
-        <a href="javascript:void(0)" onclick="showPage('debtors_list.php')"class="page_navs">
+        <div class="cards" id="card5" style="background: brown">
+            <a href="javascript:void(0)" onclick="showPage('loan_status.php')"class="page_navs">
                 <div class="infos">
-                <p><i class="fas fa-money-check"></i> Receiveables</p>
+                <p><i class="fas fa-hand-holding-dollar"></i> Total Paid</p>
                     <p>
                     <?php
-                        //get total sales
-                        /* $get_sales = new selects();
-                        $rows = $get_sales->fetch_sum_singleless('customers', 'wallet_balance', 'wallet_balance', 0);
-                        if(gettype($rows) == "array"){
-                            foreach($rows as $row){
-                                $debt = $row->total;
+                        //first checkloan status
+                        $stats = $get_dashboard->fetch_details_2cond('loan_applications', 'customer', 'loan_status', $customer_id, 2);
+                        if(is_array($stats)){
+                            foreach($stats as $stat){
+                                //get total paid
+                                $paid = $get_dashboard->fetch_sum_single('repayment_schedule', 'amount_paid', 'loan', $stat->loan_id);
+                                foreach($paid as $pay){
+                                    echo "₦".number_format($pay->total, 2);
+                                }
                             }
-                        }
-                        if(gettype($rows) == "string"){
-                            $debt = 0;
-                        }
-                        
-                        echo "₦".number_format($debt * -1, 2);
-                        */
-                        $get_debit = new selects();
-                        $debs = $get_debit->fetch_sum_single('transactions', 'debit', 'class', 4);
-                        if(gettype($debs) == 'array'){
-                            foreach($debs as $deb){
-                                $debit = $deb->total;
-                            }
-                        }
-                        if(gettype($debs) == 'string'){
-                            $debit = 0;
-                        }
-                        //get total credits from customers
-                        $get_credit = new selects();
-                        $creds = $get_credit->fetch_sum_single('transactions', 'credit', 'class', 4);
-                        if(gettype($creds) == 'array'){
-                            foreach($creds as $cred){
-                                $credit = $cred->total;
-                            }
-                        }
-                        if(gettype($creds) == 'string'){
-                            $credit = 0;
-                        }
-                        $balance = $debit - $credit;
-                        if($balance > 0){
-                            echo "₦".number_format($balance, 2);
                         }else{
-                            echo "₦0.00";
+                            echo "No Active Loan";
                         }
                     ?>
                     </p>
@@ -511,83 +490,113 @@
 ?>
 <div class="check_out_due">
     <hr>
-    <div class="displays allResults" id="check_out_guest">
-       
-        <h3 style="background:var(--otherColor)">My Daily transactions</h3>
-        <table id="check_out_table" class="searchTable" style="width:100%;">
-            <thead>
-                <tr style="background:var(--moreColor)">
-                    <td>S/N</td>
-                    <td>Ref No.</td>
-                    <td>Invoice No.</td>
-                    <td>Customer</td>
-                    <td>Amount</td>
-                    <td>Trans. Date</td>
-                    <td>Due Date</td>
-                    <td>Post Time</td>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                    $n = 1;
-                    $get_users = new selects();
-                    $details = $get_users->fetch_details_date2Cond('invoices', 'date(post_date)', 'invoice_status', 1, 'posted_by', $user_id);
-                    if(gettype($details) === 'array'){
-                    foreach($details as $detail):
-                ?>
-                <tr>
-                    <td style="text-align:center; color:red;"><?php echo $n?></td>
-                    <td style="color:green"><?php echo $detail->invoice?></td>
-                    <td style="color:green"><?php echo $detail->manual_invoice?></td>
-                    <td>
-                        <?php
-                            $get_name = new selects();
-                            $name = $get_name->fetch_details_group('customers', 'customer', 'customer_id', $detail->customer);
-                            echo $name->customer;
-                        ?>
-                    </td>
-                    <!-- <td style="text-align:center; color:var(--otherColor)"><?php echo $detail->quantity?></td> -->
-                    <td>
-                        <?php 
-                            $get_amount = new selects();
-                            $mounts = $get_amount->fetch_sum_single('invoices', 'total_amount', 'invoice', $detail->invoice);
-                            foreach($mounts as $mount){
-                                echo "₦".number_format($mount->total);
-                            }
-                            
-                        ?>
-                    </td>
-                    <!-- <td><?php echo "₦".number_format($detail->total_amount)?></td> -->
-                    <!-- <td>
-                        <?php
-                            //get payment mode
-                            $get_mode = new selects();
-                            $mode = $get_mode->fetch_details_group('payments', 'payment_mode', 'invoice', $detail->invoice);
-                            //check if invoice is more than 1
-                            $get_mode_count = new selects();
-                            $rows = $get_mode_count->fetch_count_cond('payments', 'invoice', $detail->invoice);
-                                if($rows >= 2){
-                                    echo "Multiple payment";
-                                }else{
-                                    echo $mode->payment_mode;
+    <div class="daily_monthly" style="margin:0!important;padding:0!important">
+        <!-- daily revenue summary -->
+        <div class="daily_report allResults" style="margin:0!important;padding:0!important">
+            <h3 style="background:var(--otherColor); font-family:Poppins">Scheduled Payments</h3>
+            <table id="item_list_table" class="searchTable">
+                <thead>
+                    <tr>
+                        <td>S/N</td>
+                        <td>Due Date</td>
+                        <td>Amount Due</td>
+                        <td>Status</td>
+                    </tr>
+                </thead>
+                <tbody id="result">
+                    <?php
+                        $n = 1;
+                        $loans = $get_dashboard->fetch_details_2cond('loan_applications', 'customer', 'loan_status', $customer_id, 2);
+                        if(is_array($loans)){
+                            foreach($loans as $loan){
+                                $repays = $get_dashboard->fetch_details_2cond('repayment_schedule', 'loan', 'payment_status', $loan->loan_id, 0);
+                                $allow_next = true; // True until first unpaid schedule is found
+                                foreach($repays as $repay){
+                        
+                    ?>
+                    <tr>
+                        <td style="text-align:center; color:red;"><?php echo $n?></td>
+                        <td><?php echo date("d-M-Y", strtotime($repay->due_date))?></td>
+                        <td style="color:var(--secondaryColor)"><?php  echo "₦".number_format(($repay->amount_due - $repay->amount_paid), 2)?></td>
+                        <td>
+                            <?php
+                                $date_due = new DateTime($repay->due_date);
+                                $today = new DateTime();
 
+                                $button = "<a style='border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:3px 6px; box-shadow:1px 1px 1px #222; border:1px solid #fff' href='javascript:void(0)' onclick=\"showPage('client_payment.php?schedule={$repay->repayment_id}&customer={$customer_id}')\" title='Post payment'>Pay <i class='fas fa-hand-holding-dollar'></i></a>";
+
+                                if($repay->payment_status == "1"){
+                                    echo "<span style='color:var(--tertiaryColor);'>Paid <i class='fas fa-check-circle'></i></span>";
+                                } else {
+                                    // First unpaid schedule (or any overdue) is allowed to pay only if previous schedules are paid
+                                    if($allow_next || $date_due < $today){
+                                        if($date_due > $today){
+                                            echo "<span style='color:var(--primaryColor);'><i class='fas fa-spinner'></i> Pending </span> {$button}";
+                                        } else {
+                                            echo "<span style='color:red;'><i class='fas fa-clock'></i> Overdue </span> {$button}";
+                                        }
+                                        $allow_next = false; // After showing Add Payment for one, others must wait
+                                    } else {
+                                        echo "<span style='color:#999;'>Waiting for previous payment <i class='fas fa-lock'></i></span>";
+                                    }
                                 }
                             ?>
-                    </td> -->
-                    <td><?php echo date("d-M-Y", strtotime($detail->trx_date))?></td>
-                    <td><?php echo date("d-M-Y", strtotime($detail->due_date))?></td>
-                    <td><?php echo date("h:i:sa", strtotime($detail->post_date))?></td>
-                </tr>
-                <?php $n++; endforeach;}?>
-            </tbody>
-        </table>
+                        </td>
+                    </tr>
+                    
+                    <?php $n++; };}}?>
+                </tbody>
+            </table>
+            <?php
+                if(gettype($loans) == "string"){
+                    echo "<p class='no_result'>'$loans'</p>";
+                }
+            ?>
+        </div>
+        <!-- monthly revenue summary -->
+        <div class="monthly_report allResults" style="margin:0!important;padding:0!important">
+            
+            <div class="monthly_encounter" style="margin:0 0 20px; width:100%!important">
+                <h3 style="background:rgb(117, 32, 12)!important; font-family:Poppins">Daily Transactions</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>S/N</td>
+                            <td>Date</td>
+                            <td>Amount</td>
+                            <td>Details</td>
+                        </tr>
+                    </thead>
+                    <?php
+                        $n = 1;
+                        $trxs = $get_dashboard->fetch_details_condLimit('deposits', 'customer', $customer_id, 10);
+                        if(is_array($trxs)){
+                        foreach($trxs as $trx):
+
+                    ?>
+                    <tbody>
+                        <tr>
+                            <td><?php echo $n?></td>
+                            <td style="color:var(--primaryColor)"><?php echo date("d-M-Y, h:ia", strtotime($trx->post_date))?></td>
+                            <td style="text-align:center; color:green"><?php echo "₦".number_format($trx->amount)?></td>
+                            <td><?php
+                                echo $trx->trx_type;
+                            ?></td>
+                        </tr>
+                    </tbody>
+                    <?php $n++; endforeach; }?>
+
+                    
+                </table>
+                <?php 
+                    if(gettype($trxs) == "string"){
+                        echo "<p class='no_result'>'$trxs'</p>";
+                    }
+                ?>
+            </div>
+           
+        </div>
         
-        <?php
-            if(gettype($details) == "string"){
-                echo "<p class='no_result'>'$details'</p>";
-            }
-        ?>
     </div>
 </div>
 <?php
