@@ -68,7 +68,21 @@
     <div class="all_modes">
 
 <?php
-    //get cash
+ //get savings deposits
+    $cashs = $get_revenue->fetch_sum_2date2Cond('deposits', 'amount', 'date(post_date)', 'trx_type', 'customer', $from, $to, 'Deposit', $customer);
+    if(gettype($cashs) === "array"){
+        foreach($cashs as $cash){
+            echo "<p class='sum_amount' style='background:var(--otherColor)'><strong><i class='fas fa-piggy-bank'></i> Savings</strong>: ₦".number_format($cash->total, 2)."</p>";
+        }
+    }
+ //get savings deposits
+    $lns = $get_revenue->fetch_sum_2date2Cond('deposits', 'amount', 'date(post_date)', 'trx_type', 'customer', $from, $to, 'Loan Repayment', $customer);
+    if(gettype($lns) === "array"){
+        foreach($lns as $ln){
+            echo "<p class='sum_amount' style='background:brown'><strong><i class='fas fa-hand-holding-dollar'></i> Loan Payments</strong>: ₦".number_format($ln->total, 2)."</p>";
+        }
+    }
+    //get total deposits
     $cashs = $get_revenue->fetch_sum_2dateCond('deposits', 'amount', 'customer', 'date(post_date)', $from, $to, $customer);
     if(gettype($cashs) === "array"){
         foreach($cashs as $cash){

@@ -87,7 +87,25 @@
     ?>
        <div class="all_modes">
     <?php
-        //get cash
+        //get savings deposits
+        $trfs = $get_customer->fetch_sum_curdate2Con('deposits', 'amount', 'post_date', 'trx_type', 'Deposit', 'customer', $customer_id);
+        if(gettype($trfs) === "array"){
+            foreach($trfs as $trf){
+                ?>
+                <a href="javascript:void(0)" class="sum_amount" style="background:var(--otherColor)"><strong><i class="fas fa-piggy-bank"></i> Savings</strong>: ₦<?php echo number_format($trf->total, 2)?></a>
+                <?php
+            }
+        }
+        //get loan repayments
+        $trfs = $get_customer->fetch_sum_curdate2Con('deposits', 'amount', 'post_date', 'trx_type', 'Loan Repayment', 'customer', $customer_id);
+        if(gettype($trfs) === "array"){
+            foreach($trfs as $trf){
+                ?>
+                <a href="javascript:void(0)" class="sum_amount" style="background:brown"><strong><i class="fas fa-hand-holding-dollar"></i> Loan Payments</strong>: ₦<?php echo number_format($trf->total, 2)?></a>
+                <?php
+            }
+        }
+        //get total deposits
         $cashs = $get_customer->fetch_sum_curdateCon('deposits', 'amount', 'post_date', 'customer', $customer_id);
         if(gettype($cashs) === "array"){
             foreach($cashs as $cash){
