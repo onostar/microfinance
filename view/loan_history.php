@@ -25,7 +25,7 @@ session_start();
     <div class="info"></div>
 <div class="displays allResults">
     
-    <h2>Current Active Loans</h2>
+    <h2>Loan Records</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchItems(this.value, 'search_patients.php')">
@@ -36,9 +36,9 @@ session_start();
             <tr style="background:var(--tertiaryColor)">
                 <td>S/N</td>
                 <td>Loan Product</td>
-                <td>Amount</td>
+                <td>Amount Requested</td>
                 <td>Total Repayable</td>
-                <td>Requested</td>
+                <td>Application Date</td>
                 <td>Status</td>
                 <td></td>
             </tr>
@@ -66,7 +66,7 @@ session_start();
                         ?>
                 </td>
                 
-                <td style="color:red">
+                <td>
                     <?php 
                         echo "₦".number_format($detail->amount, 2);
                     ?>
@@ -95,7 +95,7 @@ session_start();
                     ?>
                 </td>
                 <td>
-                    <a style="padding:5px; border-radius:15px;background:var(--tertiaryColor);color:#fff;"href="javascript:void(0)" onclick="showPage('view_active_loan.php?loan=<?php echo $detail->loan_id?>')" title="view Loan details">View <i class="fas fa-eye"></i></a>
+                    <a style="padding:5px; border-radius:15px;background:var(--tertiaryColor);color:#fff;"href="javascript:void(0)" onclick="showPage('view_customer_loan.php?loan=<?php echo $detail->loan_id?>')" title="view Loan details">View <i class="fas fa-eye"></i></a>
                 </td>
             </tr>
             
