@@ -1,5 +1,8 @@
 <div id="fund_account">
     <style>
+        .inputs input{
+            border-radius: 5px!important;
+        }
         @media screen and (max-width: 800px){
             .fund_account{
                 width: 100%!important;
@@ -98,17 +101,17 @@
                     <?php if($balance >= 0){?>
                     <div class="data" style="width:48%; margin:5px 0">
                         <label for="balance">Account balance:</label>
-                        <input type="text" value="<?php echo "₦".number_format(0, 2)?>" style="color:red;">
+                        <input type="text" value="<?php echo "₦".number_format(0, 2)?>" style="color:#222;" readonly>
                     </div>
                     <?php }else{?>
                     <div class="data" style="width:48%; margin:5px 0">
                         <label for="balance">Account balance:</label>
-                        <input type="text" value="<?php echo "₦".number_format(-($balance), 2)?>" style="color:green;">
+                        <input type="text" value="<?php echo "₦".number_format(-($balance), 2)?>" style="color:green;" readonly>
                     </div>
                     <?php }?>
                     <div class="data" style="width:48%; margin:5px 0">
                         <label for="balance">Loan Due:</label>
-                        <input type="text" value="<?php echo "₦".number_format($debt, 2)?>" style="color:red;">
+                        <input type="text" value="<?php echo "₦".number_format($debt, 2)?>" style="color:red;" readonly>
                     </div>
                     <div class="data" style="width:48%; margin:5px 0">
                         <label for="amount"> Transaction Date</label>

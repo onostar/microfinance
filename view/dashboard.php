@@ -569,7 +569,7 @@
                     </thead>
                     <?php
                         $n = 1;
-                        $trxs = $get_dashboard->fetch_details_condLimit('deposits', 'customer', $customer_id, 10);
+                        $trxs = $get_dashboard->fetch_details_condLimitDesc('deposits', 'customer', $customer_id, 10, 'post_date');
                         if(is_array($trxs)){
                         foreach($trxs as $trx):
 

@@ -94,6 +94,19 @@
                 return $rows;
             }
         }
+        //fetch details with condition and a limit descending order
+        public function fetch_details_condLimitDesc($table, $column, $condition, $limit, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column ORDER BY $order DESC LIMIT $limit");
+            $get_user->bindValue("$column", $condition);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch details with condition and a limit
         public function fetch_details_condLimit($table, $column, $condition, $limit){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column LIMIT $limit");
@@ -123,7 +136,7 @@
         }
         //fetch details with condition order by
         public function fetch_details_condOrder($table, $column, $condition, $order){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column ORDER BY $order");
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column ORDER BY $order DESC");
             $get_user->bindValue("$column", $condition);
             $get_user->execute();
             if($get_user->rowCount() > 0){
@@ -577,6 +590,19 @@
                 return $rows;
             }
         }
+        //fetch between two dates and a condition order by
+        public function fetch_details_date2ConOrder($table, $column, $value1, $value2, $condition, $condition_value, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition = :$condition AND $column BETWEEN '$value1' AND '$value2' ORDER BY $order ASC");
+            $get_user->bindValue("$condition",$condition_value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch between two dates and 2 condition
         public function fetch_details_2date2Con($table, $column, $value1, $value2, $condition, $condition_value, $condition2, $condition_value2){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition = :$condition AND $condition2 = :$condition2 AND $column BETWEEN '$value1' AND '$value2'");
@@ -871,6 +897,19 @@
         //fetch with current date and condition
         public function fetch_details_curdateCon($table, $column, $condition, $value){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition =:$condition AND date($column) = CURDATE()");
+            $get_user->bindValue("$condition", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch with current date and condition order
+        public function fetch_details_curdateConOrder($table, $column, $condition, $value, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition =:$condition AND date($column) = CURDATE() ORDER BY $order DESC");
             $get_user->bindValue("$condition", $value);
             $get_user->execute();
             if($get_user->rowCount() > 0){
