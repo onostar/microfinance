@@ -3102,8 +3102,9 @@ x
 
 }
 .transactions .allResults{
-    width:49%;
+    width:50%;
     margin:0!important;
+    /* border:1px solid #cdcdcd; */
 }
 #pay_modes{
     display:flex;

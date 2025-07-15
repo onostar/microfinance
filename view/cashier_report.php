@@ -22,17 +22,17 @@
 </section>
     </div>
 <div class="displays allResults new_data" id="revenue_report">
-    <h2>Cashier report for today</h2>
+    <h2>Officer Collections for today</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchCheckout" placeholder="Enter keyword" onkeyup="searchData(this.value)">
-        <a class="download_excel" href="javascript:void(0)" onclick="convertToExcel('data_table', 'Cashier report')"title="Download to excel"><i class="fas fa-file-excel"></i></a>
+        <a class="download_excel" href="javascript:void(0)" onclick="convertToExcel('data_table', 'Loan Officer report')"title="Download to excel"><i class="fas fa-file-excel"></i></a>
     </div>
     <table id="data_table" class="searchTable">
         <thead>
             <tr style="background:var(--primaryColor)">
                 <td>S/N</td>
-                <td>Cashier</td>
+                <td>Loan Officer</td>
                 <td>Cash</td>
                 <td>POS</td>
                 <td>Transfer</td>
@@ -48,16 +48,33 @@
                 $details = $get_users->fetch_details_curdateGro1con('deposits', 'post_date', 'store', $store, 'posted_by');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
+                    //get posted by
+                    $psts = $get_users->fetch_details_cond('users', 'user_id', $detail->posted_by);
+                    if(is_array($psts)){
+                        foreach($psts as $ps){
+                            $cashier_name = $ps->full_name;
+                            $role = $ps->user_role;
+                        }
+                    }
+                    if($role == "Client"){
+                        //check customer table for name
+                        $cus = $get_users->fetch_details_cond('customers', 'user_id', $detail->posted_by);
+                        foreach($cus as $c){
+                            $cashier = $c->customer;
+                        }
+                        
+                    }else{
+                        $cashier = $cashier_name;
+                    }
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
-                <td style="color:var(--otherColor)">
-                    <?php
-                        //get posted by
-                        $get_posted_by = new selects();
-                        $checkedin_by = $get_posted_by->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
-                        echo $checkedin_by->full_name;
-                    ?>
+                <td>
+                    <?php if($role == "Client"){?>
+                    <a href="javascript:void(0)" style="color:var(--otherColor)"><?php echo $cashier?></a>
+                    <?php }else{?>
+                    <a href="javascript:void(0)" style="color:var(--otherColor)" onclick="showPage('officer_collection.php?cashier=<?php echo $detail->posted_by?>')"><?php echo $cashier?></a>
+                    <?php }?>
                 </td>
                 <td>
                     <?php

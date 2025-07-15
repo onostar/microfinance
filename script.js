@@ -1013,6 +1013,27 @@ function viewCustomerInvoice(invoice_id){
      // }
      
  }
+ //display loan details
+function viewLoanDetails(loan_id){
+     let loan = loan_id;
+          
+          $.ajax({
+               type : "GET",
+               url : "../controller/loan_details.php?loan="+loan,
+               beforeSend : function(){
+                    $("#customer_invoices").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#customer_invoices").html(response);
+                    // window.scrollTo(0, 0);
+                    document.getElementById("customer_invoices").scrollIntoView();
+               }
+          })
+          $("#sales_item").html("");
+          return false;
+     // }
+     
+ }
  //update items in each customer inivoice under statement/transaction history
 function updateCustomerInvoice(invoice_id){
      let invoice = invoice_id;

@@ -1604,6 +1604,21 @@
                 return $rows;
             }
         }
+        //fetch sum between two dates and  2 condition or
+        public function fetch_sum_2date2CondEither($table, $column1, $column2, $condition1, $condition2, $value1, $value2, $value3, $value4, $value5){
+            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) as total FROM $table WHERE $condition1 = :$condition1 AND ($condition2 = :con3 OR $condition2 = :con4) AND $column2 BETWEEN '$value1' AND '$value2'");
+            $get_user->bindValue("$condition1", $value3);
+            $get_user->bindValue("con3", $value4);
+            $get_user->bindValue("con4", $value5);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch sum between two dates and  2 condition with 1 negative
         public function fetch_sum_2date2Cond1neg($table, $column1, $column2, $condition1, $condition2, $value1, $value2, $value3, $value4){
             $get_user = $this->connectdb()->prepare("SELECT SUM($column1) as total FROM $table WHERE $condition1 = :$condition1 AND $condition2 != :$condition2 AND $column2 BETWEEN '$value1' AND '$value2'");
