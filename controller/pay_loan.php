@@ -93,8 +93,8 @@
         $processing_portion = ($loan_amount * $processing_rate) / 100;
 
         // Proportional interest and fee for this payment
-        $interest = round(($amount_received * $interest_portion) / $total_payable, 2);
-        $processing_fee = round(($amount_received * $processing_portion) / $total_payable, 2);
+        $interest = ($amount_received * $interest_portion) / $total_payable;
+        $processing_fee = ($amount_received * $processing_portion) / $total_payable;
         $principal = $amount_received - $interest - $processing_fee;
         
         $total_paid = $amount_paid + $amount_received;
@@ -138,8 +138,8 @@
                     $next_balance = $next->amount_due - $next->amount_paid;
                     $to_pay = min($overpaid, $next_balance);
                     // Proportional interest and fee for this overpaid portion
-                    $next_interest = round(($to_pay * $interest_portion) / $total_payable, 2);
-                    $next_fee = round(($to_pay * $processing_portion) / $total_payable, 2);
+                    $next_interest = ($to_pay * $interest_portion) / $total_payable;
+                    $next_fee = ($to_pay * $processing_portion) / $total_payable;
                     $new_paid = $next->amount_paid + $to_pay;
 
                     if($new_paid >= $next->amount_due) {
@@ -171,7 +171,7 @@
         // we post one consolidated debit and credit here for the full amount.
          // Proportional interest and fee for this payment
         $interest_income = round(($amount * $interest_portion) / $total_payable, 2);
-        $processing_fee_income = round(($amount * $processing_portion) / $total_payable,2);
+        $processing_fee_income = round(($amount * $processing_portion) / $total_payable, 2);
         //get customer details
         $get_balance = new selects();
         $bals = $get_balance->fetch_details_cond('customers', 'customer_id', $customer);
