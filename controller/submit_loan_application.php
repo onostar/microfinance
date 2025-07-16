@@ -1,7 +1,8 @@
 <?php
     session_start();
-    date_default_timezone_set("Africa/Lagos");;
+    date_default_timezone_set("Africa/Lagos");
     $user = $_SESSION['user_id'];
+    $store = $_SESSION['store_id'];
     $date = date("Y-m-d H:i:s");
     $customer = htmlspecialchars(stripslashes($_POST['customer']));
     $product = htmlspecialchars(stripslashes($_POST['product']));
@@ -49,6 +50,7 @@
         'processing_rate' => $processing_rate,
         'total_payable' => $total,
         'loan_term' => $loan_term,
+        'store' => $store,
         'posted_by' => $user,
         'application_date' => $date
     );
