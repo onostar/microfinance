@@ -304,7 +304,7 @@
         $add_flow = new add_data('cash_flows', $flow_data);
         $add_flow->create_data();
         //add to other income table
-        //add inerest first
+        /* //add inerest first
         $interest_income_data = array(
             'income_head' => $loan_id,
             'amount' => $interest_income,
@@ -327,7 +327,7 @@
             'posted_by' => $user
         );
         $add_processing_income = new add_data('other_income', $process_data);
-        $add_processing_income->create_data();
+        $add_processing_income->create_data(); */
         //check if all repayments have been paid and update loan status
         $check_repayments = $get_details->fetch_sum_single('repayment_schedule', 'amount_paid', 'loan', $loan_id);
         foreach($check_repayments as $rep){

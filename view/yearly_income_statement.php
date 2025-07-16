@@ -63,34 +63,74 @@
         </thead>
         <tbody>
             <tr>
-                <td style="color:#222;text-align:left">Revenue</td>
+                <td style="color:#222;text-align:left">Revenue (Interest and Loan Fees)</td>
                 <td>
                     <?php
-                        // get accounts
+                       /*  // get accounts
                         $get_account = new selects();
                         $rows = $get_account->fetch_sum_Year2Cond('invoices', 'total_amount', 'post_date', $year, 'store', $store, 'invoice_status', 1);
                         foreach($rows as $row){
                             $revenue = $row->total;
                             // $cost = $row->total_cost;
                         }
-                        echo number_format($revenue, 2)
+                        echo number_format($revenue, 2) */
+                        //get interest total
+                        $ints = $get_store->fetch_sum_YearCond('repayments', 'interest', 'post_date', $year, 'store', $store);
+                        if(is_array($ints)){
+                            foreach($ints as $int){
+                                $interest = $int->total;
+                            }
+                        }else{
+                            $interest = 0;
+                        }
+                        //get loan fees total
+                        $lns = $get_store->fetch_sum_YearCond('repayments', 'processing_fee', 'post_date', $year, 'store', $store);;
+                        if(is_array($lns)){
+                            foreach($lns as $ln){
+                                $processing = $ln->total;
+                            }
+                        }else{
+                            $processing = 0;
+                        }
+                        $revenue = $interest + $processing;
+                        echo number_format($revenue, 2);
                     ?>
                 </td>
                 <td>
                     <?php
-                        // get accounts
+                        /* // get accounts
                         $get_account = new selects();
                         $rows = $get_account->fetch_sum_Year2Cond('invoices', 'total_amount', 'post_date', $prev_year, 'store', $store, 'invoice_status', 1);
                         foreach($rows as $row){
                             $pre_revenue = $row->total;
                             // $cost = $row->total_cost;
                         }
-                        echo number_format($pre_revenue, 2)
+                        echo number_format($pre_revenue, 2) */
+                        //get previous year interest
+                        $pre_ints = $get_store->fetch_sum_YearCond('repayments', 'interest', 'post_date', $prev_year, 'store', $store);
+                        if(is_array($pre_ints)){
+                            foreach($pre_ints as $pre_int){
+                                $prev_interest = $pre_int->total;
+                            }
+                        }else{
+                            $prev_interest = 0;
+                        }
+                        //get previous loan fees total
+                        $prev_lns = $get_store->fetch_sum_YearCond('repayments', 'processing_fee', 'post_date', $prev_year, 'store', $store);
+                        if(is_array($prev_lns)){
+                            foreach($prev_lns as $prev_ln){
+                                $prev_processing = $prev_ln->total;
+                            }
+                        }else{
+                            $prev_processing = 0;
+                        }
+                        $pre_revenue = $prev_interest + $prev_processing;
+                        echo number_format($pre_revenue, 2);
                     ?>
                 </td>
             </tr>
             <tr>
-                <td style="color:#222;text-align:left">Other Revenue (Gain from disposal of Asset, Interest, Loan fees)</td>
+                <td style="color:#222;text-align:left">Other Revenue (Gain from disposal of Asset)</td>
                 <td>
                     <?php
                         // get accounts

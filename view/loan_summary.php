@@ -161,6 +161,28 @@
         $balance = $total_due - $paids;
     ?>
         <a href="javascript:void(0)" class="sum_amount" style="background:brown"><strong>Total Due</strong>: ₦<?php echo number_format($balance, 2)?></a>
+
+    <?php
+        //get total interest
+        $ints = $get_users->fetch_sum_curdateCon('repayments', 'interest', 'post_date', 'store', $store);
+        if(gettype($ints) === "array"){
+            foreach($ints as $int){
+                ?>
+                <a href="javascript:void(0)" class="sum_amount" style="background:var(--primaryColor)"><strong>Total Interest</strong>: ₦<?php echo number_format($int->total, 2)?></a>
+                <?php
+            }
+        }
+        //get total processing fee
+        $proc = $get_users->fetch_sum_curdateCon('repayments', 'processing_fee', 'post_date', 'store', $store);
+        if(gettype($proc) === "array"){
+            foreach($proc as $pro){
+                ?>
+                <a href="javascript:void(0)" class="sum_amount" style="background:var(--menuColor)"><strong>Processing Fees</strong>: ₦<?php echo number_format($pro->total, 2)?></a>
+                <?php
+            }
+        }
+
+    ?>
     </div>
 </div>
 

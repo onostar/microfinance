@@ -43,22 +43,42 @@
         </thead>
         <tbody>
             <tr>
-                <td style="color:#222;text-align:left">Revenue</td>
+                <td style="color:#222;text-align:left">Revenue (Interest and Loan Fees)</td>
                 <td>
                     <?php
                         // get accounts
-                        $get_account = new selects();
+                        /* $get_account = new selects();
                         $rows = $get_account->fetch_sum_curdate2Con('invoices', 'total_amount', 'date(post_date)', 'store', $store, 'invoice_status', 1);
                         foreach($rows as $row){
                             $revenue = $row->total;
                             // $cost = $row->total_cost;
                         }
-                        echo number_format($revenue, 2)
+                        echo number_format($revenue, 2) */
+                        //get interest total
+                        $ints = $get_store->fetch_sum_curdateCon('repayments', 'interest', 'post_date', 'store', $store);
+                        if(is_array($ints)){
+                            foreach($ints as $int){
+                                $interest = $int->total;
+                            }
+                        }else{
+                            $interest = 0;
+                        }
+                        //get loan fees total
+                        $lns = $get_store->fetch_sum_curdateCon('repayments', 'processing_fee', 'post_date', 'store', $store);
+                        if(is_array($lns)){
+                            foreach($lns as $ln){
+                                $processing = $ln->total;
+                            }
+                        }else{
+                            $processing = 0;
+                        }
+                        $revenue = $interest + $processing;
+                        echo number_format($revenue, 2);
                     ?>
                 </td>
             </tr>
             <tr>
-                <td style="color:#222;text-align:left">Other Revenue (Gain from disposal of Asset, Interest, Loan fees)</td>
+                <td style="color:#222;text-align:left">Other Revenue (Gain from disposal of Asset)</td>
                 <td>
                     <?php
                         // get accounts
