@@ -30,13 +30,14 @@
     </div>
     <table id="data_table" class="searchTable">
         <thead>
-            <tr style="background:var(--primaryColor)">
+            <tr style="background:var(--moreColor)">
                 <td>S/N</td>
                 <td>Customer</td>
                 <td>Product</td>
                 <td>Requested Amount</td>
                 <td>Total Payable</td>
-                <td>Time</td>
+                <td>Total Paid</td>
+                <td>Application Time</td>
                 <td>Status</td>
                 <td></td>
                 
@@ -46,7 +47,7 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_curdate('loan_applications', 'date(application_date)');
+                $details = $get_users->fetch_details_curdateCon('loan_applications', 'application_date','store', $store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -69,10 +70,24 @@
                 <td style="color:green">
                     <?php echo "₦".number_format($detail->amount, 2);?>
                 </td>
-                <td>
+                <td style="color:red">
                     <?php echo "₦".number_format($detail->total_payable, 2);?>
                 </td>
-                <td style="color:var(--moreColor)"><?php echo date("H:ia", strtotime($detail->trx_date));?></td>
+                <td>
+                    <?php 
+                        //get total paid
+                        $paid = $get_users->fetch_sum_single('repayment_schedule', 'amount_paid', 'loan', $detail->loan_id);
+                        if(is_array($paid)){
+                            foreach($paid as $p){
+                                $total_paid = $p->total;
+                            }
+                        }else{
+                            $total_paid = 0;
+                        }
+                        echo "₦".number_format($total_paid, 2);
+                        
+                    ?>
+                </td>
                 <td style="color:var(--otherColor)"><?php echo date("H:i:sa", strtotime($detail->application_date));?></td>
                 <td>
                     <?php
@@ -81,16 +96,18 @@
                         }elseif($detail->loan_status == "-1"){
                             echo "<span style='color:red'><i class='fas fa-cancel'></i> Declined</span>";
                         }elseif($detail->loan_status == "1"){
-                            echo "<span style='color:var(--otherColor)'><i class='fas fa-hand-holding-dollar'></i> Approved</span>";
+                            echo "<span style='color:var(--otherColor)'><i class='fas fa-chart-line'></i> Approved</span>";
                         }elseif($detail->loan_status == "2"){
-                            echo "<span style='color:var(--tertiaryColor)'><i class='fas fa-chart-line'></i> Active</span>";
+                            echo "<span style='color:var(--tertiaryColor)'><i class='fas fa-hand-holding-dollar'></i> Active</span>";
                         }else{
                             echo "<span style='color:var(--tertiaryColor)'><i class='fas fa-check-circle'></i> Completed</span>";
 
                         }
                     ?>
                 </td>
-                
+                <td>
+                    <a style="padding:5px; border-radius:15px;background:var(--tertiaryColor);color:#fff;"href="javascript:void(0)" onclick="showPage('view_loan_summary.php?loan=<?php echo $detail->loan_id?>')" title="view Loan details">View <i class="fas fa-eye"></i></a>
+                </td>
             </tr>
             <?php $n++; endforeach;}?>
         </tbody>
@@ -103,7 +120,7 @@
        <div class="all_modes">
     <?php
         //get total disbursed
-        $cashs = $get_users->fetch_sum_curdateCon('loan_applications', 'amount', 'disbursed_date', 'loan_status', '2');
+        $cashs = $get_users->fetch_sum_curdate2Con('loan_applications', 'amount', 'disbursed_date', 'loan_status', '2', 'store', $store);
         if(gettype($cashs) === "array"){
             foreach($cashs as $cash){
                 ?>
@@ -113,24 +130,37 @@
             }
         }
        
-        //get transfer
-        $trfs = $get_users->fetch_sum_curdate2Con('disbursal', 'amount', 'disbursed_date', 'mode', 'Transfer', 'store', $store);
+        //get total paid
+        $trfs = $get_users->fetch_sum_curdateCon('repayment_schedule', 'amount_paid', 'post_date', 'store', $store);
         if(gettype($trfs) === "array"){
             foreach($trfs as $trf){
                 ?>
-                <a href="javascript:void(0)" class="sum_amount" style="background:brown"><strong>Transfer</strong>: ₦<?php echo number_format($trf->total, 2)?></a>
+                <a href="javascript:void(0)" class="sum_amount" style="background:var(--tertiaryColor)"><strong>Total Paid</strong>: ₦<?php echo number_format($trf->total, 2)?></a>
                 <?php
             }
         }
-        // get sum
-        $amounts = $get_users->fetch_sum_curdateCon('disbursal', 'amount', 'disbursed_date', 'store', $store);
-        foreach($amounts as $amount){
-            $paid_amount = $amount->total;
-            
+        //get total due
+        $dues = $get_users->fetch_sum_curdate2Con('repayment_schedule', 'amount_due', 'post_date', 'store', $store, 'payment_status', 0);
+        if(is_array($dues)){
+            foreach($dues as $due){
+                $total_due = $due->total;
+            }
+        }else{
+            $total_due = 0;
         }
-        echo "<p class='sum_amount' style='background:green; margin-left:100px;'><strong>Total Disbursement</strong>: ₦".number_format($paid_amount, 2)."</p>";
-        
+        // get sum paid
+        $pays = $get_users->fetch_sum_curdate2Con('repayment_schedule', 'amount_paid', 'post_date', 'store', $store, 'payment_status', 0);
+        if(is_array($pays)){
+            foreach($pays as $pay){
+                $paids = $pay->total;
+                
+            }
+        }else{
+            $paids = 0;
+        }
+        $balance = $total_due - $paids;
     ?>
+        <a href="javascript:void(0)" class="sum_amount" style="background:brown"><strong>Total Due</strong>: ₦<?php echo number_format($balance, 2)?></a>
     </div>
 </div>
 
