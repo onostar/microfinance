@@ -385,6 +385,28 @@
                    
                 </tr>
                 <tr>
+                    <td style="color:#222; text-align:left">Loan Disbursements</td>
+                    <td>
+                        <?php 
+                            //get all cash flow to customers
+                            $get_inflow = new selects();
+                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
+                            $from, $to, 'financing',  'loan disbursement');
+                            if(gettype($rows) == 'array'){
+                                foreach($rows as $row){
+                                    $purchase = $row->total;
+                                }
+                                echo number_format($purchase, 2);
+                            }
+                            if(gettype($rows) == 'string'){
+                                echo "0.00";
+                            }
+                            
+                        ?>
+                    </td>
+                   
+                </tr>
+                <tr>
                     <td style="color:#222; text-align:left">Director's Remuneration</td>
                     <td>
                         <?php 
