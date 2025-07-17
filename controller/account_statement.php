@@ -20,6 +20,12 @@
     }
     
 ?>
+<style>
+    .demography .demo_block{
+        width:auto!important;
+        margin:5px;
+    }
+</style>
 <!-- customer info -->
 <div class="close_btn">
     <a href="javascript:void(0)" title="Close form" onclick="showPage('../view/account_statement.php');" class="close_form">Close <i class="fas fa-close"></i></a>
@@ -34,6 +40,25 @@
         <div class="demo_block">
             <h4><i class="fas fa-map"></i> Account No.:</h4>
             <p><?php echo $acn?></p>
+        </div>
+        <div class="demo_block" style="color:green">
+            <h4 style="color:green"><i class="fas fa-piggy-bank"></i> Account balance:</h4>
+            <?php
+                //get account balance
+                $bals = $get_customer->fetch_account_balance($acn);
+                if(is_array($bals)){
+                    foreach($bals as $bal){
+                        $wallet = $bal->balance;
+                    }
+                }else{
+                    $wallet = 0;
+                }
+                if($wallet >= 0){
+            ?>
+            <p style="color:green"><?php echo "₦".number_format($wallet, 2)?></p>
+            <?php }else{?>
+            <p style="color:red"><?php echo "₦".number_format($wallet, 2)?></p>
+            <?php }?>
         </div>
         <!-- <div class="demo_block">
             <h4><i class="fas fa-phone-square"></i> Phone numbers:</h4>
@@ -59,7 +84,7 @@
         </div>
         <?php }?> -->
     </div>
-    <h3 style="background:red; text-align:center; color:#fff; padding:10px;margin:0;">Transactions</h3>
+    <h3 style="background:var(--otherColor); text-align:center; color:#fff; padding:10px;margin:0;">Transactions</h3>
     <div class="transactions">
         <div class="all_credit allResults" style="width:100%">
             <table id="data_table" class="searchTable">

@@ -5450,6 +5450,9 @@ function getDepreciationYear(year){
              type : "POST",
              url : "../controller/get_yearly_depreciation.php",
              data: {dep_year:dep_year},
+             beforeSend : function(){
+                    $(".new_data").html("<div class='processing'><div class='loading'></div></div>");
+               },
              success : function(response){
                  $(".new_data").html(response);
              }
@@ -5480,7 +5483,7 @@ function getDepreciationYear(year){
                },
                success : function(response){
                     $(".new_data").html(response)
-                    $(".new_date").scrollIntoView();
+                    $(".new_data").scrollIntoView();
 
                }
           })
@@ -5503,7 +5506,7 @@ function getDepreciationYear(year){
                },
                success : function(response){
                     $(".new_data").html(response)
-                    $(".new_date").scrollIntoView();
+                    $(".new_data").scrollIntoView();
                }
           })
      }
@@ -5525,7 +5528,7 @@ function getDepreciationYear(year){
                },
                success : function(response){
                     $(".new_data").html(response)
-                    $(".new_date").scrollIntoView();
+                    $(".new_data").scrollIntoView();
 
                }
           })
@@ -5554,6 +5557,9 @@ function getAccount(customer_id){
                     type : "POST",
                     url :"../controller/get_account.php",
                     data : {customer:customer, fromDate:fromDate, toDate:toDate},
+                    beforeSend : function(){
+                    $("#sales_item").html("<div class='processing'><div class='loading'></div></div>");
+               },
                     success : function(response){
                          $("#sales_item").html(response);
                     }

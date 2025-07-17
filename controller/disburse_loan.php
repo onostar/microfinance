@@ -185,7 +185,7 @@
             'sub_group' => $contra_group,
             'class' => $contra_class,
             'credit' => $amount,
-            'details' => 'Loan Disbursement to'.$client,
+            'details' => 'Loan Disbursement to '.$client,
             'post_date' => $date,
             'posted_by' => $user,
             'trx_number' => $trx_num,

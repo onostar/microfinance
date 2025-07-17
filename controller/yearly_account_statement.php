@@ -92,7 +92,7 @@
         </div>
         <?php }?> -->
     </div>
-    <h3 style="background:red; text-align:center; color:#fff; padding:10px;margin:0;">Transactions</h3>
+    <h3 style="background:var(--otherColor); text-align:center; color:#fff; padding:10px;margin:0;">Transactions</h3>
     <div class="transactions">
         <div class="all_credit allResults" style="width:100%">
             <table id="data_table" class="searchTable">
